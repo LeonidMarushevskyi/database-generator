@@ -9,8 +9,30 @@
     <include file="classpath:config/liquibase/changelog/20170501060639_added_entity_AddressType.xml" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/20170501060639_added_entity_Facility.xml" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/20170501061423_added_entity_FacilityAddress.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20170501055907_added_entity_A.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20170501195703_added_entity_EthnicityType.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20170501195703_added_entity_FacilityChild.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20170501195703_added_entity_FacilityPhone.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20170501195703_added_entity_LanguageType.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20170501195703_added_entity_RaceType.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20170501195703_added_entity_PersonAddress.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20170501195703_added_entity_PersonEthnicity.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20170501195703_added_entity_PersonLanguage.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20170501195703_added_entity_PersonPhone.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20170501195703_added_entity_PersonRace.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20170501195703_added_entity_Phone.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20170501195703_added_entity_PhoneType.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20170501195703_added_entity_Person.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
-    <include file="classpath:config/liquibase/changelog/20170501060639_added_entity_constraints_Address.xml" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/20170501061423_added_entity_constraints_FacilityAddress.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20170501195703_added_entity_constraints_FacilityChild.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20170501195703_added_entity_constraints_FacilityPhone.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20170501195703_added_entity_constraints_PersonAddress.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20170501195703_added_entity_constraints_PersonEthnicity.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20170501195703_added_entity_constraints_PersonLanguage.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20170501195703_added_entity_constraints_PersonPhone.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20170501195703_added_entity_constraints_PersonRace.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20170501195703_added_entity_constraints_Person.xml" relativeToChangelogFile="false"/>
+    <!--<include file="classpath:config/liquibase/changelog/20170501060639_added_entity_constraints_Address.xml" relativeToChangelogFile="false"/>-->
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
 </databaseChangeLog>

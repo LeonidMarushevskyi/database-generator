@@ -86,9 +86,19 @@ public class Facility implements Serializable {
     private String county;
 
     @OneToMany(mappedBy = "facility")
-//    @JsonIgnore
+    @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<FacilityAddress> addresses = new HashSet<>();
+
+    @OneToMany(mappedBy = "facility")
+    @JsonIgnore
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<FacilityPhone> phones = new HashSet<>();
+
+    @OneToMany(mappedBy = "facility")
+    @JsonIgnore
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<FacilityChild> children = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -316,6 +326,56 @@ public class Facility implements Serializable {
 
     public void setAddresses(Set<FacilityAddress> facilityAddresses) {
         this.addresses = facilityAddresses;
+    }
+
+    public Set<FacilityPhone> getPhones() {
+        return phones;
+    }
+
+    public Facility phones(Set<FacilityPhone> facilityPhones) {
+        this.phones = facilityPhones;
+        return this;
+    }
+
+    public Facility addPhone(FacilityPhone facilityPhone) {
+        this.phones.add(facilityPhone);
+        facilityPhone.setFacility(this);
+        return this;
+    }
+
+    public Facility removePhone(FacilityPhone facilityPhone) {
+        this.phones.remove(facilityPhone);
+        facilityPhone.setFacility(null);
+        return this;
+    }
+
+    public void setPhones(Set<FacilityPhone> facilityPhones) {
+        this.phones = facilityPhones;
+    }
+
+    public Set<FacilityChild> getChildren() {
+        return children;
+    }
+
+    public Facility children(Set<FacilityChild> facilityChildren) {
+        this.children = facilityChildren;
+        return this;
+    }
+
+    public Facility addChild(FacilityChild facilityChild) {
+        this.children.add(facilityChild);
+        facilityChild.setFacility(this);
+        return this;
+    }
+
+    public Facility removeChild(FacilityChild facilityChild) {
+        this.children.remove(facilityChild);
+        facilityChild.setFacility(null);
+        return this;
+    }
+
+    public void setChildren(Set<FacilityChild> facilityChildren) {
+        this.children = facilityChildren;
     }
 
     @Override

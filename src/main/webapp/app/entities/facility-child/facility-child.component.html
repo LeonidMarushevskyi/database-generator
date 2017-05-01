@@ -1,0 +1,81 @@
+<div>
+    <h2>
+        <span>Facility Children</span>
+        <button class="btn btn-primary float-right create-facility-child" [routerLink]="['/', { outlets: { popup: ['facility-child-new'] } }]">
+            <span class="fa fa-plus"></span>
+            <span >
+            Create new Facility Child
+            </span>
+        </button>
+    </h2>
+    <jhi-alert></jhi-alert>
+    <div class="row">
+    </div>
+    <br/>
+    <div class="table-responsive" *ngIf="facilityChildren">
+        <table class="table table-striped">
+            <thead>
+            <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
+            <th jhiSortBy="id"><span>ID</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="dateOfPlacement"><span>Date Of Placement</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="assignedWorker"><span>Assigned Worker</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="countyOfOrigin"><span>County Of Origin</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="facilityId"><span>Facility</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="personId"><span>Person</span> <span class="fa fa-sort"></span></th>
+            <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let facilityChild of facilityChildren ;trackBy: trackId">
+                <td><a [routerLink]="['../facility-child', facilityChild.id ]">{{facilityChild.id}}</a></td>
+                <td>{{facilityChild.dateOfPlacement | date:'mediumDate'}}</td>
+                <td>{{facilityChild.assignedWorker}}</td>
+                <td>{{facilityChild.countyOfOrigin}}</td>
+                <td>
+                    <div *ngIf="facilityChild.facilityId">
+                        <a [routerLink]="['../facility', facilityChild.facilityId  ]" >{{facilityChild.facilityId}}</a>
+                    </div>
+                </td>
+                <td>
+                    <div *ngIf="facilityChild.personId">
+                        <a [routerLink]="['../person', facilityChild.personId  ]" >{{facilityChild.personId}}</a>
+                    </div>
+                </td>
+                <td class="text-right">
+                    <div class="btn-group flex-btn-group-container">
+                        <button type="submit"
+                                [routerLink]="['../facility-child', facilityChild.id ]"
+                                class="btn btn-info btn-sm">
+                            <span class="fa fa-eye"></span>
+                            <span class="hidden-md-down">View</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', { outlets: { popup: 'facility-child/'+ facilityChild.id + '/edit'} }]"
+                                replaceUrl="true"
+                                class="btn btn-primary btn-sm">
+                            <span class="fa fa-pencil"></span>
+                            <span class="hidden-md-down">Edit</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', { outlets: { popup: 'facility-child/'+ facilityChild.id + '/delete'} }]"
+                                replaceUrl="true"
+                                class="btn btn-danger btn-sm">
+                            <span class="fa fa-remove"></span>
+                            <span class="hidden-md-down">Delete</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+        <!-- Pager is not implemented yet, so this is normal pagination instead -->
+        <div *ngIf="facilityChildren && facilityChildren.length">
+            <div class="row justify-content-center">
+                <jhi-item-count [page]="page" [total]="queryCount" [itemsPerPage]="itemsPerPage"></jhi-item-count>
+            </div>
+            <div class="row justify-content-center">
+                <ngb-pagination [collectionSize]="totalItems" [(page)]="page"  (pageChange)="loadPage(page)"></ngb-pagination>
+            </div>
+        </div>
+</div>

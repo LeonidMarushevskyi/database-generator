@@ -1,0 +1,39 @@
+
+<div *ngIf="personPhone">
+    <h2><span>Person Phone</span> {{personPhone.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span>Person</span></dt>
+        <dd>
+            <div *ngIf="personPhone.personId">
+                <a [routerLink]="['/person', personPhone.personId]">{{personPhone.personId}}</a>
+            </div>
+        </dd>
+        <dt><span>Phone</span></dt>
+        <dd>
+            <div *ngIf="personPhone.phoneId">
+                <a [routerLink]="['/phone', personPhone.phoneId]">{{personPhone.phoneId}}</a>
+            </div>
+        </dd>
+        <dt><span>Type</span></dt>
+        <dd>
+            <div *ngIf="personPhone.typeId">
+                <a [routerLink]="['/phone-type', personPhone.typeId]">{{personPhone.typeId}}</a>
+            </div>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            (click)="previousState()"
+            class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span> Back</span>
+    </button>
+
+    <button type="button"
+            [routerLink]="['/', { outlets: { popup: 'person-phone/'+ personPhone.id + '/edit'} }]"
+            replaceUrl="true"
+            class="btn btn-primary">
+        <span class="fa fa-pencil"></span>&nbsp;<span> Edit</span>
+    </button>
+</div>

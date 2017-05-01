@@ -6,6 +6,18 @@
             "relationshipName": "address",
             "otherEntityName": "facilityAddress",
             "otherEntityRelationshipName": "facility"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "phone",
+            "otherEntityName": "facilityPhone",
+            "otherEntityRelationshipName": "facility"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "child",
+            "otherEntityName": "facilityChild",
+            "otherEntityRelationshipName": "facility"
         }
     ],
     "fields": [

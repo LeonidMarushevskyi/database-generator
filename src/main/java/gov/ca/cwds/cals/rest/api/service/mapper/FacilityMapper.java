@@ -17,6 +17,8 @@ public interface FacilityMapper {
     List<FacilityDTO> facilitiesToFacilityDTOs(List<Facility> facilities);
 
     @Mapping(target = "addresses", ignore = true)
+    @Mapping(target = "phones", ignore = true)
+    @Mapping(target = "children", ignore = true)
     Facility facilityDTOToFacility(FacilityDTO facilityDTO);
 
     List<Facility> facilityDTOsToFacilities(List<FacilityDTO> facilityDTOs);

@@ -17,6 +17,8 @@ export class Facility {
         public lastVisitReason?: string,
         public county?: string,
         public addressId?: number,
+        public phoneId?: number,
+        public childId?: number,
     ) {
     }
 }

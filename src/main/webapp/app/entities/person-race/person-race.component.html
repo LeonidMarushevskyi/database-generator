@@ -1,0 +1,66 @@
+<div>
+    <h2>
+        <span>Person Races</span>
+        <button class="btn btn-primary float-right create-person-race" [routerLink]="['/', { outlets: { popup: ['person-race-new'] } }]">
+            <span class="fa fa-plus"></span>
+            <span >
+            Create new Person Race
+            </span>
+        </button>
+    </h2>
+    <jhi-alert></jhi-alert>
+    <div class="row">
+    </div>
+    <br/>
+    <div class="table-responsive" *ngIf="personRaces">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+            <th><span>ID</span></th>
+            <th><span>Person</span></th>
+            <th><span>Race</span></th>
+            <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let personRace of personRaces ;trackBy: trackId">
+                <td><a [routerLink]="['../person-race', personRace.id ]">{{personRace.id}}</a></td>
+                <td>
+                    <div *ngIf="personRace.personId">
+                        <a [routerLink]="['../person', personRace.personId  ]" >{{personRace.personId}}</a>
+                    </div>
+                </td>
+                <td>
+                    <div *ngIf="personRace.raceId">
+                        <a [routerLink]="['../race-type', personRace.raceId  ]" >{{personRace.raceId}}</a>
+                    </div>
+                </td>
+                <td class="text-right">
+                    <div class="btn-group flex-btn-group-container">
+                        <button type="submit"
+                                [routerLink]="['../person-race', personRace.id ]"
+                                class="btn btn-info btn-sm">
+                            <span class="fa fa-eye"></span>
+                            <span class="hidden-md-down">View</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', { outlets: { popup: 'person-race/'+ personRace.id + '/edit'} }]"
+                                replaceUrl="true"
+                                class="btn btn-primary btn-sm">
+                            <span class="fa fa-pencil"></span>
+                            <span class="hidden-md-down">Edit</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', { outlets: { popup: 'person-race/'+ personRace.id + '/delete'} }]"
+                                replaceUrl="true"
+                                class="btn btn-danger btn-sm">
+                            <span class="fa fa-remove"></span>
+                            <span class="hidden-md-down">Delete</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

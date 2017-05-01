@@ -9,6 +9,8 @@ import { Facility } from './facility.model';
 import { FacilityPopupService } from './facility-popup.service';
 import { FacilityService } from './facility.service';
 import { FacilityAddress, FacilityAddressService } from '../facility-address';
+import { FacilityPhone, FacilityPhoneService } from '../facility-phone';
+import { FacilityChild, FacilityChildService } from '../facility-child';
 
 @Component({
     selector: 'jhi-facility-dialog',
@@ -21,11 +23,17 @@ export class FacilityDialogComponent implements OnInit {
     isSaving: boolean;
 
     facilityaddresses: FacilityAddress[];
+
+    facilityphones: FacilityPhone[];
+
+    facilitychildren: FacilityChild[];
     constructor(
         public activeModal: NgbActiveModal,
         private alertService: AlertService,
         private facilityService: FacilityService,
         private facilityAddressService: FacilityAddressService,
+        private facilityPhoneService: FacilityPhoneService,
+        private facilityChildService: FacilityChildService,
         private eventManager: EventManager
     ) {
     }
@@ -35,6 +43,10 @@ export class FacilityDialogComponent implements OnInit {
         this.authorities = ['ROLE_USER', 'ROLE_ADMIN'];
         this.facilityAddressService.query().subscribe(
             (res: Response) => { this.facilityaddresses = res.json(); }, (res: Response) => this.onError(res.json()));
+        this.facilityPhoneService.query().subscribe(
+            (res: Response) => { this.facilityphones = res.json(); }, (res: Response) => this.onError(res.json()));
+        this.facilityChildService.query().subscribe(
+            (res: Response) => { this.facilitychildren = res.json(); }, (res: Response) => this.onError(res.json()));
     }
     clear () {
         this.activeModal.dismiss('cancel');
@@ -69,6 +81,14 @@ export class FacilityDialogComponent implements OnInit {
     }
 
     trackFacilityAddressById(index: number, item: FacilityAddress) {
+        return item.id;
+    }
+
+    trackFacilityPhoneById(index: number, item: FacilityPhone) {
+        return item.id;
+    }
+
+    trackFacilityChildById(index: number, item: FacilityChild) {
         return item.id;
     }
 }

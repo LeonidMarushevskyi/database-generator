@@ -21,6 +21,31 @@ entity Facility {
   	county String required
 }
 
+entity Person {
+	id Long required,
+    firstName String required,
+    lastName String required,
+    gender String,
+    age Integer,
+	dateOfBirth LocalDate,
+    ssn String
+}
+
+entity PersonAddress {
+
+}
+
+entity PersonPhone {
+
+}
+
+entity FacilityChild {
+	id Long required,
+    dateOfPlacement LocalDate,
+    assignedWorker String,
+    countyOfOrigin String required
+}
+
 entity Address {
     streetAddress String required maxlength(100),
     city String required maxlength(50),
@@ -32,27 +57,137 @@ entity Address {
     deliverable Boolean
 }
 
+entity PersonEthnicity {
+}
+
+entity PersonLanguage {
+}
+
+entity LanguageType {
+	code String maxlength(2) required,
+    type String  maxlength(20)
+}
+
+entity PersonRace {
+}
+
+entity RaceType {
+	code String maxlength(2) required,
+    type String  maxlength(20)
+}
+
+entity EthnicityType {
+	code String maxlength(2) required,
+    type String  maxlength(20)
+}
+
+entity Phone {
+    number String required maxlength(16)
+}
+
 entity FacilityAddress {
 
 }
+
+entity FacilityPhone {
+
+}
+
 
 entity AddressType {
 	code String maxlength(2) required,
     type String  maxlength(20)
 }
 
-relationship ManyToOne {
-	FacilityAddress{type} to AddressType
+entity PhoneType {
+	code String maxlength(2) required,
+    type String  maxlength(20)
 }
 
 relationship OneToMany {
   Facility{address} to FacilityAddress
 }
 
+relationship OneToMany {
+  Facility{phone} to FacilityPhone
+}
+
 relationship OneToOne {
   FacilityAddress{address} to Address
 }
 
-dto Facility, FacilityAddress, AddressType, Address with mapstruct
+relationship OneToOne {
+  FacilityPhone{phone} to Phone
+}
+
+relationship ManyToOne {
+	FacilityAddress{type} to AddressType
+}
+
+relationship ManyToOne {
+	PersonAddress{type} to AddressType
+}
+
+relationship ManyToOne {
+	FacilityPhone{type} to PhoneType
+}
+
+relationship ManyToOne {
+	PersonPhone{type} to PhoneType
+}
+
+
+relationship OneToMany {
+	Person{phone} to PersonPhone
+}
+
+relationship OneToOne {
+	PersonPhone{phone} to Phone
+}
+
+relationship OneToMany {
+	Facility{child} to FacilityChild
+}
+
+
+relationship OneToOne {
+	FacilityChild{person} to Person
+}
+
+relationship OneToMany {
+	Person{address} to PersonAddress
+}
+
+relationship OneToOne {
+	Person{ethnicity} to PersonEthnicity
+}
+
+relationship ManyToOne {
+	PersonEthnicity{ethnicity} to EthnicityType
+}
+
+relationship ManyToOne {
+	PersonEthnicity{subEthnicity} to EthnicityType
+}
+
+relationship ManyToOne {
+	PersonRace{race} to RaceType
+}
+
+relationship ManyToOne {
+	PersonLanguage{language} to LanguageType
+}
+
+relationship OneToMany {
+	Person{language} to PersonLanguage
+}
+
+relationship OneToMany {
+	Person{race} to PersonRace
+}
+
+dto Facility, FacilityAddress, FacilityPhone, AddressType, Address, PhoneType, Phone, FacilityChild, Person, PersonPhone, PersonAddress, PersonEthnicity, PersonLanguage, PersonRace, LanguageType, EthnicityType, RaceType with mapstruct
 
 paginate Facility with pager
+
+paginate FacilityChild with pager

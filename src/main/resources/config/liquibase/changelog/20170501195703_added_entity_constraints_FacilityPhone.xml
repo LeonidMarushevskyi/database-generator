@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <!--
+        Added the constraints for entity FacilityPhone.
+    -->
+    <changeSet id="20170501195703-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="facility_id"
+                                 baseTableName="facility_phone"
+                                 constraintName="fk_facility_phone_facility_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="facility"/>
+
+        <addForeignKeyConstraint baseColumnNames="phone_id"
+                                 baseTableName="facility_phone"
+                                 constraintName="fk_facility_phone_phone_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="phone"/>
+
+        <addForeignKeyConstraint baseColumnNames="type_id"
+                                 baseTableName="facility_phone"
+                                 constraintName="fk_facility_phone_type_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="phone_type"/>
+
+    </changeSet>
+</databaseChangeLog>

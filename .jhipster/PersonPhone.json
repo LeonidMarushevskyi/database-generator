@@ -1,0 +1,31 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipName": "person",
+            "otherEntityName": "person",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "one-to-one",
+            "relationshipName": "phone",
+            "otherEntityName": "phone",
+            "otherEntityField": "id",
+            "ownerSide": true,
+            "otherEntityRelationshipName": "personPhone"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "relationshipName": "type",
+            "otherEntityName": "phoneType",
+            "otherEntityField": "id"
+        }
+    ],
+    "fields": [],
+    "changelogDate": "20170501195703",
+    "entityTableName": "person_phone",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "no"
+}

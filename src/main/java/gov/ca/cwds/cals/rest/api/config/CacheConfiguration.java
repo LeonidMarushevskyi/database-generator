@@ -47,6 +47,26 @@ public class CacheConfiguration {
             cm.createCache(gov.ca.cwds.cals.rest.api.domain.Facility.class.getName(), jcacheConfiguration);
             cm.createCache(gov.ca.cwds.cals.rest.api.domain.Facility.class.getName() + ".addresses", jcacheConfiguration);
             cm.createCache(gov.ca.cwds.cals.rest.api.domain.FacilityAddress.class.getName(), jcacheConfiguration);
+            cm.createCache(gov.ca.cwds.cals.rest.api.domain.A.class.getName(), jcacheConfiguration);
+            cm.createCache(gov.ca.cwds.cals.rest.api.domain.Facility.class.getName() + ".phones", jcacheConfiguration);
+            cm.createCache(gov.ca.cwds.cals.rest.api.domain.Facility.class.getName() + ".children", jcacheConfiguration);
+            cm.createCache(gov.ca.cwds.cals.rest.api.domain.EthnicityType.class.getName(), jcacheConfiguration);
+            cm.createCache(gov.ca.cwds.cals.rest.api.domain.FacilityChild.class.getName(), jcacheConfiguration);
+            cm.createCache(gov.ca.cwds.cals.rest.api.domain.FacilityPhone.class.getName(), jcacheConfiguration);
+            cm.createCache(gov.ca.cwds.cals.rest.api.domain.LanguageType.class.getName(), jcacheConfiguration);
+            cm.createCache(gov.ca.cwds.cals.rest.api.domain.RaceType.class.getName(), jcacheConfiguration);
+            cm.createCache(gov.ca.cwds.cals.rest.api.domain.PersonAddress.class.getName(), jcacheConfiguration);
+            cm.createCache(gov.ca.cwds.cals.rest.api.domain.PersonEthnicity.class.getName(), jcacheConfiguration);
+            cm.createCache(gov.ca.cwds.cals.rest.api.domain.PersonLanguage.class.getName(), jcacheConfiguration);
+            cm.createCache(gov.ca.cwds.cals.rest.api.domain.PersonPhone.class.getName(), jcacheConfiguration);
+            cm.createCache(gov.ca.cwds.cals.rest.api.domain.PersonRace.class.getName(), jcacheConfiguration);
+            cm.createCache(gov.ca.cwds.cals.rest.api.domain.Phone.class.getName(), jcacheConfiguration);
+            cm.createCache(gov.ca.cwds.cals.rest.api.domain.PhoneType.class.getName(), jcacheConfiguration);
+            cm.createCache(gov.ca.cwds.cals.rest.api.domain.Person.class.getName(), jcacheConfiguration);
+            cm.createCache(gov.ca.cwds.cals.rest.api.domain.Person.class.getName() + ".phones", jcacheConfiguration);
+            cm.createCache(gov.ca.cwds.cals.rest.api.domain.Person.class.getName() + ".addresses", jcacheConfiguration);
+            cm.createCache(gov.ca.cwds.cals.rest.api.domain.Person.class.getName() + ".languages", jcacheConfiguration);
+            cm.createCache(gov.ca.cwds.cals.rest.api.domain.Person.class.getName() + ".races", jcacheConfiguration);
             // jhipster-needle-ehcache-add-entry
         };
     }

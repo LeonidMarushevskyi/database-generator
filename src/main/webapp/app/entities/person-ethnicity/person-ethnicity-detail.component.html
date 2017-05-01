@@ -1,0 +1,33 @@
+
+<div *ngIf="personEthnicity">
+    <h2><span>Person Ethnicity</span> {{personEthnicity.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span>Ethnicity</span></dt>
+        <dd>
+            <div *ngIf="personEthnicity.ethnicityId">
+                <a [routerLink]="['/ethnicity-type', personEthnicity.ethnicityId]">{{personEthnicity.ethnicityId}}</a>
+            </div>
+        </dd>
+        <dt><span>Sub Ethnicity</span></dt>
+        <dd>
+            <div *ngIf="personEthnicity.subEthnicityId">
+                <a [routerLink]="['/ethnicity-type', personEthnicity.subEthnicityId]">{{personEthnicity.subEthnicityId}}</a>
+            </div>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            (click)="previousState()"
+            class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span> Back</span>
+    </button>
+
+    <button type="button"
+            [routerLink]="['/', { outlets: { popup: 'person-ethnicity/'+ personEthnicity.id + '/edit'} }]"
+            replaceUrl="true"
+            class="btn btn-primary">
+        <span class="fa fa-pencil"></span>&nbsp;<span> Edit</span>
+    </button>
+</div>

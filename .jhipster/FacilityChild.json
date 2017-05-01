@@ -1,0 +1,41 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipName": "facility",
+            "otherEntityName": "facility",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "one-to-one",
+            "relationshipName": "person",
+            "otherEntityName": "person",
+            "otherEntityField": "id",
+            "ownerSide": true,
+            "otherEntityRelationshipName": "facilityChild"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "dateOfPlacement",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "assignedWorker",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "countyOfOrigin",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "changelogDate": "20170501195703",
+    "entityTableName": "facility_child",
+    "dto": "mapstruct",
+    "pagination": "pager",
+    "service": "no"
+}
