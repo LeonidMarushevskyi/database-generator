@@ -1,0 +1,42 @@
+{
+    "fluentMethods": true,
+    "relationships": [],
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "minlength",
+                "maxlength"
+            ],
+            "fieldValidateRulesMinlength": 1,
+            "fieldValidateRulesMaxlength": 42
+        },
+        {
+            "fieldName": "content",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text",
+            "fieldValidateRules": [
+                "minbytes",
+                "maxbytes"
+            ],
+            "fieldValidateRulesMinbytes": 20,
+            "fieldValidateRulesMaxbytes": 40
+        },
+        {
+            "fieldName": "count",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "min",
+                "max"
+            ],
+            "fieldValidateRulesMin": 0,
+            "fieldValidateRulesMax": 41
+        }
+    ],
+    "changelogDate": "20170501055907",
+    "entityTableName": "a",
+    "dto": "no",
+    "pagination": "no",
+    "service": "no"
+}

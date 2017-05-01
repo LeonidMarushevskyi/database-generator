@@ -1,0 +1,58 @@
+/**
+ * @author CALS API team.
+ */
+
+entity Facility {
+    id Long required,
+  	type String required,
+  	name String required maxlength(50),
+  	licenseeName String maxlength(50) required,
+  	licenseeType String,
+  	assignedWorker String,
+  	districtOffice String,
+  	licenseNumber Long required,
+  	licenseStatus String,
+  	capacity Integer required,
+  	licenseEffectiveDate LocalDate required,
+  	originalApplicationRecievedDate LocalDate required,
+  	lastVisitDate LocalDate,
+  	emailAddress String maxlength(50),
+  	lastVisitReason String,
+  	county String required
+}
+
+entity Address {
+    streetAddress String required maxlength(100),
+    city String required maxlength(50),
+    state String required minlength(2) maxlength(2),
+    zipCode String required minlength(5) maxlength(5),
+    zipSuffixCode String minlength(4) maxlength(4),
+    longitude BigDecimal,
+    lattitude BigDecimal,
+    deliverable Boolean
+}
+
+entity FacilityAddress {
+
+}
+
+entity AddressType {
+	code String maxlength(2) required,
+    type String  maxlength(20)
+}
+
+relationship ManyToOne {
+	FacilityAddress{type} to AddressType
+}
+
+relationship OneToMany {
+  Facility{address} to FacilityAddress
+}
+
+relationship OneToOne {
+  FacilityAddress{address} to Address
+}
+
+dto Facility, FacilityAddress, AddressType, Address with mapstruct
+
+paginate Facility with pager

@@ -1,0 +1,53 @@
+
+<div *ngIf="address">
+    <h2><span>Address</span> {{address.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span>Street Address</span></dt>
+        <dd>
+            <span>{{address.streetAddress}}</span>
+        </dd>
+        <dt><span>City</span></dt>
+        <dd>
+            <span>{{address.city}}</span>
+        </dd>
+        <dt><span>State</span></dt>
+        <dd>
+            <span>{{address.state}}</span>
+        </dd>
+        <dt><span>Zip Code</span></dt>
+        <dd>
+            <span>{{address.zipCode}}</span>
+        </dd>
+        <dt><span>Zip Suffix Code</span></dt>
+        <dd>
+            <span>{{address.zipSuffixCode}}</span>
+        </dd>
+        <dt><span>Longitude</span></dt>
+        <dd>
+            <span>{{address.longitude}}</span>
+        </dd>
+        <dt><span>Lattitude</span></dt>
+        <dd>
+            <span>{{address.lattitude}}</span>
+        </dd>
+        <dt><span>Deliverable</span></dt>
+        <dd>
+            <span>{{address.deliverable}}</span>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            (click)="previousState()"
+            class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span> Back</span>
+    </button>
+
+    <button type="button"
+            [routerLink]="['/', { outlets: { popup: 'address/'+ address.id + '/edit'} }]"
+            replaceUrl="true"
+            class="btn btn-primary">
+        <span class="fa fa-pencil"></span>&nbsp;<span> Edit</span>
+    </button>
+</div>
