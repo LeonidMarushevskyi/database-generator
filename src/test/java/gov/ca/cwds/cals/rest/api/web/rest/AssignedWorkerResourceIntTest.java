@@ -4,6 +4,8 @@ import gov.ca.cwds.cals.rest.api.GeneratorApp;
 
 import gov.ca.cwds.cals.rest.api.domain.AssignedWorker;
 import gov.ca.cwds.cals.rest.api.repository.AssignedWorkerRepository;
+import gov.ca.cwds.cals.rest.api.service.dto.AssignedWorkerDTO;
+import gov.ca.cwds.cals.rest.api.service.mapper.AssignedWorkerMapper;
 import gov.ca.cwds.cals.rest.api.web.rest.errors.ExceptionTranslator;
 
 import org.junit.Before;
@@ -44,6 +46,9 @@ public class AssignedWorkerResourceIntTest {
     private AssignedWorkerRepository assignedWorkerRepository;
 
     @Autowired
+    private AssignedWorkerMapper assignedWorkerMapper;
+
+    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -62,7 +67,7 @@ public class AssignedWorkerResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        AssignedWorkerResource assignedWorkerResource = new AssignedWorkerResource(assignedWorkerRepository);
+        AssignedWorkerResource assignedWorkerResource = new AssignedWorkerResource(assignedWorkerRepository, assignedWorkerMapper);
         this.restAssignedWorkerMockMvc = MockMvcBuilders.standaloneSetup(assignedWorkerResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -92,9 +97,10 @@ public class AssignedWorkerResourceIntTest {
         int databaseSizeBeforeCreate = assignedWorkerRepository.findAll().size();
 
         // Create the AssignedWorker
+        AssignedWorkerDTO assignedWorkerDTO = assignedWorkerMapper.assignedWorkerToAssignedWorkerDTO(assignedWorker);
         restAssignedWorkerMockMvc.perform(post("/api/assigned-workers")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(assignedWorker)))
+            .content(TestUtil.convertObjectToJsonBytes(assignedWorkerDTO)))
             .andExpect(status().isCreated());
 
         // Validate the AssignedWorker in the database
@@ -111,11 +117,12 @@ public class AssignedWorkerResourceIntTest {
 
         // Create the AssignedWorker with an existing ID
         assignedWorker.setId(1L);
+        AssignedWorkerDTO assignedWorkerDTO = assignedWorkerMapper.assignedWorkerToAssignedWorkerDTO(assignedWorker);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restAssignedWorkerMockMvc.perform(post("/api/assigned-workers")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(assignedWorker)))
+            .content(TestUtil.convertObjectToJsonBytes(assignedWorkerDTO)))
             .andExpect(status().isBadRequest());
 
         // Validate the Alice in the database
@@ -131,10 +138,11 @@ public class AssignedWorkerResourceIntTest {
         assignedWorker.setCode(null);
 
         // Create the AssignedWorker, which fails.
+        AssignedWorkerDTO assignedWorkerDTO = assignedWorkerMapper.assignedWorkerToAssignedWorkerDTO(assignedWorker);
 
         restAssignedWorkerMockMvc.perform(post("/api/assigned-workers")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(assignedWorker)))
+            .content(TestUtil.convertObjectToJsonBytes(assignedWorkerDTO)))
             .andExpect(status().isBadRequest());
 
         List<AssignedWorker> assignedWorkerList = assignedWorkerRepository.findAll();
@@ -188,10 +196,11 @@ public class AssignedWorkerResourceIntTest {
         AssignedWorker updatedAssignedWorker = assignedWorkerRepository.findOne(assignedWorker.getId());
         updatedAssignedWorker
             .code(UPDATED_CODE);
+        AssignedWorkerDTO assignedWorkerDTO = assignedWorkerMapper.assignedWorkerToAssignedWorkerDTO(updatedAssignedWorker);
 
         restAssignedWorkerMockMvc.perform(put("/api/assigned-workers")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(updatedAssignedWorker)))
+            .content(TestUtil.convertObjectToJsonBytes(assignedWorkerDTO)))
             .andExpect(status().isOk());
 
         // Validate the AssignedWorker in the database
@@ -207,11 +216,12 @@ public class AssignedWorkerResourceIntTest {
         int databaseSizeBeforeUpdate = assignedWorkerRepository.findAll().size();
 
         // Create the AssignedWorker
+        AssignedWorkerDTO assignedWorkerDTO = assignedWorkerMapper.assignedWorkerToAssignedWorkerDTO(assignedWorker);
 
         // If the entity doesn't have an ID, it will be created instead of just being updated
         restAssignedWorkerMockMvc.perform(put("/api/assigned-workers")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(assignedWorker)))
+            .content(TestUtil.convertObjectToJsonBytes(assignedWorkerDTO)))
             .andExpect(status().isCreated());
 
         // Validate the AssignedWorker in the database

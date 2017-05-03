@@ -7,8 +7,6 @@ entity Facility {
   	name String required maxlength(50),
   	licenseeName String maxlength(50) required,
   	licenseeType String,
-  	assignedWorker String,
-  	districtOffice String,
   	licenseNumber Long required,
   	licenseStatus String,
   	capacity Integer required,
@@ -32,11 +30,6 @@ entity FacilityStatus {
 entity County {
 	code Integer required,
     type String  maxlength(20)
-}
-
-entity DistrictOffice {
-	facilityNumber Long required,
-	name String maxlength(50) required,
 }
 
 entity DistrictOffice {
@@ -242,7 +235,7 @@ relationship OneToOne {
 	PersonAddress{race} to Address
 }
 
-dto AssignedWorker, Facility, FacilityAddress, FacilityPhone, AddressType, Address, PhoneType, Phone, FacilityChild, Person, PersonPhone, PersonAddress, PersonEthnicity, PersonLanguage, PersonRace, AssignedWorker,  with mapstruct
+dto AssignedWorker, Facility, FacilityAddress, FacilityPhone, AddressType, Address, PhoneType, Phone, FacilityChild, Person, PersonPhone, PersonAddress, PersonEthnicity, PersonLanguage, PersonRace, AssignedWorker, FacilityType, FacilityStatus, County, DistrictOffice, AssignedWorker  with mapstruct
 
 paginate Facility with pager
 

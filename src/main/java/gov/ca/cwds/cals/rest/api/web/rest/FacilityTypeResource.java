@@ -5,6 +5,8 @@ import gov.ca.cwds.cals.rest.api.domain.FacilityType;
 
 import gov.ca.cwds.cals.rest.api.repository.FacilityTypeRepository;
 import gov.ca.cwds.cals.rest.api.web.rest.util.HeaderUtil;
+import gov.ca.cwds.cals.rest.api.service.dto.FacilityTypeDTO;
+import gov.ca.cwds.cals.rest.api.service.mapper.FacilityTypeMapper;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,8 +16,10 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * REST controller for managing FacilityType.
@@ -30,25 +34,30 @@ public class FacilityTypeResource {
         
     private final FacilityTypeRepository facilityTypeRepository;
 
-    public FacilityTypeResource(FacilityTypeRepository facilityTypeRepository) {
+    private final FacilityTypeMapper facilityTypeMapper;
+
+    public FacilityTypeResource(FacilityTypeRepository facilityTypeRepository, FacilityTypeMapper facilityTypeMapper) {
         this.facilityTypeRepository = facilityTypeRepository;
+        this.facilityTypeMapper = facilityTypeMapper;
     }
 
     /**
      * POST  /facility-types : Create a new facilityType.
      *
-     * @param facilityType the facilityType to create
-     * @return the ResponseEntity with status 201 (Created) and with body the new facilityType, or with status 400 (Bad Request) if the facilityType has already an ID
+     * @param facilityTypeDTO the facilityTypeDTO to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new facilityTypeDTO, or with status 400 (Bad Request) if the facilityType has already an ID
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PostMapping("/facility-types")
     @Timed
-    public ResponseEntity<FacilityType> createFacilityType(@Valid @RequestBody FacilityType facilityType) throws URISyntaxException {
-        log.debug("REST request to save FacilityType : {}", facilityType);
-        if (facilityType.getId() != null) {
+    public ResponseEntity<FacilityTypeDTO> createFacilityType(@Valid @RequestBody FacilityTypeDTO facilityTypeDTO) throws URISyntaxException {
+        log.debug("REST request to save FacilityType : {}", facilityTypeDTO);
+        if (facilityTypeDTO.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new facilityType cannot already have an ID")).body(null);
         }
-        FacilityType result = facilityTypeRepository.save(facilityType);
+        FacilityType facilityType = facilityTypeMapper.facilityTypeDTOToFacilityType(facilityTypeDTO);
+        facilityType = facilityTypeRepository.save(facilityType);
+        FacilityTypeDTO result = facilityTypeMapper.facilityTypeToFacilityTypeDTO(facilityType);
         return ResponseEntity.created(new URI("/api/facility-types/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -57,22 +66,24 @@ public class FacilityTypeResource {
     /**
      * PUT  /facility-types : Updates an existing facilityType.
      *
-     * @param facilityType the facilityType to update
-     * @return the ResponseEntity with status 200 (OK) and with body the updated facilityType,
-     * or with status 400 (Bad Request) if the facilityType is not valid,
-     * or with status 500 (Internal Server Error) if the facilityType couldnt be updated
+     * @param facilityTypeDTO the facilityTypeDTO to update
+     * @return the ResponseEntity with status 200 (OK) and with body the updated facilityTypeDTO,
+     * or with status 400 (Bad Request) if the facilityTypeDTO is not valid,
+     * or with status 500 (Internal Server Error) if the facilityTypeDTO couldnt be updated
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PutMapping("/facility-types")
     @Timed
-    public ResponseEntity<FacilityType> updateFacilityType(@Valid @RequestBody FacilityType facilityType) throws URISyntaxException {
-        log.debug("REST request to update FacilityType : {}", facilityType);
-        if (facilityType.getId() == null) {
-            return createFacilityType(facilityType);
+    public ResponseEntity<FacilityTypeDTO> updateFacilityType(@Valid @RequestBody FacilityTypeDTO facilityTypeDTO) throws URISyntaxException {
+        log.debug("REST request to update FacilityType : {}", facilityTypeDTO);
+        if (facilityTypeDTO.getId() == null) {
+            return createFacilityType(facilityTypeDTO);
         }
-        FacilityType result = facilityTypeRepository.save(facilityType);
+        FacilityType facilityType = facilityTypeMapper.facilityTypeDTOToFacilityType(facilityTypeDTO);
+        facilityType = facilityTypeRepository.save(facilityType);
+        FacilityTypeDTO result = facilityTypeMapper.facilityTypeToFacilityTypeDTO(facilityType);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, facilityType.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, facilityTypeDTO.getId().toString()))
             .body(result);
     }
 
@@ -83,30 +94,31 @@ public class FacilityTypeResource {
      */
     @GetMapping("/facility-types")
     @Timed
-    public List<FacilityType> getAllFacilityTypes() {
+    public List<FacilityTypeDTO> getAllFacilityTypes() {
         log.debug("REST request to get all FacilityTypes");
         List<FacilityType> facilityTypes = facilityTypeRepository.findAll();
-        return facilityTypes;
+        return facilityTypeMapper.facilityTypesToFacilityTypeDTOs(facilityTypes);
     }
 
     /**
      * GET  /facility-types/:id : get the "id" facilityType.
      *
-     * @param id the id of the facilityType to retrieve
-     * @return the ResponseEntity with status 200 (OK) and with body the facilityType, or with status 404 (Not Found)
+     * @param id the id of the facilityTypeDTO to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the facilityTypeDTO, or with status 404 (Not Found)
      */
     @GetMapping("/facility-types/{id}")
     @Timed
-    public ResponseEntity<FacilityType> getFacilityType(@PathVariable Long id) {
+    public ResponseEntity<FacilityTypeDTO> getFacilityType(@PathVariable Long id) {
         log.debug("REST request to get FacilityType : {}", id);
         FacilityType facilityType = facilityTypeRepository.findOne(id);
-        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(facilityType));
+        FacilityTypeDTO facilityTypeDTO = facilityTypeMapper.facilityTypeToFacilityTypeDTO(facilityType);
+        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(facilityTypeDTO));
     }
 
     /**
      * DELETE  /facility-types/:id : delete the "id" facilityType.
      *
-     * @param id the id of the facilityType to delete
+     * @param id the id of the facilityTypeDTO to delete
      * @return the ResponseEntity with status 200 (OK)
      */
     @DeleteMapping("/facility-types/{id}")

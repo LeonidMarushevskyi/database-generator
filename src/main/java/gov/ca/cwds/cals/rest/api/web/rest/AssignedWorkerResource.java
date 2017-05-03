@@ -5,6 +5,8 @@ import gov.ca.cwds.cals.rest.api.domain.AssignedWorker;
 
 import gov.ca.cwds.cals.rest.api.repository.AssignedWorkerRepository;
 import gov.ca.cwds.cals.rest.api.web.rest.util.HeaderUtil;
+import gov.ca.cwds.cals.rest.api.service.dto.AssignedWorkerDTO;
+import gov.ca.cwds.cals.rest.api.service.mapper.AssignedWorkerMapper;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,8 +16,10 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * REST controller for managing AssignedWorker.
@@ -30,25 +34,30 @@ public class AssignedWorkerResource {
         
     private final AssignedWorkerRepository assignedWorkerRepository;
 
-    public AssignedWorkerResource(AssignedWorkerRepository assignedWorkerRepository) {
+    private final AssignedWorkerMapper assignedWorkerMapper;
+
+    public AssignedWorkerResource(AssignedWorkerRepository assignedWorkerRepository, AssignedWorkerMapper assignedWorkerMapper) {
         this.assignedWorkerRepository = assignedWorkerRepository;
+        this.assignedWorkerMapper = assignedWorkerMapper;
     }
 
     /**
      * POST  /assigned-workers : Create a new assignedWorker.
      *
-     * @param assignedWorker the assignedWorker to create
-     * @return the ResponseEntity with status 201 (Created) and with body the new assignedWorker, or with status 400 (Bad Request) if the assignedWorker has already an ID
+     * @param assignedWorkerDTO the assignedWorkerDTO to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new assignedWorkerDTO, or with status 400 (Bad Request) if the assignedWorker has already an ID
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PostMapping("/assigned-workers")
     @Timed
-    public ResponseEntity<AssignedWorker> createAssignedWorker(@Valid @RequestBody AssignedWorker assignedWorker) throws URISyntaxException {
-        log.debug("REST request to save AssignedWorker : {}", assignedWorker);
-        if (assignedWorker.getId() != null) {
+    public ResponseEntity<AssignedWorkerDTO> createAssignedWorker(@Valid @RequestBody AssignedWorkerDTO assignedWorkerDTO) throws URISyntaxException {
+        log.debug("REST request to save AssignedWorker : {}", assignedWorkerDTO);
+        if (assignedWorkerDTO.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new assignedWorker cannot already have an ID")).body(null);
         }
-        AssignedWorker result = assignedWorkerRepository.save(assignedWorker);
+        AssignedWorker assignedWorker = assignedWorkerMapper.assignedWorkerDTOToAssignedWorker(assignedWorkerDTO);
+        assignedWorker = assignedWorkerRepository.save(assignedWorker);
+        AssignedWorkerDTO result = assignedWorkerMapper.assignedWorkerToAssignedWorkerDTO(assignedWorker);
         return ResponseEntity.created(new URI("/api/assigned-workers/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -57,22 +66,24 @@ public class AssignedWorkerResource {
     /**
      * PUT  /assigned-workers : Updates an existing assignedWorker.
      *
-     * @param assignedWorker the assignedWorker to update
-     * @return the ResponseEntity with status 200 (OK) and with body the updated assignedWorker,
-     * or with status 400 (Bad Request) if the assignedWorker is not valid,
-     * or with status 500 (Internal Server Error) if the assignedWorker couldnt be updated
+     * @param assignedWorkerDTO the assignedWorkerDTO to update
+     * @return the ResponseEntity with status 200 (OK) and with body the updated assignedWorkerDTO,
+     * or with status 400 (Bad Request) if the assignedWorkerDTO is not valid,
+     * or with status 500 (Internal Server Error) if the assignedWorkerDTO couldnt be updated
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PutMapping("/assigned-workers")
     @Timed
-    public ResponseEntity<AssignedWorker> updateAssignedWorker(@Valid @RequestBody AssignedWorker assignedWorker) throws URISyntaxException {
-        log.debug("REST request to update AssignedWorker : {}", assignedWorker);
-        if (assignedWorker.getId() == null) {
-            return createAssignedWorker(assignedWorker);
+    public ResponseEntity<AssignedWorkerDTO> updateAssignedWorker(@Valid @RequestBody AssignedWorkerDTO assignedWorkerDTO) throws URISyntaxException {
+        log.debug("REST request to update AssignedWorker : {}", assignedWorkerDTO);
+        if (assignedWorkerDTO.getId() == null) {
+            return createAssignedWorker(assignedWorkerDTO);
         }
-        AssignedWorker result = assignedWorkerRepository.save(assignedWorker);
+        AssignedWorker assignedWorker = assignedWorkerMapper.assignedWorkerDTOToAssignedWorker(assignedWorkerDTO);
+        assignedWorker = assignedWorkerRepository.save(assignedWorker);
+        AssignedWorkerDTO result = assignedWorkerMapper.assignedWorkerToAssignedWorkerDTO(assignedWorker);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, assignedWorker.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, assignedWorkerDTO.getId().toString()))
             .body(result);
     }
 
@@ -83,30 +94,31 @@ public class AssignedWorkerResource {
      */
     @GetMapping("/assigned-workers")
     @Timed
-    public List<AssignedWorker> getAllAssignedWorkers() {
+    public List<AssignedWorkerDTO> getAllAssignedWorkers() {
         log.debug("REST request to get all AssignedWorkers");
         List<AssignedWorker> assignedWorkers = assignedWorkerRepository.findAll();
-        return assignedWorkers;
+        return assignedWorkerMapper.assignedWorkersToAssignedWorkerDTOs(assignedWorkers);
     }
 
     /**
      * GET  /assigned-workers/:id : get the "id" assignedWorker.
      *
-     * @param id the id of the assignedWorker to retrieve
-     * @return the ResponseEntity with status 200 (OK) and with body the assignedWorker, or with status 404 (Not Found)
+     * @param id the id of the assignedWorkerDTO to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the assignedWorkerDTO, or with status 404 (Not Found)
      */
     @GetMapping("/assigned-workers/{id}")
     @Timed
-    public ResponseEntity<AssignedWorker> getAssignedWorker(@PathVariable Long id) {
+    public ResponseEntity<AssignedWorkerDTO> getAssignedWorker(@PathVariable Long id) {
         log.debug("REST request to get AssignedWorker : {}", id);
         AssignedWorker assignedWorker = assignedWorkerRepository.findOne(id);
-        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(assignedWorker));
+        AssignedWorkerDTO assignedWorkerDTO = assignedWorkerMapper.assignedWorkerToAssignedWorkerDTO(assignedWorker);
+        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(assignedWorkerDTO));
     }
 
     /**
      * DELETE  /assigned-workers/:id : delete the "id" assignedWorker.
      *
-     * @param id the id of the assignedWorker to delete
+     * @param id the id of the assignedWorkerDTO to delete
      * @return the ResponseEntity with status 200 (OK)
      */
     @DeleteMapping("/assigned-workers/{id}")

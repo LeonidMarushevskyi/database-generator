@@ -50,12 +50,6 @@ public class FacilityResourceIntTest {
     private static final String DEFAULT_LICENSEE_TYPE = "AAAAAAAAAA";
     private static final String UPDATED_LICENSEE_TYPE = "BBBBBBBBBB";
 
-    private static final String DEFAULT_ASSIGNED_WORKER = "AAAAAAAAAA";
-    private static final String UPDATED_ASSIGNED_WORKER = "BBBBBBBBBB";
-
-    private static final String DEFAULT_DISTRICT_OFFICE = "AAAAAAAAAA";
-    private static final String UPDATED_DISTRICT_OFFICE = "BBBBBBBBBB";
-
     private static final Long DEFAULT_LICENSE_NUMBER = 1L;
     private static final Long UPDATED_LICENSE_NUMBER = 2L;
 
@@ -123,8 +117,6 @@ public class FacilityResourceIntTest {
             .name(DEFAULT_NAME)
             .licenseeName(DEFAULT_LICENSEE_NAME)
             .licenseeType(DEFAULT_LICENSEE_TYPE)
-            .assignedWorker(DEFAULT_ASSIGNED_WORKER)
-            .districtOffice(DEFAULT_DISTRICT_OFFICE)
             .licenseNumber(DEFAULT_LICENSE_NUMBER)
             .licenseStatus(DEFAULT_LICENSE_STATUS)
             .capacity(DEFAULT_CAPACITY)
@@ -160,8 +152,6 @@ public class FacilityResourceIntTest {
         assertThat(testFacility.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testFacility.getLicenseeName()).isEqualTo(DEFAULT_LICENSEE_NAME);
         assertThat(testFacility.getLicenseeType()).isEqualTo(DEFAULT_LICENSEE_TYPE);
-        assertThat(testFacility.getAssignedWorker()).isEqualTo(DEFAULT_ASSIGNED_WORKER);
-        assertThat(testFacility.getDistrictOffice()).isEqualTo(DEFAULT_DISTRICT_OFFICE);
         assertThat(testFacility.getLicenseNumber()).isEqualTo(DEFAULT_LICENSE_NUMBER);
         assertThat(testFacility.getLicenseStatus()).isEqualTo(DEFAULT_LICENSE_STATUS);
         assertThat(testFacility.getCapacity()).isEqualTo(DEFAULT_CAPACITY);
@@ -320,8 +310,6 @@ public class FacilityResourceIntTest {
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())))
             .andExpect(jsonPath("$.[*].licenseeName").value(hasItem(DEFAULT_LICENSEE_NAME.toString())))
             .andExpect(jsonPath("$.[*].licenseeType").value(hasItem(DEFAULT_LICENSEE_TYPE.toString())))
-            .andExpect(jsonPath("$.[*].assignedWorker").value(hasItem(DEFAULT_ASSIGNED_WORKER.toString())))
-            .andExpect(jsonPath("$.[*].districtOffice").value(hasItem(DEFAULT_DISTRICT_OFFICE.toString())))
             .andExpect(jsonPath("$.[*].licenseNumber").value(hasItem(DEFAULT_LICENSE_NUMBER.intValue())))
             .andExpect(jsonPath("$.[*].licenseStatus").value(hasItem(DEFAULT_LICENSE_STATUS.toString())))
             .andExpect(jsonPath("$.[*].capacity").value(hasItem(DEFAULT_CAPACITY)))
@@ -346,8 +334,6 @@ public class FacilityResourceIntTest {
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME.toString()))
             .andExpect(jsonPath("$.licenseeName").value(DEFAULT_LICENSEE_NAME.toString()))
             .andExpect(jsonPath("$.licenseeType").value(DEFAULT_LICENSEE_TYPE.toString()))
-            .andExpect(jsonPath("$.assignedWorker").value(DEFAULT_ASSIGNED_WORKER.toString()))
-            .andExpect(jsonPath("$.districtOffice").value(DEFAULT_DISTRICT_OFFICE.toString()))
             .andExpect(jsonPath("$.licenseNumber").value(DEFAULT_LICENSE_NUMBER.intValue()))
             .andExpect(jsonPath("$.licenseStatus").value(DEFAULT_LICENSE_STATUS.toString()))
             .andExpect(jsonPath("$.capacity").value(DEFAULT_CAPACITY))
@@ -379,8 +365,6 @@ public class FacilityResourceIntTest {
             .name(UPDATED_NAME)
             .licenseeName(UPDATED_LICENSEE_NAME)
             .licenseeType(UPDATED_LICENSEE_TYPE)
-            .assignedWorker(UPDATED_ASSIGNED_WORKER)
-            .districtOffice(UPDATED_DISTRICT_OFFICE)
             .licenseNumber(UPDATED_LICENSE_NUMBER)
             .licenseStatus(UPDATED_LICENSE_STATUS)
             .capacity(UPDATED_CAPACITY)
@@ -403,8 +387,6 @@ public class FacilityResourceIntTest {
         assertThat(testFacility.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testFacility.getLicenseeName()).isEqualTo(UPDATED_LICENSEE_NAME);
         assertThat(testFacility.getLicenseeType()).isEqualTo(UPDATED_LICENSEE_TYPE);
-        assertThat(testFacility.getAssignedWorker()).isEqualTo(UPDATED_ASSIGNED_WORKER);
-        assertThat(testFacility.getDistrictOffice()).isEqualTo(UPDATED_DISTRICT_OFFICE);
         assertThat(testFacility.getLicenseNumber()).isEqualTo(UPDATED_LICENSE_NUMBER);
         assertThat(testFacility.getLicenseStatus()).isEqualTo(UPDATED_LICENSE_STATUS);
         assertThat(testFacility.getCapacity()).isEqualTo(UPDATED_CAPACITY);

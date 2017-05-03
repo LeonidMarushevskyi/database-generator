@@ -27,8 +27,8 @@
                 <td><a [routerLink]="['../assigned-worker', assignedWorker.id ]">{{assignedWorker.id}}</a></td>
                 <td>{{assignedWorker.code}}</td>
                 <td>
-                    <div *ngIf="assignedWorker.person">
-                        <a [routerLink]="['../person', assignedWorker.person?.id ]" >{{assignedWorker.person?.id}}</a>
+                    <div *ngIf="assignedWorker.personId">
+                        <a [routerLink]="['../person', assignedWorker.personId  ]" >{{assignedWorker.personId}}</a>
                     </div>
                 </td>
                 <td class="text-right">

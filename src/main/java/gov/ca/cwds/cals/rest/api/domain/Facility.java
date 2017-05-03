@@ -42,12 +42,6 @@ public class Facility implements Serializable {
     @Column(name = "licensee_type")
     private String licenseeType;
 
-    @Column(name = "assigned_worker")
-    private String assignedWorker;
-
-    @Column(name = "district_office")
-    private String districtOffice;
-
     @NotNull
     @Column(name = "license_number", nullable = false)
     private Long licenseNumber;
@@ -152,32 +146,6 @@ public class Facility implements Serializable {
 
     public void setLicenseeType(String licenseeType) {
         this.licenseeType = licenseeType;
-    }
-
-    public String getAssignedWorker() {
-        return assignedWorker;
-    }
-
-    public Facility assignedWorker(String assignedWorker) {
-        this.assignedWorker = assignedWorker;
-        return this;
-    }
-
-    public void setAssignedWorker(String assignedWorker) {
-        this.assignedWorker = assignedWorker;
-    }
-
-    public String getDistrictOffice() {
-        return districtOffice;
-    }
-
-    public Facility districtOffice(String districtOffice) {
-        this.districtOffice = districtOffice;
-        return this;
-    }
-
-    public void setDistrictOffice(String districtOffice) {
-        this.districtOffice = districtOffice;
     }
 
     public Long getLicenseNumber() {
@@ -451,8 +419,6 @@ public class Facility implements Serializable {
             ", name='" + name + "'" +
             ", licenseeName='" + licenseeName + "'" +
             ", licenseeType='" + licenseeType + "'" +
-            ", assignedWorker='" + assignedWorker + "'" +
-            ", districtOffice='" + districtOffice + "'" +
             ", licenseNumber='" + licenseNumber + "'" +
             ", licenseStatus='" + licenseStatus + "'" +
             ", capacity='" + capacity + "'" +

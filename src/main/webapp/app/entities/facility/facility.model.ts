@@ -4,8 +4,6 @@ export class Facility {
         public name?: string,
         public licenseeName?: string,
         public licenseeType?: string,
-        public assignedWorker?: string,
-        public districtOffice?: string,
         public licenseNumber?: number,
         public licenseStatus?: string,
         public capacity?: number,

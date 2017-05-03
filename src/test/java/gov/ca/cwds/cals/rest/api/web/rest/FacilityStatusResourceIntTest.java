@@ -4,6 +4,8 @@ import gov.ca.cwds.cals.rest.api.GeneratorApp;
 
 import gov.ca.cwds.cals.rest.api.domain.FacilityStatus;
 import gov.ca.cwds.cals.rest.api.repository.FacilityStatusRepository;
+import gov.ca.cwds.cals.rest.api.service.dto.FacilityStatusDTO;
+import gov.ca.cwds.cals.rest.api.service.mapper.FacilityStatusMapper;
 import gov.ca.cwds.cals.rest.api.web.rest.errors.ExceptionTranslator;
 
 import org.junit.Before;
@@ -47,6 +49,9 @@ public class FacilityStatusResourceIntTest {
     private FacilityStatusRepository facilityStatusRepository;
 
     @Autowired
+    private FacilityStatusMapper facilityStatusMapper;
+
+    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -65,7 +70,7 @@ public class FacilityStatusResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        FacilityStatusResource facilityStatusResource = new FacilityStatusResource(facilityStatusRepository);
+        FacilityStatusResource facilityStatusResource = new FacilityStatusResource(facilityStatusRepository, facilityStatusMapper);
         this.restFacilityStatusMockMvc = MockMvcBuilders.standaloneSetup(facilityStatusResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -96,9 +101,10 @@ public class FacilityStatusResourceIntTest {
         int databaseSizeBeforeCreate = facilityStatusRepository.findAll().size();
 
         // Create the FacilityStatus
+        FacilityStatusDTO facilityStatusDTO = facilityStatusMapper.facilityStatusToFacilityStatusDTO(facilityStatus);
         restFacilityStatusMockMvc.perform(post("/api/facility-statuses")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(facilityStatus)))
+            .content(TestUtil.convertObjectToJsonBytes(facilityStatusDTO)))
             .andExpect(status().isCreated());
 
         // Validate the FacilityStatus in the database
@@ -116,11 +122,12 @@ public class FacilityStatusResourceIntTest {
 
         // Create the FacilityStatus with an existing ID
         facilityStatus.setId(1L);
+        FacilityStatusDTO facilityStatusDTO = facilityStatusMapper.facilityStatusToFacilityStatusDTO(facilityStatus);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restFacilityStatusMockMvc.perform(post("/api/facility-statuses")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(facilityStatus)))
+            .content(TestUtil.convertObjectToJsonBytes(facilityStatusDTO)))
             .andExpect(status().isBadRequest());
 
         // Validate the Alice in the database
@@ -136,10 +143,11 @@ public class FacilityStatusResourceIntTest {
         facilityStatus.setCode(null);
 
         // Create the FacilityStatus, which fails.
+        FacilityStatusDTO facilityStatusDTO = facilityStatusMapper.facilityStatusToFacilityStatusDTO(facilityStatus);
 
         restFacilityStatusMockMvc.perform(post("/api/facility-statuses")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(facilityStatus)))
+            .content(TestUtil.convertObjectToJsonBytes(facilityStatusDTO)))
             .andExpect(status().isBadRequest());
 
         List<FacilityStatus> facilityStatusList = facilityStatusRepository.findAll();
@@ -196,10 +204,11 @@ public class FacilityStatusResourceIntTest {
         updatedFacilityStatus
             .code(UPDATED_CODE)
             .type(UPDATED_TYPE);
+        FacilityStatusDTO facilityStatusDTO = facilityStatusMapper.facilityStatusToFacilityStatusDTO(updatedFacilityStatus);
 
         restFacilityStatusMockMvc.perform(put("/api/facility-statuses")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(updatedFacilityStatus)))
+            .content(TestUtil.convertObjectToJsonBytes(facilityStatusDTO)))
             .andExpect(status().isOk());
 
         // Validate the FacilityStatus in the database
@@ -216,11 +225,12 @@ public class FacilityStatusResourceIntTest {
         int databaseSizeBeforeUpdate = facilityStatusRepository.findAll().size();
 
         // Create the FacilityStatus
+        FacilityStatusDTO facilityStatusDTO = facilityStatusMapper.facilityStatusToFacilityStatusDTO(facilityStatus);
 
         // If the entity doesn't have an ID, it will be created instead of just being updated
         restFacilityStatusMockMvc.perform(put("/api/facility-statuses")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(facilityStatus)))
+            .content(TestUtil.convertObjectToJsonBytes(facilityStatusDTO)))
             .andExpect(status().isCreated());
 
         // Validate the FacilityStatus in the database

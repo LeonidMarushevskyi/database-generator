@@ -21,7 +21,7 @@
     ],
     "changelogDate": "20170502210302",
     "entityTableName": "district_office",
-    "dto": "no",
+    "dto": "mapstruct",
     "pagination": "no",
     "service": "no"
 }

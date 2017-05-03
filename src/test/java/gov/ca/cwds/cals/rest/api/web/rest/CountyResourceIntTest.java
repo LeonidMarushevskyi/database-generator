@@ -4,6 +4,8 @@ import gov.ca.cwds.cals.rest.api.GeneratorApp;
 
 import gov.ca.cwds.cals.rest.api.domain.County;
 import gov.ca.cwds.cals.rest.api.repository.CountyRepository;
+import gov.ca.cwds.cals.rest.api.service.dto.CountyDTO;
+import gov.ca.cwds.cals.rest.api.service.mapper.CountyMapper;
 import gov.ca.cwds.cals.rest.api.web.rest.errors.ExceptionTranslator;
 
 import org.junit.Before;
@@ -47,6 +49,9 @@ public class CountyResourceIntTest {
     private CountyRepository countyRepository;
 
     @Autowired
+    private CountyMapper countyMapper;
+
+    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -65,7 +70,7 @@ public class CountyResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        CountyResource countyResource = new CountyResource(countyRepository);
+        CountyResource countyResource = new CountyResource(countyRepository, countyMapper);
         this.restCountyMockMvc = MockMvcBuilders.standaloneSetup(countyResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -96,9 +101,10 @@ public class CountyResourceIntTest {
         int databaseSizeBeforeCreate = countyRepository.findAll().size();
 
         // Create the County
+        CountyDTO countyDTO = countyMapper.countyToCountyDTO(county);
         restCountyMockMvc.perform(post("/api/counties")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(county)))
+            .content(TestUtil.convertObjectToJsonBytes(countyDTO)))
             .andExpect(status().isCreated());
 
         // Validate the County in the database
@@ -116,11 +122,12 @@ public class CountyResourceIntTest {
 
         // Create the County with an existing ID
         county.setId(1L);
+        CountyDTO countyDTO = countyMapper.countyToCountyDTO(county);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restCountyMockMvc.perform(post("/api/counties")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(county)))
+            .content(TestUtil.convertObjectToJsonBytes(countyDTO)))
             .andExpect(status().isBadRequest());
 
         // Validate the Alice in the database
@@ -136,10 +143,11 @@ public class CountyResourceIntTest {
         county.setCode(null);
 
         // Create the County, which fails.
+        CountyDTO countyDTO = countyMapper.countyToCountyDTO(county);
 
         restCountyMockMvc.perform(post("/api/counties")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(county)))
+            .content(TestUtil.convertObjectToJsonBytes(countyDTO)))
             .andExpect(status().isBadRequest());
 
         List<County> countyList = countyRepository.findAll();
@@ -196,10 +204,11 @@ public class CountyResourceIntTest {
         updatedCounty
             .code(UPDATED_CODE)
             .type(UPDATED_TYPE);
+        CountyDTO countyDTO = countyMapper.countyToCountyDTO(updatedCounty);
 
         restCountyMockMvc.perform(put("/api/counties")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(updatedCounty)))
+            .content(TestUtil.convertObjectToJsonBytes(countyDTO)))
             .andExpect(status().isOk());
 
         // Validate the County in the database
@@ -216,11 +225,12 @@ public class CountyResourceIntTest {
         int databaseSizeBeforeUpdate = countyRepository.findAll().size();
 
         // Create the County
+        CountyDTO countyDTO = countyMapper.countyToCountyDTO(county);
 
         // If the entity doesn't have an ID, it will be created instead of just being updated
         restCountyMockMvc.perform(put("/api/counties")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(county)))
+            .content(TestUtil.convertObjectToJsonBytes(countyDTO)))
             .andExpect(status().isCreated());
 
         // Validate the County in the database

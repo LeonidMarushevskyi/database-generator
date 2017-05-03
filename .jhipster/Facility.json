@@ -74,14 +74,6 @@
             "fieldType": "String"
         },
         {
-            "fieldName": "assignedWorker",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "districtOffice",
-            "fieldType": "String"
-        },
-        {
             "fieldName": "licenseNumber",
             "fieldType": "Long",
             "fieldValidateRules": [

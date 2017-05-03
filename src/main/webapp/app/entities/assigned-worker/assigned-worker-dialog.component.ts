@@ -34,10 +34,10 @@ export class AssignedWorkerDialogComponent implements OnInit {
         this.isSaving = false;
         this.authorities = ['ROLE_USER', 'ROLE_ADMIN'];
         this.personService.query({filter: 'assignedworker-is-null'}).subscribe((res: Response) => {
-            if (!this.assignedWorker.person || !this.assignedWorker.person.id) {
+            if (!this.assignedWorker.personId) {
                 this.people = res.json();
             } else {
-                this.personService.find(this.assignedWorker.person.id).subscribe((subRes: Person) => {
+                this.personService.find(this.assignedWorker.personId).subscribe((subRes: Person) => {
                     this.people = [subRes].concat(res.json());
                 }, (subRes: Response) => this.onError(subRes.json()));
             }

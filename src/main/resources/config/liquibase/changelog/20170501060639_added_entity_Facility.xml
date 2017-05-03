@@ -33,14 +33,6 @@
                 <constraints nullable="true" />
             </column>
 
-            <column name="assigned_worker" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-
-            <column name="district_office" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-
             <column name="license_number" type="bigint">
                 <constraints nullable="false" />
             </column>

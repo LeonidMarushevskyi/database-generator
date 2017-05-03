@@ -5,6 +5,8 @@ import gov.ca.cwds.cals.rest.api.domain.County;
 
 import gov.ca.cwds.cals.rest.api.repository.CountyRepository;
 import gov.ca.cwds.cals.rest.api.web.rest.util.HeaderUtil;
+import gov.ca.cwds.cals.rest.api.service.dto.CountyDTO;
+import gov.ca.cwds.cals.rest.api.service.mapper.CountyMapper;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,8 +16,10 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * REST controller for managing County.
@@ -30,25 +34,30 @@ public class CountyResource {
         
     private final CountyRepository countyRepository;
 
-    public CountyResource(CountyRepository countyRepository) {
+    private final CountyMapper countyMapper;
+
+    public CountyResource(CountyRepository countyRepository, CountyMapper countyMapper) {
         this.countyRepository = countyRepository;
+        this.countyMapper = countyMapper;
     }
 
     /**
      * POST  /counties : Create a new county.
      *
-     * @param county the county to create
-     * @return the ResponseEntity with status 201 (Created) and with body the new county, or with status 400 (Bad Request) if the county has already an ID
+     * @param countyDTO the countyDTO to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new countyDTO, or with status 400 (Bad Request) if the county has already an ID
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PostMapping("/counties")
     @Timed
-    public ResponseEntity<County> createCounty(@Valid @RequestBody County county) throws URISyntaxException {
-        log.debug("REST request to save County : {}", county);
-        if (county.getId() != null) {
+    public ResponseEntity<CountyDTO> createCounty(@Valid @RequestBody CountyDTO countyDTO) throws URISyntaxException {
+        log.debug("REST request to save County : {}", countyDTO);
+        if (countyDTO.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new county cannot already have an ID")).body(null);
         }
-        County result = countyRepository.save(county);
+        County county = countyMapper.countyDTOToCounty(countyDTO);
+        county = countyRepository.save(county);
+        CountyDTO result = countyMapper.countyToCountyDTO(county);
         return ResponseEntity.created(new URI("/api/counties/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -57,22 +66,24 @@ public class CountyResource {
     /**
      * PUT  /counties : Updates an existing county.
      *
-     * @param county the county to update
-     * @return the ResponseEntity with status 200 (OK) and with body the updated county,
-     * or with status 400 (Bad Request) if the county is not valid,
-     * or with status 500 (Internal Server Error) if the county couldnt be updated
+     * @param countyDTO the countyDTO to update
+     * @return the ResponseEntity with status 200 (OK) and with body the updated countyDTO,
+     * or with status 400 (Bad Request) if the countyDTO is not valid,
+     * or with status 500 (Internal Server Error) if the countyDTO couldnt be updated
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PutMapping("/counties")
     @Timed
-    public ResponseEntity<County> updateCounty(@Valid @RequestBody County county) throws URISyntaxException {
-        log.debug("REST request to update County : {}", county);
-        if (county.getId() == null) {
-            return createCounty(county);
+    public ResponseEntity<CountyDTO> updateCounty(@Valid @RequestBody CountyDTO countyDTO) throws URISyntaxException {
+        log.debug("REST request to update County : {}", countyDTO);
+        if (countyDTO.getId() == null) {
+            return createCounty(countyDTO);
         }
-        County result = countyRepository.save(county);
+        County county = countyMapper.countyDTOToCounty(countyDTO);
+        county = countyRepository.save(county);
+        CountyDTO result = countyMapper.countyToCountyDTO(county);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, county.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, countyDTO.getId().toString()))
             .body(result);
     }
 
@@ -83,30 +94,31 @@ public class CountyResource {
      */
     @GetMapping("/counties")
     @Timed
-    public List<County> getAllCounties() {
+    public List<CountyDTO> getAllCounties() {
         log.debug("REST request to get all Counties");
         List<County> counties = countyRepository.findAll();
-        return counties;
+        return countyMapper.countiesToCountyDTOs(counties);
     }
 
     /**
      * GET  /counties/:id : get the "id" county.
      *
-     * @param id the id of the county to retrieve
-     * @return the ResponseEntity with status 200 (OK) and with body the county, or with status 404 (Not Found)
+     * @param id the id of the countyDTO to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the countyDTO, or with status 404 (Not Found)
      */
     @GetMapping("/counties/{id}")
     @Timed
-    public ResponseEntity<County> getCounty(@PathVariable Long id) {
+    public ResponseEntity<CountyDTO> getCounty(@PathVariable Long id) {
         log.debug("REST request to get County : {}", id);
         County county = countyRepository.findOne(id);
-        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(county));
+        CountyDTO countyDTO = countyMapper.countyToCountyDTO(county);
+        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(countyDTO));
     }
 
     /**
      * DELETE  /counties/:id : delete the "id" county.
      *
-     * @param id the id of the county to delete
+     * @param id the id of the countyDTO to delete
      * @return the ResponseEntity with status 200 (OK)
      */
     @DeleteMapping("/counties/{id}")

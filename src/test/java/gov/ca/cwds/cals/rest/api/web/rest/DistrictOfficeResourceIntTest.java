@@ -4,6 +4,8 @@ import gov.ca.cwds.cals.rest.api.GeneratorApp;
 
 import gov.ca.cwds.cals.rest.api.domain.DistrictOffice;
 import gov.ca.cwds.cals.rest.api.repository.DistrictOfficeRepository;
+import gov.ca.cwds.cals.rest.api.service.dto.DistrictOfficeDTO;
+import gov.ca.cwds.cals.rest.api.service.mapper.DistrictOfficeMapper;
 import gov.ca.cwds.cals.rest.api.web.rest.errors.ExceptionTranslator;
 
 import org.junit.Before;
@@ -47,6 +49,9 @@ public class DistrictOfficeResourceIntTest {
     private DistrictOfficeRepository districtOfficeRepository;
 
     @Autowired
+    private DistrictOfficeMapper districtOfficeMapper;
+
+    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -65,7 +70,7 @@ public class DistrictOfficeResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        DistrictOfficeResource districtOfficeResource = new DistrictOfficeResource(districtOfficeRepository);
+        DistrictOfficeResource districtOfficeResource = new DistrictOfficeResource(districtOfficeRepository, districtOfficeMapper);
         this.restDistrictOfficeMockMvc = MockMvcBuilders.standaloneSetup(districtOfficeResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -96,9 +101,10 @@ public class DistrictOfficeResourceIntTest {
         int databaseSizeBeforeCreate = districtOfficeRepository.findAll().size();
 
         // Create the DistrictOffice
+        DistrictOfficeDTO districtOfficeDTO = districtOfficeMapper.districtOfficeToDistrictOfficeDTO(districtOffice);
         restDistrictOfficeMockMvc.perform(post("/api/district-offices")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(districtOffice)))
+            .content(TestUtil.convertObjectToJsonBytes(districtOfficeDTO)))
             .andExpect(status().isCreated());
 
         // Validate the DistrictOffice in the database
@@ -116,11 +122,12 @@ public class DistrictOfficeResourceIntTest {
 
         // Create the DistrictOffice with an existing ID
         districtOffice.setId(1L);
+        DistrictOfficeDTO districtOfficeDTO = districtOfficeMapper.districtOfficeToDistrictOfficeDTO(districtOffice);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restDistrictOfficeMockMvc.perform(post("/api/district-offices")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(districtOffice)))
+            .content(TestUtil.convertObjectToJsonBytes(districtOfficeDTO)))
             .andExpect(status().isBadRequest());
 
         // Validate the Alice in the database
@@ -136,10 +143,11 @@ public class DistrictOfficeResourceIntTest {
         districtOffice.setFacilityNumber(null);
 
         // Create the DistrictOffice, which fails.
+        DistrictOfficeDTO districtOfficeDTO = districtOfficeMapper.districtOfficeToDistrictOfficeDTO(districtOffice);
 
         restDistrictOfficeMockMvc.perform(post("/api/district-offices")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(districtOffice)))
+            .content(TestUtil.convertObjectToJsonBytes(districtOfficeDTO)))
             .andExpect(status().isBadRequest());
 
         List<DistrictOffice> districtOfficeList = districtOfficeRepository.findAll();
@@ -154,10 +162,11 @@ public class DistrictOfficeResourceIntTest {
         districtOffice.setName(null);
 
         // Create the DistrictOffice, which fails.
+        DistrictOfficeDTO districtOfficeDTO = districtOfficeMapper.districtOfficeToDistrictOfficeDTO(districtOffice);
 
         restDistrictOfficeMockMvc.perform(post("/api/district-offices")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(districtOffice)))
+            .content(TestUtil.convertObjectToJsonBytes(districtOfficeDTO)))
             .andExpect(status().isBadRequest());
 
         List<DistrictOffice> districtOfficeList = districtOfficeRepository.findAll();
@@ -214,10 +223,11 @@ public class DistrictOfficeResourceIntTest {
         updatedDistrictOffice
             .facilityNumber(UPDATED_FACILITY_NUMBER)
             .name(UPDATED_NAME);
+        DistrictOfficeDTO districtOfficeDTO = districtOfficeMapper.districtOfficeToDistrictOfficeDTO(updatedDistrictOffice);
 
         restDistrictOfficeMockMvc.perform(put("/api/district-offices")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(updatedDistrictOffice)))
+            .content(TestUtil.convertObjectToJsonBytes(districtOfficeDTO)))
             .andExpect(status().isOk());
 
         // Validate the DistrictOffice in the database
@@ -234,11 +244,12 @@ public class DistrictOfficeResourceIntTest {
         int databaseSizeBeforeUpdate = districtOfficeRepository.findAll().size();
 
         // Create the DistrictOffice
+        DistrictOfficeDTO districtOfficeDTO = districtOfficeMapper.districtOfficeToDistrictOfficeDTO(districtOffice);
 
         // If the entity doesn't have an ID, it will be created instead of just being updated
         restDistrictOfficeMockMvc.perform(put("/api/district-offices")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(districtOffice)))
+            .content(TestUtil.convertObjectToJsonBytes(districtOfficeDTO)))
             .andExpect(status().isCreated());
 
         // Validate the DistrictOffice in the database

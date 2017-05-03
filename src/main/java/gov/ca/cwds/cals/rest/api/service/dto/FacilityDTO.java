@@ -24,10 +24,6 @@ public class FacilityDTO implements Serializable {
 
     private String licenseeType;
 
-    private String assignedWorker;
-
-    private String districtOffice;
-
     @NotNull
     private Long licenseNumber;
 
@@ -86,20 +82,6 @@ public class FacilityDTO implements Serializable {
 
     public void setLicenseeType(String licenseeType) {
         this.licenseeType = licenseeType;
-    }
-    public String getAssignedWorker() {
-        return assignedWorker;
-    }
-
-    public void setAssignedWorker(String assignedWorker) {
-        this.assignedWorker = assignedWorker;
-    }
-    public String getDistrictOffice() {
-        return districtOffice;
-    }
-
-    public void setDistrictOffice(String districtOffice) {
-        this.districtOffice = districtOffice;
     }
     public Long getLicenseNumber() {
         return licenseNumber;
@@ -226,8 +208,6 @@ public class FacilityDTO implements Serializable {
             ", name='" + name + "'" +
             ", licenseeName='" + licenseeName + "'" +
             ", licenseeType='" + licenseeType + "'" +
-            ", assignedWorker='" + assignedWorker + "'" +
-            ", districtOffice='" + districtOffice + "'" +
             ", licenseNumber='" + licenseNumber + "'" +
             ", licenseStatus='" + licenseStatus + "'" +
             ", capacity='" + capacity + "'" +

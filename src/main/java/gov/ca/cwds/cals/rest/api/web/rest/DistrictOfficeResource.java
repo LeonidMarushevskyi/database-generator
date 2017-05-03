@@ -5,6 +5,8 @@ import gov.ca.cwds.cals.rest.api.domain.DistrictOffice;
 
 import gov.ca.cwds.cals.rest.api.repository.DistrictOfficeRepository;
 import gov.ca.cwds.cals.rest.api.web.rest.util.HeaderUtil;
+import gov.ca.cwds.cals.rest.api.service.dto.DistrictOfficeDTO;
+import gov.ca.cwds.cals.rest.api.service.mapper.DistrictOfficeMapper;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,8 +16,10 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * REST controller for managing DistrictOffice.
@@ -30,25 +34,30 @@ public class DistrictOfficeResource {
         
     private final DistrictOfficeRepository districtOfficeRepository;
 
-    public DistrictOfficeResource(DistrictOfficeRepository districtOfficeRepository) {
+    private final DistrictOfficeMapper districtOfficeMapper;
+
+    public DistrictOfficeResource(DistrictOfficeRepository districtOfficeRepository, DistrictOfficeMapper districtOfficeMapper) {
         this.districtOfficeRepository = districtOfficeRepository;
+        this.districtOfficeMapper = districtOfficeMapper;
     }
 
     /**
      * POST  /district-offices : Create a new districtOffice.
      *
-     * @param districtOffice the districtOffice to create
-     * @return the ResponseEntity with status 201 (Created) and with body the new districtOffice, or with status 400 (Bad Request) if the districtOffice has already an ID
+     * @param districtOfficeDTO the districtOfficeDTO to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new districtOfficeDTO, or with status 400 (Bad Request) if the districtOffice has already an ID
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PostMapping("/district-offices")
     @Timed
-    public ResponseEntity<DistrictOffice> createDistrictOffice(@Valid @RequestBody DistrictOffice districtOffice) throws URISyntaxException {
-        log.debug("REST request to save DistrictOffice : {}", districtOffice);
-        if (districtOffice.getId() != null) {
+    public ResponseEntity<DistrictOfficeDTO> createDistrictOffice(@Valid @RequestBody DistrictOfficeDTO districtOfficeDTO) throws URISyntaxException {
+        log.debug("REST request to save DistrictOffice : {}", districtOfficeDTO);
+        if (districtOfficeDTO.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new districtOffice cannot already have an ID")).body(null);
         }
-        DistrictOffice result = districtOfficeRepository.save(districtOffice);
+        DistrictOffice districtOffice = districtOfficeMapper.districtOfficeDTOToDistrictOffice(districtOfficeDTO);
+        districtOffice = districtOfficeRepository.save(districtOffice);
+        DistrictOfficeDTO result = districtOfficeMapper.districtOfficeToDistrictOfficeDTO(districtOffice);
         return ResponseEntity.created(new URI("/api/district-offices/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -57,22 +66,24 @@ public class DistrictOfficeResource {
     /**
      * PUT  /district-offices : Updates an existing districtOffice.
      *
-     * @param districtOffice the districtOffice to update
-     * @return the ResponseEntity with status 200 (OK) and with body the updated districtOffice,
-     * or with status 400 (Bad Request) if the districtOffice is not valid,
-     * or with status 500 (Internal Server Error) if the districtOffice couldnt be updated
+     * @param districtOfficeDTO the districtOfficeDTO to update
+     * @return the ResponseEntity with status 200 (OK) and with body the updated districtOfficeDTO,
+     * or with status 400 (Bad Request) if the districtOfficeDTO is not valid,
+     * or with status 500 (Internal Server Error) if the districtOfficeDTO couldnt be updated
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PutMapping("/district-offices")
     @Timed
-    public ResponseEntity<DistrictOffice> updateDistrictOffice(@Valid @RequestBody DistrictOffice districtOffice) throws URISyntaxException {
-        log.debug("REST request to update DistrictOffice : {}", districtOffice);
-        if (districtOffice.getId() == null) {
-            return createDistrictOffice(districtOffice);
+    public ResponseEntity<DistrictOfficeDTO> updateDistrictOffice(@Valid @RequestBody DistrictOfficeDTO districtOfficeDTO) throws URISyntaxException {
+        log.debug("REST request to update DistrictOffice : {}", districtOfficeDTO);
+        if (districtOfficeDTO.getId() == null) {
+            return createDistrictOffice(districtOfficeDTO);
         }
-        DistrictOffice result = districtOfficeRepository.save(districtOffice);
+        DistrictOffice districtOffice = districtOfficeMapper.districtOfficeDTOToDistrictOffice(districtOfficeDTO);
+        districtOffice = districtOfficeRepository.save(districtOffice);
+        DistrictOfficeDTO result = districtOfficeMapper.districtOfficeToDistrictOfficeDTO(districtOffice);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, districtOffice.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, districtOfficeDTO.getId().toString()))
             .body(result);
     }
 
@@ -83,30 +94,31 @@ public class DistrictOfficeResource {
      */
     @GetMapping("/district-offices")
     @Timed
-    public List<DistrictOffice> getAllDistrictOffices() {
+    public List<DistrictOfficeDTO> getAllDistrictOffices() {
         log.debug("REST request to get all DistrictOffices");
         List<DistrictOffice> districtOffices = districtOfficeRepository.findAll();
-        return districtOffices;
+        return districtOfficeMapper.districtOfficesToDistrictOfficeDTOs(districtOffices);
     }
 
     /**
      * GET  /district-offices/:id : get the "id" districtOffice.
      *
-     * @param id the id of the districtOffice to retrieve
-     * @return the ResponseEntity with status 200 (OK) and with body the districtOffice, or with status 404 (Not Found)
+     * @param id the id of the districtOfficeDTO to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the districtOfficeDTO, or with status 404 (Not Found)
      */
     @GetMapping("/district-offices/{id}")
     @Timed
-    public ResponseEntity<DistrictOffice> getDistrictOffice(@PathVariable Long id) {
+    public ResponseEntity<DistrictOfficeDTO> getDistrictOffice(@PathVariable Long id) {
         log.debug("REST request to get DistrictOffice : {}", id);
         DistrictOffice districtOffice = districtOfficeRepository.findOne(id);
-        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(districtOffice));
+        DistrictOfficeDTO districtOfficeDTO = districtOfficeMapper.districtOfficeToDistrictOfficeDTO(districtOffice);
+        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(districtOfficeDTO));
     }
 
     /**
      * DELETE  /district-offices/:id : delete the "id" districtOffice.
      *
-     * @param id the id of the districtOffice to delete
+     * @param id the id of the districtOfficeDTO to delete
      * @return the ResponseEntity with status 200 (OK)
      */
     @DeleteMapping("/district-offices/{id}")

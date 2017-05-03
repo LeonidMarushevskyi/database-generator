@@ -4,6 +4,8 @@ import gov.ca.cwds.cals.rest.api.GeneratorApp;
 
 import gov.ca.cwds.cals.rest.api.domain.FacilityType;
 import gov.ca.cwds.cals.rest.api.repository.FacilityTypeRepository;
+import gov.ca.cwds.cals.rest.api.service.dto.FacilityTypeDTO;
+import gov.ca.cwds.cals.rest.api.service.mapper.FacilityTypeMapper;
 import gov.ca.cwds.cals.rest.api.web.rest.errors.ExceptionTranslator;
 
 import org.junit.Before;
@@ -47,6 +49,9 @@ public class FacilityTypeResourceIntTest {
     private FacilityTypeRepository facilityTypeRepository;
 
     @Autowired
+    private FacilityTypeMapper facilityTypeMapper;
+
+    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -65,7 +70,7 @@ public class FacilityTypeResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        FacilityTypeResource facilityTypeResource = new FacilityTypeResource(facilityTypeRepository);
+        FacilityTypeResource facilityTypeResource = new FacilityTypeResource(facilityTypeRepository, facilityTypeMapper);
         this.restFacilityTypeMockMvc = MockMvcBuilders.standaloneSetup(facilityTypeResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -96,9 +101,10 @@ public class FacilityTypeResourceIntTest {
         int databaseSizeBeforeCreate = facilityTypeRepository.findAll().size();
 
         // Create the FacilityType
+        FacilityTypeDTO facilityTypeDTO = facilityTypeMapper.facilityTypeToFacilityTypeDTO(facilityType);
         restFacilityTypeMockMvc.perform(post("/api/facility-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(facilityType)))
+            .content(TestUtil.convertObjectToJsonBytes(facilityTypeDTO)))
             .andExpect(status().isCreated());
 
         // Validate the FacilityType in the database
@@ -116,11 +122,12 @@ public class FacilityTypeResourceIntTest {
 
         // Create the FacilityType with an existing ID
         facilityType.setId(1L);
+        FacilityTypeDTO facilityTypeDTO = facilityTypeMapper.facilityTypeToFacilityTypeDTO(facilityType);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restFacilityTypeMockMvc.perform(post("/api/facility-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(facilityType)))
+            .content(TestUtil.convertObjectToJsonBytes(facilityTypeDTO)))
             .andExpect(status().isBadRequest());
 
         // Validate the Alice in the database
@@ -136,10 +143,11 @@ public class FacilityTypeResourceIntTest {
         facilityType.setCode(null);
 
         // Create the FacilityType, which fails.
+        FacilityTypeDTO facilityTypeDTO = facilityTypeMapper.facilityTypeToFacilityTypeDTO(facilityType);
 
         restFacilityTypeMockMvc.perform(post("/api/facility-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(facilityType)))
+            .content(TestUtil.convertObjectToJsonBytes(facilityTypeDTO)))
             .andExpect(status().isBadRequest());
 
         List<FacilityType> facilityTypeList = facilityTypeRepository.findAll();
@@ -196,10 +204,11 @@ public class FacilityTypeResourceIntTest {
         updatedFacilityType
             .code(UPDATED_CODE)
             .type(UPDATED_TYPE);
+        FacilityTypeDTO facilityTypeDTO = facilityTypeMapper.facilityTypeToFacilityTypeDTO(updatedFacilityType);
 
         restFacilityTypeMockMvc.perform(put("/api/facility-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(updatedFacilityType)))
+            .content(TestUtil.convertObjectToJsonBytes(facilityTypeDTO)))
             .andExpect(status().isOk());
 
         // Validate the FacilityType in the database
@@ -216,11 +225,12 @@ public class FacilityTypeResourceIntTest {
         int databaseSizeBeforeUpdate = facilityTypeRepository.findAll().size();
 
         // Create the FacilityType
+        FacilityTypeDTO facilityTypeDTO = facilityTypeMapper.facilityTypeToFacilityTypeDTO(facilityType);
 
         // If the entity doesn't have an ID, it will be created instead of just being updated
         restFacilityTypeMockMvc.perform(put("/api/facility-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(facilityType)))
+            .content(TestUtil.convertObjectToJsonBytes(facilityTypeDTO)))
             .andExpect(status().isCreated());
 
         // Validate the FacilityType in the database

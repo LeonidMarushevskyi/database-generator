@@ -20,7 +20,7 @@
     ],
     "changelogDate": "20170502210302",
     "entityTableName": "facility_type",
-    "dto": "no",
+    "dto": "mapstruct",
     "pagination": "no",
     "service": "no"
 }

@@ -23,7 +23,7 @@
     ],
     "changelogDate": "20170502220129",
     "entityTableName": "assigned_worker",
-    "dto": "no",
+    "dto": "mapstruct",
     "pagination": "no",
     "service": "no"
 }

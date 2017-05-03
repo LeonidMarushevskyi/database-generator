@@ -5,6 +5,8 @@ import gov.ca.cwds.cals.rest.api.domain.FacilityStatus;
 
 import gov.ca.cwds.cals.rest.api.repository.FacilityStatusRepository;
 import gov.ca.cwds.cals.rest.api.web.rest.util.HeaderUtil;
+import gov.ca.cwds.cals.rest.api.service.dto.FacilityStatusDTO;
+import gov.ca.cwds.cals.rest.api.service.mapper.FacilityStatusMapper;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,8 +16,10 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * REST controller for managing FacilityStatus.
@@ -30,25 +34,30 @@ public class FacilityStatusResource {
         
     private final FacilityStatusRepository facilityStatusRepository;
 
-    public FacilityStatusResource(FacilityStatusRepository facilityStatusRepository) {
+    private final FacilityStatusMapper facilityStatusMapper;
+
+    public FacilityStatusResource(FacilityStatusRepository facilityStatusRepository, FacilityStatusMapper facilityStatusMapper) {
         this.facilityStatusRepository = facilityStatusRepository;
+        this.facilityStatusMapper = facilityStatusMapper;
     }
 
     /**
      * POST  /facility-statuses : Create a new facilityStatus.
      *
-     * @param facilityStatus the facilityStatus to create
-     * @return the ResponseEntity with status 201 (Created) and with body the new facilityStatus, or with status 400 (Bad Request) if the facilityStatus has already an ID
+     * @param facilityStatusDTO the facilityStatusDTO to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new facilityStatusDTO, or with status 400 (Bad Request) if the facilityStatus has already an ID
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PostMapping("/facility-statuses")
     @Timed
-    public ResponseEntity<FacilityStatus> createFacilityStatus(@Valid @RequestBody FacilityStatus facilityStatus) throws URISyntaxException {
-        log.debug("REST request to save FacilityStatus : {}", facilityStatus);
-        if (facilityStatus.getId() != null) {
+    public ResponseEntity<FacilityStatusDTO> createFacilityStatus(@Valid @RequestBody FacilityStatusDTO facilityStatusDTO) throws URISyntaxException {
+        log.debug("REST request to save FacilityStatus : {}", facilityStatusDTO);
+        if (facilityStatusDTO.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new facilityStatus cannot already have an ID")).body(null);
         }
-        FacilityStatus result = facilityStatusRepository.save(facilityStatus);
+        FacilityStatus facilityStatus = facilityStatusMapper.facilityStatusDTOToFacilityStatus(facilityStatusDTO);
+        facilityStatus = facilityStatusRepository.save(facilityStatus);
+        FacilityStatusDTO result = facilityStatusMapper.facilityStatusToFacilityStatusDTO(facilityStatus);
         return ResponseEntity.created(new URI("/api/facility-statuses/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -57,22 +66,24 @@ public class FacilityStatusResource {
     /**
      * PUT  /facility-statuses : Updates an existing facilityStatus.
      *
-     * @param facilityStatus the facilityStatus to update
-     * @return the ResponseEntity with status 200 (OK) and with body the updated facilityStatus,
-     * or with status 400 (Bad Request) if the facilityStatus is not valid,
-     * or with status 500 (Internal Server Error) if the facilityStatus couldnt be updated
+     * @param facilityStatusDTO the facilityStatusDTO to update
+     * @return the ResponseEntity with status 200 (OK) and with body the updated facilityStatusDTO,
+     * or with status 400 (Bad Request) if the facilityStatusDTO is not valid,
+     * or with status 500 (Internal Server Error) if the facilityStatusDTO couldnt be updated
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PutMapping("/facility-statuses")
     @Timed
-    public ResponseEntity<FacilityStatus> updateFacilityStatus(@Valid @RequestBody FacilityStatus facilityStatus) throws URISyntaxException {
-        log.debug("REST request to update FacilityStatus : {}", facilityStatus);
-        if (facilityStatus.getId() == null) {
-            return createFacilityStatus(facilityStatus);
+    public ResponseEntity<FacilityStatusDTO> updateFacilityStatus(@Valid @RequestBody FacilityStatusDTO facilityStatusDTO) throws URISyntaxException {
+        log.debug("REST request to update FacilityStatus : {}", facilityStatusDTO);
+        if (facilityStatusDTO.getId() == null) {
+            return createFacilityStatus(facilityStatusDTO);
         }
-        FacilityStatus result = facilityStatusRepository.save(facilityStatus);
+        FacilityStatus facilityStatus = facilityStatusMapper.facilityStatusDTOToFacilityStatus(facilityStatusDTO);
+        facilityStatus = facilityStatusRepository.save(facilityStatus);
+        FacilityStatusDTO result = facilityStatusMapper.facilityStatusToFacilityStatusDTO(facilityStatus);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, facilityStatus.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, facilityStatusDTO.getId().toString()))
             .body(result);
     }
 
@@ -83,30 +94,31 @@ public class FacilityStatusResource {
      */
     @GetMapping("/facility-statuses")
     @Timed
-    public List<FacilityStatus> getAllFacilityStatuses() {
+    public List<FacilityStatusDTO> getAllFacilityStatuses() {
         log.debug("REST request to get all FacilityStatuses");
         List<FacilityStatus> facilityStatuses = facilityStatusRepository.findAll();
-        return facilityStatuses;
+        return facilityStatusMapper.facilityStatusesToFacilityStatusDTOs(facilityStatuses);
     }
 
     /**
      * GET  /facility-statuses/:id : get the "id" facilityStatus.
      *
-     * @param id the id of the facilityStatus to retrieve
-     * @return the ResponseEntity with status 200 (OK) and with body the facilityStatus, or with status 404 (Not Found)
+     * @param id the id of the facilityStatusDTO to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the facilityStatusDTO, or with status 404 (Not Found)
      */
     @GetMapping("/facility-statuses/{id}")
     @Timed
-    public ResponseEntity<FacilityStatus> getFacilityStatus(@PathVariable Long id) {
+    public ResponseEntity<FacilityStatusDTO> getFacilityStatus(@PathVariable Long id) {
         log.debug("REST request to get FacilityStatus : {}", id);
         FacilityStatus facilityStatus = facilityStatusRepository.findOne(id);
-        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(facilityStatus));
+        FacilityStatusDTO facilityStatusDTO = facilityStatusMapper.facilityStatusToFacilityStatusDTO(facilityStatus);
+        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(facilityStatusDTO));
     }
 
     /**
      * DELETE  /facility-statuses/:id : delete the "id" facilityStatus.
      *
-     * @param id the id of the facilityStatus to delete
+     * @param id the id of the facilityStatusDTO to delete
      * @return the ResponseEntity with status 200 (OK)
      */
     @DeleteMapping("/facility-statuses/{id}")
