@@ -10,7 +10,7 @@
             ]
         },
         {
-            "fieldName": "type",
+            "fieldName": "description",
             "fieldType": "String",
             "fieldValidateRules": [
                 "maxlength"

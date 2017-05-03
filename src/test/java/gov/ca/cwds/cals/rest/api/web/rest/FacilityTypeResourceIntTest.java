@@ -42,8 +42,8 @@ public class FacilityTypeResourceIntTest {
     private static final Integer DEFAULT_CODE = 1;
     private static final Integer UPDATED_CODE = 2;
 
-    private static final String DEFAULT_TYPE = "AAAAAAAAAA";
-    private static final String UPDATED_TYPE = "BBBBBBBBBB";
+    private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
+    private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
 
     @Autowired
     private FacilityTypeRepository facilityTypeRepository;
@@ -86,7 +86,7 @@ public class FacilityTypeResourceIntTest {
     public static FacilityType createEntity(EntityManager em) {
         FacilityType facilityType = new FacilityType()
             .code(DEFAULT_CODE)
-            .type(DEFAULT_TYPE);
+            .description(DEFAULT_DESCRIPTION);
         return facilityType;
     }
 
@@ -112,7 +112,7 @@ public class FacilityTypeResourceIntTest {
         assertThat(facilityTypeList).hasSize(databaseSizeBeforeCreate + 1);
         FacilityType testFacilityType = facilityTypeList.get(facilityTypeList.size() - 1);
         assertThat(testFacilityType.getCode()).isEqualTo(DEFAULT_CODE);
-        assertThat(testFacilityType.getType()).isEqualTo(DEFAULT_TYPE);
+        assertThat(testFacilityType.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
     }
 
     @Test
@@ -166,7 +166,7 @@ public class FacilityTypeResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(facilityType.getId().intValue())))
             .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE)))
-            .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE.toString())));
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())));
     }
 
     @Test
@@ -181,7 +181,7 @@ public class FacilityTypeResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(facilityType.getId().intValue()))
             .andExpect(jsonPath("$.code").value(DEFAULT_CODE))
-            .andExpect(jsonPath("$.type").value(DEFAULT_TYPE.toString()));
+            .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION.toString()));
     }
 
     @Test
@@ -203,7 +203,7 @@ public class FacilityTypeResourceIntTest {
         FacilityType updatedFacilityType = facilityTypeRepository.findOne(facilityType.getId());
         updatedFacilityType
             .code(UPDATED_CODE)
-            .type(UPDATED_TYPE);
+            .description(UPDATED_DESCRIPTION);
         FacilityTypeDTO facilityTypeDTO = facilityTypeMapper.facilityTypeToFacilityTypeDTO(updatedFacilityType);
 
         restFacilityTypeMockMvc.perform(put("/api/facility-types")
@@ -216,7 +216,7 @@ public class FacilityTypeResourceIntTest {
         assertThat(facilityTypeList).hasSize(databaseSizeBeforeUpdate);
         FacilityType testFacilityType = facilityTypeList.get(facilityTypeList.size() - 1);
         assertThat(testFacilityType.getCode()).isEqualTo(UPDATED_CODE);
-        assertThat(testFacilityType.getType()).isEqualTo(UPDATED_TYPE);
+        assertThat(testFacilityType.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
     }
 
     @Test

@@ -42,8 +42,8 @@ public class CountyResourceIntTest {
     private static final Integer DEFAULT_CODE = 1;
     private static final Integer UPDATED_CODE = 2;
 
-    private static final String DEFAULT_TYPE = "AAAAAAAAAA";
-    private static final String UPDATED_TYPE = "BBBBBBBBBB";
+    private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
+    private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
 
     @Autowired
     private CountyRepository countyRepository;
@@ -86,7 +86,7 @@ public class CountyResourceIntTest {
     public static County createEntity(EntityManager em) {
         County county = new County()
             .code(DEFAULT_CODE)
-            .type(DEFAULT_TYPE);
+            .description(DEFAULT_DESCRIPTION);
         return county;
     }
 
@@ -112,7 +112,7 @@ public class CountyResourceIntTest {
         assertThat(countyList).hasSize(databaseSizeBeforeCreate + 1);
         County testCounty = countyList.get(countyList.size() - 1);
         assertThat(testCounty.getCode()).isEqualTo(DEFAULT_CODE);
-        assertThat(testCounty.getType()).isEqualTo(DEFAULT_TYPE);
+        assertThat(testCounty.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
     }
 
     @Test
@@ -166,7 +166,7 @@ public class CountyResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(county.getId().intValue())))
             .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE)))
-            .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE.toString())));
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())));
     }
 
     @Test
@@ -181,7 +181,7 @@ public class CountyResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(county.getId().intValue()))
             .andExpect(jsonPath("$.code").value(DEFAULT_CODE))
-            .andExpect(jsonPath("$.type").value(DEFAULT_TYPE.toString()));
+            .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION.toString()));
     }
 
     @Test
@@ -203,7 +203,7 @@ public class CountyResourceIntTest {
         County updatedCounty = countyRepository.findOne(county.getId());
         updatedCounty
             .code(UPDATED_CODE)
-            .type(UPDATED_TYPE);
+            .description(UPDATED_DESCRIPTION);
         CountyDTO countyDTO = countyMapper.countyToCountyDTO(updatedCounty);
 
         restCountyMockMvc.perform(put("/api/counties")
@@ -216,7 +216,7 @@ public class CountyResourceIntTest {
         assertThat(countyList).hasSize(databaseSizeBeforeUpdate);
         County testCounty = countyList.get(countyList.size() - 1);
         assertThat(testCounty.getCode()).isEqualTo(UPDATED_CODE);
-        assertThat(testCounty.getType()).isEqualTo(UPDATED_TYPE);
+        assertThat(testCounty.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
     }
 
     @Test

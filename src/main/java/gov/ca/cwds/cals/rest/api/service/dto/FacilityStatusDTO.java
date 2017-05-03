@@ -16,7 +16,7 @@ public class FacilityStatusDTO implements Serializable {
     private Integer code;
 
     @Size(max = 20)
-    private String type;
+    private String description;
 
     public Long getId() {
         return id;
@@ -32,12 +32,12 @@ public class FacilityStatusDTO implements Serializable {
     public void setCode(Integer code) {
         this.code = code;
     }
-    public String getType() {
-        return type;
+    public String getDescription() {
+        return description;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Override
@@ -66,7 +66,7 @@ public class FacilityStatusDTO implements Serializable {
         return "FacilityStatusDTO{" +
             "id=" + id +
             ", code='" + code + "'" +
-            ", type='" + type + "'" +
+            ", description='" + description + "'" +
             '}';
     }
 }

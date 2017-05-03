@@ -19,17 +19,17 @@ entity Facility {
 
 entity FacilityType {
 	code Integer required,
-    type String  maxlength(20)
+    description String  maxlength(20)
 }
 
 entity FacilityStatus {
 	code Integer required,
-    type String  maxlength(20)
+    description String  maxlength(20)
 }
 
 entity County {
 	code Integer required,
-    type String  maxlength(20)
+    description String  maxlength(20)
 }
 
 entity DistrictOffice {

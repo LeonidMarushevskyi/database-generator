@@ -28,8 +28,8 @@ public class FacilityStatus implements Serializable {
     private Integer code;
 
     @Size(max = 20)
-    @Column(name = "type", length = 20)
-    private String type;
+    @Column(name = "description", length = 20)
+    private String description;
 
     public Long getId() {
         return id;
@@ -52,17 +52,17 @@ public class FacilityStatus implements Serializable {
         this.code = code;
     }
 
-    public String getType() {
-        return type;
+    public String getDescription() {
+        return description;
     }
 
-    public FacilityStatus type(String type) {
-        this.type = type;
+    public FacilityStatus description(String description) {
+        this.description = description;
         return this;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Override
@@ -90,7 +90,7 @@ public class FacilityStatus implements Serializable {
         return "FacilityStatus{" +
             "id=" + id +
             ", code='" + code + "'" +
-            ", type='" + type + "'" +
+            ", description='" + description + "'" +
             '}';
     }
 }
