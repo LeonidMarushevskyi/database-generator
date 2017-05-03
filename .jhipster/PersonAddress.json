@@ -8,6 +8,14 @@
             "otherEntityField": "id"
         },
         {
+            "relationshipType": "one-to-one",
+            "relationshipName": "race",
+            "otherEntityName": "address",
+            "otherEntityField": "id",
+            "ownerSide": true,
+            "otherEntityRelationshipName": "personAddress"
+        },
+        {
             "relationshipType": "many-to-one",
             "relationshipName": "type",
             "otherEntityName": "addressType",

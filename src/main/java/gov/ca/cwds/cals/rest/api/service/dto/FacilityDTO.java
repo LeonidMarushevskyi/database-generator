@@ -15,9 +15,6 @@ public class FacilityDTO implements Serializable {
     private Long id;
 
     @NotNull
-    private String type;
-
-    @NotNull
     @Size(max = 50)
     private String name;
 
@@ -52,8 +49,15 @@ public class FacilityDTO implements Serializable {
 
     private String lastVisitReason;
 
-    @NotNull
-    private String county;
+    private Long assignedWorkerId;
+
+    private Long districtOfficeId;
+
+    private Long typeId;
+
+    private Long statusId;
+
+    private Long countyId;
 
     public Long getId() {
         return id;
@@ -61,13 +65,6 @@ public class FacilityDTO implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
     public String getName() {
         return name;
@@ -160,12 +157,45 @@ public class FacilityDTO implements Serializable {
     public void setLastVisitReason(String lastVisitReason) {
         this.lastVisitReason = lastVisitReason;
     }
-    public String getCounty() {
-        return county;
+
+    public Long getAssignedWorkerId() {
+        return assignedWorkerId;
     }
 
-    public void setCounty(String county) {
-        this.county = county;
+    public void setAssignedWorkerId(Long assignedWorkerId) {
+        this.assignedWorkerId = assignedWorkerId;
+    }
+
+    public Long getDistrictOfficeId() {
+        return districtOfficeId;
+    }
+
+    public void setDistrictOfficeId(Long districtOfficeId) {
+        this.districtOfficeId = districtOfficeId;
+    }
+
+    public Long getTypeId() {
+        return typeId;
+    }
+
+    public void setTypeId(Long facilityTypeId) {
+        this.typeId = facilityTypeId;
+    }
+
+    public Long getStatusId() {
+        return statusId;
+    }
+
+    public void setStatusId(Long facilityStatusId) {
+        this.statusId = facilityStatusId;
+    }
+
+    public Long getCountyId() {
+        return countyId;
+    }
+
+    public void setCountyId(Long countyId) {
+        this.countyId = countyId;
     }
 
     @Override
@@ -193,7 +223,6 @@ public class FacilityDTO implements Serializable {
     public String toString() {
         return "FacilityDTO{" +
             "id=" + id +
-            ", type='" + type + "'" +
             ", name='" + name + "'" +
             ", licenseeName='" + licenseeName + "'" +
             ", licenseeType='" + licenseeType + "'" +
@@ -207,7 +236,6 @@ public class FacilityDTO implements Serializable {
             ", lastVisitDate='" + lastVisitDate + "'" +
             ", emailAddress='" + emailAddress + "'" +
             ", lastVisitReason='" + lastVisitReason + "'" +
-            ", county='" + county + "'" +
             '}';
     }
 }

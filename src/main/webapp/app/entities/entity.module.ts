@@ -18,6 +18,11 @@ import { GeneratorPersonRaceModule } from './person-race/person-race.module';
 import { GeneratorPhoneModule } from './phone/phone.module';
 import { GeneratorPhoneTypeModule } from './phone-type/phone-type.module';
 import { GeneratorPersonModule } from './person/person.module';
+import { GeneratorFacilityStatusModule } from './facility-status/facility-status.module';
+import { GeneratorDistrictOfficeModule } from './district-office/district-office.module';
+import { GeneratorCountyModule } from './county/county.module';
+import { GeneratorFacilityTypeModule } from './facility-type/facility-type.module';
+import { GeneratorAssignedWorkerModule } from './assigned-worker/assigned-worker.module';
 /* jhipster-needle-add-entity-module-import - JHipster will add entity modules imports here */
 
 @NgModule({
@@ -40,6 +45,11 @@ import { GeneratorPersonModule } from './person/person.module';
         GeneratorPhoneModule,
         GeneratorPhoneTypeModule,
         GeneratorPersonModule,
+        GeneratorFacilityStatusModule,
+        GeneratorDistrictOfficeModule,
+        GeneratorCountyModule,
+        GeneratorFacilityTypeModule,
+        GeneratorAssignedWorkerModule,
         /* jhipster-needle-add-entity-module - JHipster will add entity modules here */
     ],
     declarations: [],

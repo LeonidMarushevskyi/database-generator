@@ -17,7 +17,6 @@
             <thead>
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
             <th jhiSortBy="id"><span>ID</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="type"><span>Type</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="name"><span>Name</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="licenseeName"><span>Licensee Name</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="licenseeType"><span>Licensee Type</span> <span class="fa fa-sort"></span></th>
@@ -31,14 +30,17 @@
             <th jhiSortBy="lastVisitDate"><span>Last Visit Date</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="emailAddress"><span>Email Address</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="lastVisitReason"><span>Last Visit Reason</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="county"><span>County</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="assignedWorkerId"><span>Assigned Worker</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="districtOfficeId"><span>District Office</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="typeId"><span>Type</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="statusId"><span>Status</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="countyId"><span>County</span> <span class="fa fa-sort"></span></th>
             <th></th>
             </tr>
             </thead>
             <tbody>
             <tr *ngFor="let facility of facilities ;trackBy: trackId">
                 <td><a [routerLink]="['../facility', facility.id ]">{{facility.id}}</a></td>
-                <td>{{facility.type}}</td>
                 <td>{{facility.name}}</td>
                 <td>{{facility.licenseeName}}</td>
                 <td>{{facility.licenseeType}}</td>
@@ -52,7 +54,31 @@
                 <td>{{facility.lastVisitDate | date:'mediumDate'}}</td>
                 <td>{{facility.emailAddress}}</td>
                 <td>{{facility.lastVisitReason}}</td>
-                <td>{{facility.county}}</td>
+                <td>
+                    <div *ngIf="facility.assignedWorkerId">
+                        <a [routerLink]="['../assigned-worker', facility.assignedWorkerId  ]" >{{facility.assignedWorkerId}}</a>
+                    </div>
+                </td>
+                <td>
+                    <div *ngIf="facility.districtOfficeId">
+                        <a [routerLink]="['../district-office', facility.districtOfficeId  ]" >{{facility.districtOfficeId}}</a>
+                    </div>
+                </td>
+                <td>
+                    <div *ngIf="facility.typeId">
+                        <a [routerLink]="['../facility-type', facility.typeId  ]" >{{facility.typeId}}</a>
+                    </div>
+                </td>
+                <td>
+                    <div *ngIf="facility.statusId">
+                        <a [routerLink]="['../facility-status', facility.statusId  ]" >{{facility.statusId}}</a>
+                    </div>
+                </td>
+                <td>
+                    <div *ngIf="facility.countyId">
+                        <a [routerLink]="['../county', facility.countyId  ]" >{{facility.countyId}}</a>
+                    </div>
+                </td>
                 <td class="text-right">
                     <div class="btn-group flex-btn-group-container">
                         <button type="submit"

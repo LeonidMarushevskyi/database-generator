@@ -15,18 +15,6 @@
                    [(ngModel)]="facility.id" readonly />
         </div>
         <div class="form-group">
-            <label class="form-control-label" for="field_type">Type</label>
-            <input type="text" class="form-control" name="type" id="field_type"
-                [(ngModel)]="facility.type"
-            required />
-            <div [hidden]="!(editForm.controls.type?.dirty && editForm.controls.type?.invalid)">
-                <small class="form-text text-danger"
-                   [hidden]="!editForm.controls.type?.errors?.required">
-                   This field is required.
-                </small>
-            </div>
-        </div>
-        <div class="form-group">
             <label class="form-control-label" for="field_name">Name</label>
             <input type="text" class="form-control" name="name" id="field_name"
                 [(ngModel)]="facility.name"
@@ -174,19 +162,42 @@
                 [(ngModel)]="facility.lastVisitReason"
              />
         </div>
-        <div class="form-group">
-            <label class="form-control-label" for="field_county">County</label>
-            <input type="text" class="form-control" name="county" id="field_county"
-                [(ngModel)]="facility.county"
-            required />
-            <div [hidden]="!(editForm.controls.county?.dirty && editForm.controls.county?.invalid)">
-                <small class="form-text text-danger"
-                   [hidden]="!editForm.controls.county?.errors?.required">
-                   This field is required.
-                </small>
-            </div>
-        </div>
 
+        <div class="form-group">
+            <label for="field_assignedWorker">Assigned Worker</label>
+            <select class="form-control" id="field_assignedWorker" name="assignedWorker" [(ngModel)]="facility.assignedWorkerId" >
+                <option [ngValue]="null"></option>
+                <option [ngValue]="assignedWorkerOption.id" *ngFor="let assignedWorkerOption of assignedworkers; trackBy: trackAssignedWorkerById">{{assignedWorkerOption.id}}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="field_districtOffice">District Office</label>
+            <select class="form-control" id="field_districtOffice" name="districtOffice" [(ngModel)]="facility.districtOfficeId" >
+                <option [ngValue]="null"></option>
+                <option [ngValue]="districtOfficeOption.id" *ngFor="let districtOfficeOption of districtoffices; trackBy: trackDistrictOfficeById">{{districtOfficeOption.id}}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="field_type">Type</label>
+            <select class="form-control" id="field_type" name="type" [(ngModel)]="facility.typeId" >
+                <option [ngValue]="null"></option>
+                <option [ngValue]="facilityTypeOption.id" *ngFor="let facilityTypeOption of facilitytypes; trackBy: trackFacilityTypeById">{{facilityTypeOption.id}}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="field_status">Status</label>
+            <select class="form-control" id="field_status" name="status" [(ngModel)]="facility.statusId" >
+                <option [ngValue]="null"></option>
+                <option [ngValue]="facilityStatusOption.id" *ngFor="let facilityStatusOption of facilitystatuses; trackBy: trackFacilityStatusById">{{facilityStatusOption.id}}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="field_county">County</label>
+            <select class="form-control" id="field_county" name="county" [(ngModel)]="facility.countyId" >
+                <option [ngValue]="null"></option>
+                <option [ngValue]="countyOption.id" *ngFor="let countyOption of counties; trackBy: trackCountyById">{{countyOption.id}}</option>
+            </select>
+        </div>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal" (click)="clear()">

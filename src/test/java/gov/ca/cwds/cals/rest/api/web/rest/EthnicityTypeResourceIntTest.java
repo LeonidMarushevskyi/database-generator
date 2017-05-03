@@ -4,8 +4,6 @@ import gov.ca.cwds.cals.rest.api.GeneratorApp;
 
 import gov.ca.cwds.cals.rest.api.domain.EthnicityType;
 import gov.ca.cwds.cals.rest.api.repository.EthnicityTypeRepository;
-import gov.ca.cwds.cals.rest.api.service.dto.EthnicityTypeDTO;
-import gov.ca.cwds.cals.rest.api.service.mapper.EthnicityTypeMapper;
 import gov.ca.cwds.cals.rest.api.web.rest.errors.ExceptionTranslator;
 
 import org.junit.Before;
@@ -49,9 +47,6 @@ public class EthnicityTypeResourceIntTest {
     private EthnicityTypeRepository ethnicityTypeRepository;
 
     @Autowired
-    private EthnicityTypeMapper ethnicityTypeMapper;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -70,7 +65,7 @@ public class EthnicityTypeResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        EthnicityTypeResource ethnicityTypeResource = new EthnicityTypeResource(ethnicityTypeRepository, ethnicityTypeMapper);
+        EthnicityTypeResource ethnicityTypeResource = new EthnicityTypeResource(ethnicityTypeRepository);
         this.restEthnicityTypeMockMvc = MockMvcBuilders.standaloneSetup(ethnicityTypeResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -101,10 +96,9 @@ public class EthnicityTypeResourceIntTest {
         int databaseSizeBeforeCreate = ethnicityTypeRepository.findAll().size();
 
         // Create the EthnicityType
-        EthnicityTypeDTO ethnicityTypeDTO = ethnicityTypeMapper.ethnicityTypeToEthnicityTypeDTO(ethnicityType);
         restEthnicityTypeMockMvc.perform(post("/api/ethnicity-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(ethnicityTypeDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(ethnicityType)))
             .andExpect(status().isCreated());
 
         // Validate the EthnicityType in the database
@@ -122,12 +116,11 @@ public class EthnicityTypeResourceIntTest {
 
         // Create the EthnicityType with an existing ID
         ethnicityType.setId(1L);
-        EthnicityTypeDTO ethnicityTypeDTO = ethnicityTypeMapper.ethnicityTypeToEthnicityTypeDTO(ethnicityType);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restEthnicityTypeMockMvc.perform(post("/api/ethnicity-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(ethnicityTypeDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(ethnicityType)))
             .andExpect(status().isBadRequest());
 
         // Validate the Alice in the database
@@ -143,11 +136,10 @@ public class EthnicityTypeResourceIntTest {
         ethnicityType.setCode(null);
 
         // Create the EthnicityType, which fails.
-        EthnicityTypeDTO ethnicityTypeDTO = ethnicityTypeMapper.ethnicityTypeToEthnicityTypeDTO(ethnicityType);
 
         restEthnicityTypeMockMvc.perform(post("/api/ethnicity-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(ethnicityTypeDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(ethnicityType)))
             .andExpect(status().isBadRequest());
 
         List<EthnicityType> ethnicityTypeList = ethnicityTypeRepository.findAll();
@@ -204,11 +196,10 @@ public class EthnicityTypeResourceIntTest {
         updatedEthnicityType
             .code(UPDATED_CODE)
             .type(UPDATED_TYPE);
-        EthnicityTypeDTO ethnicityTypeDTO = ethnicityTypeMapper.ethnicityTypeToEthnicityTypeDTO(updatedEthnicityType);
 
         restEthnicityTypeMockMvc.perform(put("/api/ethnicity-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(ethnicityTypeDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedEthnicityType)))
             .andExpect(status().isOk());
 
         // Validate the EthnicityType in the database
@@ -225,12 +216,11 @@ public class EthnicityTypeResourceIntTest {
         int databaseSizeBeforeUpdate = ethnicityTypeRepository.findAll().size();
 
         // Create the EthnicityType
-        EthnicityTypeDTO ethnicityTypeDTO = ethnicityTypeMapper.ethnicityTypeToEthnicityTypeDTO(ethnicityType);
 
         // If the entity doesn't have an ID, it will be created instead of just being updated
         restEthnicityTypeMockMvc.perform(put("/api/ethnicity-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(ethnicityTypeDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(ethnicityType)))
             .andExpect(status().isCreated());
 
         // Validate the EthnicityType in the database

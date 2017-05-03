@@ -4,10 +4,6 @@
     <hr>
     <jhi-alert-error></jhi-alert-error>
     <dl class="row-md jh-entity-details">
-        <dt><span>Type</span></dt>
-        <dd>
-            <span>{{facility.type}}</span>
-        </dd>
         <dt><span>Name</span></dt>
         <dd>
             <span>{{facility.name}}</span>
@@ -60,9 +56,35 @@
         <dd>
             <span>{{facility.lastVisitReason}}</span>
         </dd>
+        <dt><span>Assigned Worker</span></dt>
+        <dd>
+            <div *ngIf="facility.assignedWorkerId">
+                <a [routerLink]="['/assigned-worker', facility.assignedWorkerId]">{{facility.assignedWorkerId}}</a>
+            </div>
+        </dd>
+        <dt><span>District Office</span></dt>
+        <dd>
+            <div *ngIf="facility.districtOfficeId">
+                <a [routerLink]="['/district-office', facility.districtOfficeId]">{{facility.districtOfficeId}}</a>
+            </div>
+        </dd>
+        <dt><span>Type</span></dt>
+        <dd>
+            <div *ngIf="facility.typeId">
+                <a [routerLink]="['/facility-type', facility.typeId]">{{facility.typeId}}</a>
+            </div>
+        </dd>
+        <dt><span>Status</span></dt>
+        <dd>
+            <div *ngIf="facility.statusId">
+                <a [routerLink]="['/facility-status', facility.statusId]">{{facility.statusId}}</a>
+            </div>
+        </dd>
         <dt><span>County</span></dt>
         <dd>
-            <span>{{facility.county}}</span>
+            <div *ngIf="facility.countyId">
+                <a [routerLink]="['/county', facility.countyId]">{{facility.countyId}}</a>
+            </div>
         </dd>
     </dl>
 

@@ -4,8 +4,6 @@ import gov.ca.cwds.cals.rest.api.GeneratorApp;
 
 import gov.ca.cwds.cals.rest.api.domain.LanguageType;
 import gov.ca.cwds.cals.rest.api.repository.LanguageTypeRepository;
-import gov.ca.cwds.cals.rest.api.service.dto.LanguageTypeDTO;
-import gov.ca.cwds.cals.rest.api.service.mapper.LanguageTypeMapper;
 import gov.ca.cwds.cals.rest.api.web.rest.errors.ExceptionTranslator;
 
 import org.junit.Before;
@@ -49,9 +47,6 @@ public class LanguageTypeResourceIntTest {
     private LanguageTypeRepository languageTypeRepository;
 
     @Autowired
-    private LanguageTypeMapper languageTypeMapper;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -70,7 +65,7 @@ public class LanguageTypeResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        LanguageTypeResource languageTypeResource = new LanguageTypeResource(languageTypeRepository, languageTypeMapper);
+        LanguageTypeResource languageTypeResource = new LanguageTypeResource(languageTypeRepository);
         this.restLanguageTypeMockMvc = MockMvcBuilders.standaloneSetup(languageTypeResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -101,10 +96,9 @@ public class LanguageTypeResourceIntTest {
         int databaseSizeBeforeCreate = languageTypeRepository.findAll().size();
 
         // Create the LanguageType
-        LanguageTypeDTO languageTypeDTO = languageTypeMapper.languageTypeToLanguageTypeDTO(languageType);
         restLanguageTypeMockMvc.perform(post("/api/language-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(languageTypeDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(languageType)))
             .andExpect(status().isCreated());
 
         // Validate the LanguageType in the database
@@ -122,12 +116,11 @@ public class LanguageTypeResourceIntTest {
 
         // Create the LanguageType with an existing ID
         languageType.setId(1L);
-        LanguageTypeDTO languageTypeDTO = languageTypeMapper.languageTypeToLanguageTypeDTO(languageType);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restLanguageTypeMockMvc.perform(post("/api/language-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(languageTypeDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(languageType)))
             .andExpect(status().isBadRequest());
 
         // Validate the Alice in the database
@@ -143,11 +136,10 @@ public class LanguageTypeResourceIntTest {
         languageType.setCode(null);
 
         // Create the LanguageType, which fails.
-        LanguageTypeDTO languageTypeDTO = languageTypeMapper.languageTypeToLanguageTypeDTO(languageType);
 
         restLanguageTypeMockMvc.perform(post("/api/language-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(languageTypeDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(languageType)))
             .andExpect(status().isBadRequest());
 
         List<LanguageType> languageTypeList = languageTypeRepository.findAll();
@@ -204,11 +196,10 @@ public class LanguageTypeResourceIntTest {
         updatedLanguageType
             .code(UPDATED_CODE)
             .type(UPDATED_TYPE);
-        LanguageTypeDTO languageTypeDTO = languageTypeMapper.languageTypeToLanguageTypeDTO(updatedLanguageType);
 
         restLanguageTypeMockMvc.perform(put("/api/language-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(languageTypeDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedLanguageType)))
             .andExpect(status().isOk());
 
         // Validate the LanguageType in the database
@@ -225,12 +216,11 @@ public class LanguageTypeResourceIntTest {
         int databaseSizeBeforeUpdate = languageTypeRepository.findAll().size();
 
         // Create the LanguageType
-        LanguageTypeDTO languageTypeDTO = languageTypeMapper.languageTypeToLanguageTypeDTO(languageType);
 
         // If the entity doesn't have an ID, it will be created instead of just being updated
         restLanguageTypeMockMvc.perform(put("/api/language-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(languageTypeDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(languageType)))
             .andExpect(status().isCreated());
 
         // Validate the LanguageType in the database

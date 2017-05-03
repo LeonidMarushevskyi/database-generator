@@ -15,6 +15,8 @@ public class PersonAddressDTO implements Serializable {
 
     private Long personId;
 
+    private Long raceId;
+
     private Long typeId;
 
     public Long getId() {
@@ -31,6 +33,14 @@ public class PersonAddressDTO implements Serializable {
 
     public void setPersonId(Long personId) {
         this.personId = personId;
+    }
+
+    public Long getRaceId() {
+        return raceId;
+    }
+
+    public void setRaceId(Long addressId) {
+        this.raceId = addressId;
     }
 
     public Long getTypeId() {

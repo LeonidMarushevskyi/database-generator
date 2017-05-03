@@ -9,16 +9,18 @@ import java.util.List;
 /**
  * Mapper for the entity PersonAddress and its DTO PersonAddressDTO.
  */
-@Mapper(componentModel = "spring", uses = {PersonMapper.class, AddressTypeMapper.class, })
+@Mapper(componentModel = "spring", uses = {PersonMapper.class, AddressMapper.class, AddressTypeMapper.class, })
 public interface PersonAddressMapper {
 
     @Mapping(source = "person.id", target = "personId")
+    @Mapping(source = "race.id", target = "raceId")
     @Mapping(source = "type.id", target = "typeId")
     PersonAddressDTO personAddressToPersonAddressDTO(PersonAddress personAddress);
 
     List<PersonAddressDTO> personAddressesToPersonAddressDTOs(List<PersonAddress> personAddresses);
 
     @Mapping(source = "personId", target = "person")
+    @Mapping(source = "raceId", target = "race")
     @Mapping(source = "typeId", target = "type")
     PersonAddress personAddressDTOToPersonAddress(PersonAddressDTO personAddressDTO);
 

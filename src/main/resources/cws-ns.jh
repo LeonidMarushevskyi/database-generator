@@ -4,7 +4,6 @@
 
 entity Facility {
     id Long required,
-  	type String required,
   	name String required maxlength(50),
   	licenseeName String maxlength(50) required,
   	licenseeType String,
@@ -17,8 +16,61 @@ entity Facility {
   	originalApplicationRecievedDate LocalDate required,
   	lastVisitDate LocalDate,
   	emailAddress String maxlength(50),
-  	lastVisitReason String,
-  	county String required
+  	lastVisitReason String
+}
+
+entity FacilityType {
+	code Integer required,
+    type String  maxlength(20)
+}
+
+entity FacilityStatus {
+	code Integer required,
+    type String  maxlength(20)
+}
+
+entity County {
+	code Integer required,
+    type String  maxlength(20)
+}
+
+entity DistrictOffice {
+	facilityNumber Long required,
+	name String maxlength(50) required,
+}
+
+entity DistrictOffice {
+	facilityNumber Long required,
+	name String maxlength(50) required,
+}
+
+entity AssignedWorker {
+	code String maxlength(2) required
+}
+
+relationship ManyToOne {
+	Facility{assignedWorker} to AssignedWorker
+}
+
+
+relationship OneToOne {
+	AssignedWorker{person} to Person
+}
+
+relationship ManyToOne {
+	Facility{districtOffice} to DistrictOffice
+}
+
+relationship ManyToOne {
+	Facility{type} to FacilityType
+}
+
+relationship ManyToOne {
+	Facility{status} to FacilityStatus
+}
+
+relationship ManyToOne {
+	Facility{county} to County
 }
 
 entity Person {
@@ -186,7 +238,11 @@ relationship OneToMany {
 	Person{race} to PersonRace
 }
 
-dto Facility, FacilityAddress, FacilityPhone, AddressType, Address, PhoneType, Phone, FacilityChild, Person, PersonPhone, PersonAddress, PersonEthnicity, PersonLanguage, PersonRace, LanguageType, EthnicityType, RaceType with mapstruct
+relationship OneToOne {
+	PersonAddress{race} to Address
+}
+
+dto AssignedWorker, Facility, FacilityAddress, FacilityPhone, AddressType, Address, PhoneType, Phone, FacilityChild, Person, PersonPhone, PersonAddress, PersonEthnicity, PersonLanguage, PersonRace, AssignedWorker,  with mapstruct
 
 paginate Facility with pager
 

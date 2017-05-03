@@ -10,6 +10,12 @@
                 <a [routerLink]="['/person', personAddress.personId]">{{personAddress.personId}}</a>
             </div>
         </dd>
+        <dt><span>Race</span></dt>
+        <dd>
+            <div *ngIf="personAddress.raceId">
+                <a [routerLink]="['/address', personAddress.raceId]">{{personAddress.raceId}}</a>
+            </div>
+        </dd>
         <dt><span>Type</span></dt>
         <dd>
             <div *ngIf="personAddress.typeId">

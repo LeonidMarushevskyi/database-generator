@@ -14,6 +14,12 @@
                                  referencedColumnNames="id"
                                  referencedTableName="person"/>
 
+        <addForeignKeyConstraint baseColumnNames="race_id"
+                                 baseTableName="person_address"
+                                 constraintName="fk_person_address_race_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="address"/>
+
         <addForeignKeyConstraint baseColumnNames="type_id"
                                  baseTableName="person_address"
                                  constraintName="fk_person_address_type_id"

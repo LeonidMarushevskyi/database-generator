@@ -11,6 +11,11 @@ import { FacilityService } from './facility.service';
 import { FacilityAddress, FacilityAddressService } from '../facility-address';
 import { FacilityPhone, FacilityPhoneService } from '../facility-phone';
 import { FacilityChild, FacilityChildService } from '../facility-child';
+import { AssignedWorker, AssignedWorkerService } from '../assigned-worker';
+import { DistrictOffice, DistrictOfficeService } from '../district-office';
+import { FacilityType, FacilityTypeService } from '../facility-type';
+import { FacilityStatus, FacilityStatusService } from '../facility-status';
+import { County, CountyService } from '../county';
 
 @Component({
     selector: 'jhi-facility-dialog',
@@ -27,6 +32,16 @@ export class FacilityDialogComponent implements OnInit {
     facilityphones: FacilityPhone[];
 
     facilitychildren: FacilityChild[];
+
+    assignedworkers: AssignedWorker[];
+
+    districtoffices: DistrictOffice[];
+
+    facilitytypes: FacilityType[];
+
+    facilitystatuses: FacilityStatus[];
+
+    counties: County[];
     constructor(
         public activeModal: NgbActiveModal,
         private alertService: AlertService,
@@ -34,6 +49,11 @@ export class FacilityDialogComponent implements OnInit {
         private facilityAddressService: FacilityAddressService,
         private facilityPhoneService: FacilityPhoneService,
         private facilityChildService: FacilityChildService,
+        private assignedWorkerService: AssignedWorkerService,
+        private districtOfficeService: DistrictOfficeService,
+        private facilityTypeService: FacilityTypeService,
+        private facilityStatusService: FacilityStatusService,
+        private countyService: CountyService,
         private eventManager: EventManager
     ) {
     }
@@ -47,6 +67,16 @@ export class FacilityDialogComponent implements OnInit {
             (res: Response) => { this.facilityphones = res.json(); }, (res: Response) => this.onError(res.json()));
         this.facilityChildService.query().subscribe(
             (res: Response) => { this.facilitychildren = res.json(); }, (res: Response) => this.onError(res.json()));
+        this.assignedWorkerService.query().subscribe(
+            (res: Response) => { this.assignedworkers = res.json(); }, (res: Response) => this.onError(res.json()));
+        this.districtOfficeService.query().subscribe(
+            (res: Response) => { this.districtoffices = res.json(); }, (res: Response) => this.onError(res.json()));
+        this.facilityTypeService.query().subscribe(
+            (res: Response) => { this.facilitytypes = res.json(); }, (res: Response) => this.onError(res.json()));
+        this.facilityStatusService.query().subscribe(
+            (res: Response) => { this.facilitystatuses = res.json(); }, (res: Response) => this.onError(res.json()));
+        this.countyService.query().subscribe(
+            (res: Response) => { this.counties = res.json(); }, (res: Response) => this.onError(res.json()));
     }
     clear () {
         this.activeModal.dismiss('cancel');
@@ -89,6 +119,26 @@ export class FacilityDialogComponent implements OnInit {
     }
 
     trackFacilityChildById(index: number, item: FacilityChild) {
+        return item.id;
+    }
+
+    trackAssignedWorkerById(index: number, item: AssignedWorker) {
+        return item.id;
+    }
+
+    trackDistrictOfficeById(index: number, item: DistrictOffice) {
+        return item.id;
+    }
+
+    trackFacilityTypeById(index: number, item: FacilityType) {
+        return item.id;
+    }
+
+    trackFacilityStatusById(index: number, item: FacilityStatus) {
+        return item.id;
+    }
+
+    trackCountyById(index: number, item: County) {
         return item.id;
     }
 }

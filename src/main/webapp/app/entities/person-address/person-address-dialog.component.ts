@@ -9,6 +9,7 @@ import { PersonAddress } from './person-address.model';
 import { PersonAddressPopupService } from './person-address-popup.service';
 import { PersonAddressService } from './person-address.service';
 import { Person, PersonService } from '../person';
+import { Address, AddressService } from '../address';
 import { AddressType, AddressTypeService } from '../address-type';
 
 @Component({
@@ -23,12 +24,15 @@ export class PersonAddressDialogComponent implements OnInit {
 
     people: Person[];
 
+    races: Address[];
+
     addresstypes: AddressType[];
     constructor(
         public activeModal: NgbActiveModal,
         private alertService: AlertService,
         private personAddressService: PersonAddressService,
         private personService: PersonService,
+        private addressService: AddressService,
         private addressTypeService: AddressTypeService,
         private eventManager: EventManager
     ) {
@@ -39,6 +43,15 @@ export class PersonAddressDialogComponent implements OnInit {
         this.authorities = ['ROLE_USER', 'ROLE_ADMIN'];
         this.personService.query().subscribe(
             (res: Response) => { this.people = res.json(); }, (res: Response) => this.onError(res.json()));
+        this.addressService.query({filter: 'personaddress-is-null'}).subscribe((res: Response) => {
+            if (!this.personAddress.raceId) {
+                this.races = res.json();
+            } else {
+                this.addressService.find(this.personAddress.raceId).subscribe((subRes: Address) => {
+                    this.races = [subRes].concat(res.json());
+                }, (subRes: Response) => this.onError(subRes.json()));
+            }
+        }, (res: Response) => this.onError(res.json()));
         this.addressTypeService.query().subscribe(
             (res: Response) => { this.addresstypes = res.json(); }, (res: Response) => this.onError(res.json()));
     }
@@ -75,6 +88,10 @@ export class PersonAddressDialogComponent implements OnInit {
     }
 
     trackPersonById(index: number, item: Person) {
+        return item.id;
+    }
+
+    trackAddressById(index: number, item: Address) {
         return item.id;
     }
 

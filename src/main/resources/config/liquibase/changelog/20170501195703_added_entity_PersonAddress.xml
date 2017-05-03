@@ -24,7 +24,9 @@
             <column name="person_id" type="bigint">
                 <constraints nullable="true" />
             </column>
-
+            <column name="race_id" type="bigint">
+                <constraints unique="true" nullable="true" />
+            </column>
             <column name="type_id" type="bigint">
                 <constraints nullable="true" />
             </column>

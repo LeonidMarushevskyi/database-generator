@@ -41,9 +41,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = GeneratorApp.class)
 public class FacilityResourceIntTest {
 
-    private static final String DEFAULT_TYPE = "AAAAAAAAAA";
-    private static final String UPDATED_TYPE = "BBBBBBBBBB";
-
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
 
@@ -82,9 +79,6 @@ public class FacilityResourceIntTest {
 
     private static final String DEFAULT_LAST_VISIT_REASON = "AAAAAAAAAA";
     private static final String UPDATED_LAST_VISIT_REASON = "BBBBBBBBBB";
-
-    private static final String DEFAULT_COUNTY = "AAAAAAAAAA";
-    private static final String UPDATED_COUNTY = "BBBBBBBBBB";
 
     @Autowired
     private FacilityRepository facilityRepository;
@@ -126,7 +120,6 @@ public class FacilityResourceIntTest {
      */
     public static Facility createEntity(EntityManager em) {
         Facility facility = new Facility()
-            .type(DEFAULT_TYPE)
             .name(DEFAULT_NAME)
             .licenseeName(DEFAULT_LICENSEE_NAME)
             .licenseeType(DEFAULT_LICENSEE_TYPE)
@@ -139,8 +132,7 @@ public class FacilityResourceIntTest {
             .originalApplicationRecievedDate(DEFAULT_ORIGINAL_APPLICATION_RECIEVED_DATE)
             .lastVisitDate(DEFAULT_LAST_VISIT_DATE)
             .emailAddress(DEFAULT_EMAIL_ADDRESS)
-            .lastVisitReason(DEFAULT_LAST_VISIT_REASON)
-            .county(DEFAULT_COUNTY);
+            .lastVisitReason(DEFAULT_LAST_VISIT_REASON);
         return facility;
     }
 
@@ -165,7 +157,6 @@ public class FacilityResourceIntTest {
         List<Facility> facilityList = facilityRepository.findAll();
         assertThat(facilityList).hasSize(databaseSizeBeforeCreate + 1);
         Facility testFacility = facilityList.get(facilityList.size() - 1);
-        assertThat(testFacility.getType()).isEqualTo(DEFAULT_TYPE);
         assertThat(testFacility.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testFacility.getLicenseeName()).isEqualTo(DEFAULT_LICENSEE_NAME);
         assertThat(testFacility.getLicenseeType()).isEqualTo(DEFAULT_LICENSEE_TYPE);
@@ -179,7 +170,6 @@ public class FacilityResourceIntTest {
         assertThat(testFacility.getLastVisitDate()).isEqualTo(DEFAULT_LAST_VISIT_DATE);
         assertThat(testFacility.getEmailAddress()).isEqualTo(DEFAULT_EMAIL_ADDRESS);
         assertThat(testFacility.getLastVisitReason()).isEqualTo(DEFAULT_LAST_VISIT_REASON);
-        assertThat(testFacility.getCounty()).isEqualTo(DEFAULT_COUNTY);
     }
 
     @Test
@@ -200,25 +190,6 @@ public class FacilityResourceIntTest {
         // Validate the Alice in the database
         List<Facility> facilityList = facilityRepository.findAll();
         assertThat(facilityList).hasSize(databaseSizeBeforeCreate);
-    }
-
-    @Test
-    @Transactional
-    public void checkTypeIsRequired() throws Exception {
-        int databaseSizeBeforeTest = facilityRepository.findAll().size();
-        // set the field null
-        facility.setType(null);
-
-        // Create the Facility, which fails.
-        FacilityDTO facilityDTO = facilityMapper.facilityToFacilityDTO(facility);
-
-        restFacilityMockMvc.perform(post("/api/facilities")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(facilityDTO)))
-            .andExpect(status().isBadRequest());
-
-        List<Facility> facilityList = facilityRepository.findAll();
-        assertThat(facilityList).hasSize(databaseSizeBeforeTest);
     }
 
     @Test
@@ -337,25 +308,6 @@ public class FacilityResourceIntTest {
 
     @Test
     @Transactional
-    public void checkCountyIsRequired() throws Exception {
-        int databaseSizeBeforeTest = facilityRepository.findAll().size();
-        // set the field null
-        facility.setCounty(null);
-
-        // Create the Facility, which fails.
-        FacilityDTO facilityDTO = facilityMapper.facilityToFacilityDTO(facility);
-
-        restFacilityMockMvc.perform(post("/api/facilities")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(facilityDTO)))
-            .andExpect(status().isBadRequest());
-
-        List<Facility> facilityList = facilityRepository.findAll();
-        assertThat(facilityList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
     public void getAllFacilities() throws Exception {
         // Initialize the database
         facilityRepository.saveAndFlush(facility);
@@ -365,7 +317,6 @@ public class FacilityResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(facility.getId().intValue())))
-            .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE.toString())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())))
             .andExpect(jsonPath("$.[*].licenseeName").value(hasItem(DEFAULT_LICENSEE_NAME.toString())))
             .andExpect(jsonPath("$.[*].licenseeType").value(hasItem(DEFAULT_LICENSEE_TYPE.toString())))
@@ -378,8 +329,7 @@ public class FacilityResourceIntTest {
             .andExpect(jsonPath("$.[*].originalApplicationRecievedDate").value(hasItem(DEFAULT_ORIGINAL_APPLICATION_RECIEVED_DATE.toString())))
             .andExpect(jsonPath("$.[*].lastVisitDate").value(hasItem(DEFAULT_LAST_VISIT_DATE.toString())))
             .andExpect(jsonPath("$.[*].emailAddress").value(hasItem(DEFAULT_EMAIL_ADDRESS.toString())))
-            .andExpect(jsonPath("$.[*].lastVisitReason").value(hasItem(DEFAULT_LAST_VISIT_REASON.toString())))
-            .andExpect(jsonPath("$.[*].county").value(hasItem(DEFAULT_COUNTY.toString())));
+            .andExpect(jsonPath("$.[*].lastVisitReason").value(hasItem(DEFAULT_LAST_VISIT_REASON.toString())));
     }
 
     @Test
@@ -393,7 +343,6 @@ public class FacilityResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(facility.getId().intValue()))
-            .andExpect(jsonPath("$.type").value(DEFAULT_TYPE.toString()))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME.toString()))
             .andExpect(jsonPath("$.licenseeName").value(DEFAULT_LICENSEE_NAME.toString()))
             .andExpect(jsonPath("$.licenseeType").value(DEFAULT_LICENSEE_TYPE.toString()))
@@ -406,8 +355,7 @@ public class FacilityResourceIntTest {
             .andExpect(jsonPath("$.originalApplicationRecievedDate").value(DEFAULT_ORIGINAL_APPLICATION_RECIEVED_DATE.toString()))
             .andExpect(jsonPath("$.lastVisitDate").value(DEFAULT_LAST_VISIT_DATE.toString()))
             .andExpect(jsonPath("$.emailAddress").value(DEFAULT_EMAIL_ADDRESS.toString()))
-            .andExpect(jsonPath("$.lastVisitReason").value(DEFAULT_LAST_VISIT_REASON.toString()))
-            .andExpect(jsonPath("$.county").value(DEFAULT_COUNTY.toString()));
+            .andExpect(jsonPath("$.lastVisitReason").value(DEFAULT_LAST_VISIT_REASON.toString()));
     }
 
     @Test
@@ -428,7 +376,6 @@ public class FacilityResourceIntTest {
         // Update the facility
         Facility updatedFacility = facilityRepository.findOne(facility.getId());
         updatedFacility
-            .type(UPDATED_TYPE)
             .name(UPDATED_NAME)
             .licenseeName(UPDATED_LICENSEE_NAME)
             .licenseeType(UPDATED_LICENSEE_TYPE)
@@ -441,8 +388,7 @@ public class FacilityResourceIntTest {
             .originalApplicationRecievedDate(UPDATED_ORIGINAL_APPLICATION_RECIEVED_DATE)
             .lastVisitDate(UPDATED_LAST_VISIT_DATE)
             .emailAddress(UPDATED_EMAIL_ADDRESS)
-            .lastVisitReason(UPDATED_LAST_VISIT_REASON)
-            .county(UPDATED_COUNTY);
+            .lastVisitReason(UPDATED_LAST_VISIT_REASON);
         FacilityDTO facilityDTO = facilityMapper.facilityToFacilityDTO(updatedFacility);
 
         restFacilityMockMvc.perform(put("/api/facilities")
@@ -454,7 +400,6 @@ public class FacilityResourceIntTest {
         List<Facility> facilityList = facilityRepository.findAll();
         assertThat(facilityList).hasSize(databaseSizeBeforeUpdate);
         Facility testFacility = facilityList.get(facilityList.size() - 1);
-        assertThat(testFacility.getType()).isEqualTo(UPDATED_TYPE);
         assertThat(testFacility.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testFacility.getLicenseeName()).isEqualTo(UPDATED_LICENSEE_NAME);
         assertThat(testFacility.getLicenseeType()).isEqualTo(UPDATED_LICENSEE_TYPE);
@@ -468,7 +413,6 @@ public class FacilityResourceIntTest {
         assertThat(testFacility.getLastVisitDate()).isEqualTo(UPDATED_LAST_VISIT_DATE);
         assertThat(testFacility.getEmailAddress()).isEqualTo(UPDATED_EMAIL_ADDRESS);
         assertThat(testFacility.getLastVisitReason()).isEqualTo(UPDATED_LAST_VISIT_REASON);
-        assertThat(testFacility.getCounty()).isEqualTo(UPDATED_COUNTY);
     }
 
     @Test

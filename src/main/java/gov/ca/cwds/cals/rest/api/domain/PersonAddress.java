@@ -25,6 +25,10 @@ public class PersonAddress implements Serializable {
     @ManyToOne
     private Person person;
 
+    @OneToOne
+    @JoinColumn(unique = true)
+    private Address race;
+
     @ManyToOne
     private AddressType type;
 
@@ -47,6 +51,19 @@ public class PersonAddress implements Serializable {
 
     public void setPerson(Person person) {
         this.person = person;
+    }
+
+    public Address getRace() {
+        return race;
+    }
+
+    public PersonAddress race(Address address) {
+        this.race = address;
+        return this;
+    }
+
+    public void setRace(Address address) {
+        this.race = address;
     }
 
     public AddressType getType() {

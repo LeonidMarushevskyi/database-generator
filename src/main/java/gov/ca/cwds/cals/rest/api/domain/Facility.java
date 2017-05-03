@@ -30,10 +30,6 @@ public class Facility implements Serializable {
     private Long id;
 
     @NotNull
-    @Column(name = "type", nullable = false)
-    private String type;
-
-    @NotNull
     @Size(max = 50)
     @Column(name = "name", length = 50, nullable = false)
     private String name;
@@ -81,10 +77,6 @@ public class Facility implements Serializable {
     @Column(name = "last_visit_reason")
     private String lastVisitReason;
 
-    @NotNull
-    @Column(name = "county", nullable = false)
-    private String county;
-
     @OneToMany(mappedBy = "facility")
     @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -100,25 +92,27 @@ public class Facility implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<FacilityChild> children = new HashSet<>();
 
+    @ManyToOne
+    private AssignedWorker assignedWorker;
+
+    @ManyToOne
+    private DistrictOffice districtOffice;
+
+    @ManyToOne
+    private FacilityType type;
+
+    @ManyToOne
+    private FacilityStatus status;
+
+    @ManyToOne
+    private County county;
+
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public Facility type(String type) {
-        this.type = type;
-        return this;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public String getName() {
@@ -290,19 +284,6 @@ public class Facility implements Serializable {
         this.lastVisitReason = lastVisitReason;
     }
 
-    public String getCounty() {
-        return county;
-    }
-
-    public Facility county(String county) {
-        this.county = county;
-        return this;
-    }
-
-    public void setCounty(String county) {
-        this.county = county;
-    }
-
     public Set<FacilityAddress> getAddresses() {
         return addresses;
     }
@@ -378,6 +359,71 @@ public class Facility implements Serializable {
         this.children = facilityChildren;
     }
 
+    public AssignedWorker getAssignedWorker() {
+        return assignedWorker;
+    }
+
+    public Facility assignedWorker(AssignedWorker assignedWorker) {
+        this.assignedWorker = assignedWorker;
+        return this;
+    }
+
+    public void setAssignedWorker(AssignedWorker assignedWorker) {
+        this.assignedWorker = assignedWorker;
+    }
+
+    public DistrictOffice getDistrictOffice() {
+        return districtOffice;
+    }
+
+    public Facility districtOffice(DistrictOffice districtOffice) {
+        this.districtOffice = districtOffice;
+        return this;
+    }
+
+    public void setDistrictOffice(DistrictOffice districtOffice) {
+        this.districtOffice = districtOffice;
+    }
+
+    public FacilityType getType() {
+        return type;
+    }
+
+    public Facility type(FacilityType facilityType) {
+        this.type = facilityType;
+        return this;
+    }
+
+    public void setType(FacilityType facilityType) {
+        this.type = facilityType;
+    }
+
+    public FacilityStatus getStatus() {
+        return status;
+    }
+
+    public Facility status(FacilityStatus facilityStatus) {
+        this.status = facilityStatus;
+        return this;
+    }
+
+    public void setStatus(FacilityStatus facilityStatus) {
+        this.status = facilityStatus;
+    }
+
+    public County getCounty() {
+        return county;
+    }
+
+    public Facility county(County county) {
+        this.county = county;
+        return this;
+    }
+
+    public void setCounty(County county) {
+        this.county = county;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -402,7 +448,6 @@ public class Facility implements Serializable {
     public String toString() {
         return "Facility{" +
             "id=" + id +
-            ", type='" + type + "'" +
             ", name='" + name + "'" +
             ", licenseeName='" + licenseeName + "'" +
             ", licenseeType='" + licenseeType + "'" +
@@ -416,7 +461,6 @@ public class Facility implements Serializable {
             ", lastVisitDate='" + lastVisitDate + "'" +
             ", emailAddress='" + emailAddress + "'" +
             ", lastVisitReason='" + lastVisitReason + "'" +
-            ", county='" + county + "'" +
             '}';
     }
 }

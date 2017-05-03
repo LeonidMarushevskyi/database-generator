@@ -4,8 +4,6 @@ import gov.ca.cwds.cals.rest.api.GeneratorApp;
 
 import gov.ca.cwds.cals.rest.api.domain.RaceType;
 import gov.ca.cwds.cals.rest.api.repository.RaceTypeRepository;
-import gov.ca.cwds.cals.rest.api.service.dto.RaceTypeDTO;
-import gov.ca.cwds.cals.rest.api.service.mapper.RaceTypeMapper;
 import gov.ca.cwds.cals.rest.api.web.rest.errors.ExceptionTranslator;
 
 import org.junit.Before;
@@ -49,9 +47,6 @@ public class RaceTypeResourceIntTest {
     private RaceTypeRepository raceTypeRepository;
 
     @Autowired
-    private RaceTypeMapper raceTypeMapper;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -70,7 +65,7 @@ public class RaceTypeResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        RaceTypeResource raceTypeResource = new RaceTypeResource(raceTypeRepository, raceTypeMapper);
+        RaceTypeResource raceTypeResource = new RaceTypeResource(raceTypeRepository);
         this.restRaceTypeMockMvc = MockMvcBuilders.standaloneSetup(raceTypeResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -101,10 +96,9 @@ public class RaceTypeResourceIntTest {
         int databaseSizeBeforeCreate = raceTypeRepository.findAll().size();
 
         // Create the RaceType
-        RaceTypeDTO raceTypeDTO = raceTypeMapper.raceTypeToRaceTypeDTO(raceType);
         restRaceTypeMockMvc.perform(post("/api/race-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(raceTypeDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(raceType)))
             .andExpect(status().isCreated());
 
         // Validate the RaceType in the database
@@ -122,12 +116,11 @@ public class RaceTypeResourceIntTest {
 
         // Create the RaceType with an existing ID
         raceType.setId(1L);
-        RaceTypeDTO raceTypeDTO = raceTypeMapper.raceTypeToRaceTypeDTO(raceType);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restRaceTypeMockMvc.perform(post("/api/race-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(raceTypeDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(raceType)))
             .andExpect(status().isBadRequest());
 
         // Validate the Alice in the database
@@ -143,11 +136,10 @@ public class RaceTypeResourceIntTest {
         raceType.setCode(null);
 
         // Create the RaceType, which fails.
-        RaceTypeDTO raceTypeDTO = raceTypeMapper.raceTypeToRaceTypeDTO(raceType);
 
         restRaceTypeMockMvc.perform(post("/api/race-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(raceTypeDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(raceType)))
             .andExpect(status().isBadRequest());
 
         List<RaceType> raceTypeList = raceTypeRepository.findAll();
@@ -204,11 +196,10 @@ public class RaceTypeResourceIntTest {
         updatedRaceType
             .code(UPDATED_CODE)
             .type(UPDATED_TYPE);
-        RaceTypeDTO raceTypeDTO = raceTypeMapper.raceTypeToRaceTypeDTO(updatedRaceType);
 
         restRaceTypeMockMvc.perform(put("/api/race-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(raceTypeDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedRaceType)))
             .andExpect(status().isOk());
 
         // Validate the RaceType in the database
@@ -225,12 +216,11 @@ public class RaceTypeResourceIntTest {
         int databaseSizeBeforeUpdate = raceTypeRepository.findAll().size();
 
         // Create the RaceType
-        RaceTypeDTO raceTypeDTO = raceTypeMapper.raceTypeToRaceTypeDTO(raceType);
 
         // If the entity doesn't have an ID, it will be created instead of just being updated
         restRaceTypeMockMvc.perform(put("/api/race-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(raceTypeDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(raceType)))
             .andExpect(status().isCreated());
 
         // Validate the RaceType in the database

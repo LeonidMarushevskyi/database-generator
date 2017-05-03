@@ -18,16 +18,39 @@
             "relationshipName": "child",
             "otherEntityName": "facilityChild",
             "otherEntityRelationshipName": "facility"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "relationshipName": "assignedWorker",
+            "otherEntityName": "assignedWorker",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "relationshipName": "districtOffice",
+            "otherEntityName": "districtOffice",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "relationshipName": "type",
+            "otherEntityName": "facilityType",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "relationshipName": "status",
+            "otherEntityName": "facilityStatus",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "relationshipName": "county",
+            "otherEntityName": "county",
+            "otherEntityField": "id"
         }
     ],
     "fields": [
-        {
-            "fieldName": "type",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
         {
             "fieldName": "name",
             "fieldType": "String",
@@ -105,13 +128,6 @@
         {
             "fieldName": "lastVisitReason",
             "fieldType": "String"
-        },
-        {
-            "fieldName": "county",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "required"
-            ]
         }
     ],
     "changelogDate": "20170501060639",

@@ -67,6 +67,11 @@ public class CacheConfiguration {
             cm.createCache(gov.ca.cwds.cals.rest.api.domain.Person.class.getName() + ".addresses", jcacheConfiguration);
             cm.createCache(gov.ca.cwds.cals.rest.api.domain.Person.class.getName() + ".languages", jcacheConfiguration);
             cm.createCache(gov.ca.cwds.cals.rest.api.domain.Person.class.getName() + ".races", jcacheConfiguration);
+            cm.createCache(gov.ca.cwds.cals.rest.api.domain.FacilityStatus.class.getName(), jcacheConfiguration);
+            cm.createCache(gov.ca.cwds.cals.rest.api.domain.DistrictOffice.class.getName(), jcacheConfiguration);
+            cm.createCache(gov.ca.cwds.cals.rest.api.domain.County.class.getName(), jcacheConfiguration);
+            cm.createCache(gov.ca.cwds.cals.rest.api.domain.FacilityType.class.getName(), jcacheConfiguration);
+            cm.createCache(gov.ca.cwds.cals.rest.api.domain.AssignedWorker.class.getName(), jcacheConfiguration);
             // jhipster-needle-ehcache-add-entry
         };
     }

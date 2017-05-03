@@ -23,6 +23,11 @@
     <include file="classpath:config/liquibase/changelog/20170501195703_added_entity_Phone.xml" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/20170501195703_added_entity_PhoneType.xml" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/20170501195703_added_entity_Person.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20170502210302_added_entity_FacilityStatus.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20170502210302_added_entity_DistrictOffice.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20170502210302_added_entity_County.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20170502210302_added_entity_FacilityType.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20170502220129_added_entity_AssignedWorker.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="classpath:config/liquibase/changelog/20170501061423_added_entity_constraints_FacilityAddress.xml" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/20170501195703_added_entity_constraints_FacilityChild.xml" relativeToChangelogFile="false"/>
@@ -34,5 +39,7 @@
     <include file="classpath:config/liquibase/changelog/20170501195703_added_entity_constraints_PersonRace.xml" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/20170501195703_added_entity_constraints_Person.xml" relativeToChangelogFile="false"/>
     <!--<include file="classpath:config/liquibase/changelog/20170501060639_added_entity_constraints_Address.xml" relativeToChangelogFile="false"/>-->
+    <include file="classpath:config/liquibase/changelog/20170501060639_added_entity_constraints_Facility.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20170502220129_added_entity_constraints_AssignedWorker.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
 </databaseChangeLog>
