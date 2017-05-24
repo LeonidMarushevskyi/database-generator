@@ -19,17 +19,17 @@ entity Facility {
 
 entity FacilityType {
 	code Integer required,
-    description String  maxlength(20)
+    description String maxlength(20)
 }
 
 entity FacilityStatus {
 	code Integer required,
-    description String  maxlength(20)
+    description String maxlength(20)
 }
 
 entity County {
 	code Integer required,
-    description String  maxlength(20)
+    description String maxlength(20)
 }
 
 entity DistrictOffice {
@@ -235,7 +235,7 @@ relationship OneToOne {
 	PersonAddress{race} to Address
 }
 
-dto AssignedWorker, Facility, FacilityAddress, FacilityPhone, AddressType, Address, PhoneType, Phone, FacilityChild, Person, PersonPhone, PersonAddress, PersonEthnicity, PersonLanguage, PersonRace, AssignedWorker, FacilityType, FacilityStatus, County, DistrictOffice, AssignedWorker  with mapstruct
+dto AssignedWorker, Facility, FacilityAddress, FacilityPhone, AddressType, Address, PhoneType, Phone, FacilityChild, Person, PersonPhone, PersonAddress, PersonEthnicity, PersonLanguage, PersonRace, AssignedWorker, FacilityType, FacilityStatus, County, DistrictOffice, AssignedWorker, Complaint, Inspection, Deficiency, ClearedPOC with mapstruct
 
 paginate Facility with pager
 

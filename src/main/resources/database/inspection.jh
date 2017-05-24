@@ -1,0 +1,33 @@
+entity Inspection {
+	representativeSignatureDate LocalDate,
+    form809PrintDate LocalDate
+}
+
+entity Deficiency {
+	deficiencyType String,
+    deficiencyTypeDescription String,
+    pocDate ZonedDateTime,
+    facSectionViolated String,
+    deficiency String,
+    correctionPlan String
+}
+
+entity ClearedPOC {
+	poc_due_date LocalDateTime,
+    poc_section_violated String,
+    poc_correction_plan String,
+    poc_date_cleared ZonedDateTime,
+    poc_comments String
+}
+
+relationship OneToMany {
+	Facility{inspection} to Inspection
+}
+
+relationship OneToMany {
+	Inspection{deficiency} to Deficiency
+}
+
+relationship OneToMany {
+	Inspection{clearedPOC} to ClearedPOC
+}

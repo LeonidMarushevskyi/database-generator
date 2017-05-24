@@ -1,0 +1,11 @@
+entity Complaint {
+	complaintDate LocalDate,
+    controlNumber String,
+    priorityLevel Integer,
+    status String,
+    approvalDate LocalDate
+}
+
+relationship OneToMany {
+	Facility{complaint} to Complaint
+}
