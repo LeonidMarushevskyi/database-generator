@@ -1,0 +1,66 @@
+<div>
+    <h2>
+        <span>Person Ethnicities</span>
+        <button class="btn btn-primary float-right create-person-ethnicity" [routerLink]="['/', { outlets: { popup: ['person-ethnicity-new'] } }]">
+            <span class="fa fa-plus"></span>
+            <span >
+            Create new Person Ethnicity
+            </span>
+        </button>
+    </h2>
+    <jhi-alert></jhi-alert>
+    <div class="row">
+    </div>
+    <br/>
+    <div class="table-responsive" *ngIf="personEthnicities">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+            <th><span>ID</span></th>
+            <th><span>Ethnicity</span></th>
+            <th><span>Sub Ethnicity</span></th>
+            <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let personEthnicity of personEthnicities ;trackBy: trackId">
+                <td><a [routerLink]="['../person-ethnicity', personEthnicity.id ]">{{personEthnicity.id}}</a></td>
+                <td>
+                    <div *ngIf="personEthnicity.ethnicityId">
+                        <a [routerLink]="['../ethnicity-type', personEthnicity.ethnicityId  ]" >{{personEthnicity.ethnicityId}}</a>
+                    </div>
+                </td>
+                <td>
+                    <div *ngIf="personEthnicity.subEthnicityId">
+                        <a [routerLink]="['../ethnicity-type', personEthnicity.subEthnicityId  ]" >{{personEthnicity.subEthnicityId}}</a>
+                    </div>
+                </td>
+                <td class="text-right">
+                    <div class="btn-group flex-btn-group-container">
+                        <button type="submit"
+                                [routerLink]="['../person-ethnicity', personEthnicity.id ]"
+                                class="btn btn-info btn-sm">
+                            <span class="fa fa-eye"></span>
+                            <span class="hidden-md-down">View</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', { outlets: { popup: 'person-ethnicity/'+ personEthnicity.id + '/edit'} }]"
+                                replaceUrl="true"
+                                class="btn btn-primary btn-sm">
+                            <span class="fa fa-pencil"></span>
+                            <span class="hidden-md-down">Edit</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', { outlets: { popup: 'person-ethnicity/'+ personEthnicity.id + '/delete'} }]"
+                                replaceUrl="true"
+                                class="btn btn-danger btn-sm">
+                            <span class="fa fa-remove"></span>
+                            <span class="hidden-md-down">Delete</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

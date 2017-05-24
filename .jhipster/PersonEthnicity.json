@@ -1,0 +1,23 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "relationshipName": "ethnicity",
+            "otherEntityName": "ethnicityType",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "relationshipName": "subEthnicity",
+            "otherEntityName": "ethnicityType",
+            "otherEntityField": "id"
+        }
+    ],
+    "fields": [],
+    "changelogDate": "20170501195703",
+    "entityTableName": "person_ethnicity",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "no"
+}

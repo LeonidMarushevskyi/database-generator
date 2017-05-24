@@ -1,0 +1,45 @@
+
+<div *ngIf="facilityChild">
+    <h2><span>Facility Child</span> {{facilityChild.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span>Date Of Placement</span></dt>
+        <dd>
+            <span>{{facilityChild.dateOfPlacement | date:'mediumDate'}}</span>
+        </dd>
+        <dt><span>Assigned Worker</span></dt>
+        <dd>
+            <span>{{facilityChild.assignedWorker}}</span>
+        </dd>
+        <dt><span>County Of Origin</span></dt>
+        <dd>
+            <span>{{facilityChild.countyOfOrigin}}</span>
+        </dd>
+        <dt><span>Facility</span></dt>
+        <dd>
+            <div *ngIf="facilityChild.facilityId">
+                <a [routerLink]="['/facility', facilityChild.facilityId]">{{facilityChild.facilityId}}</a>
+            </div>
+        </dd>
+        <dt><span>Person</span></dt>
+        <dd>
+            <div *ngIf="facilityChild.personId">
+                <a [routerLink]="['/person', facilityChild.personId]">{{facilityChild.personId}}</a>
+            </div>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            (click)="previousState()"
+            class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span> Back</span>
+    </button>
+
+    <button type="button"
+            [routerLink]="['/', { outlets: { popup: 'facility-child/'+ facilityChild.id + '/edit'} }]"
+            replaceUrl="true"
+            class="btn btn-primary">
+        <span class="fa fa-pencil"></span>&nbsp;<span> Edit</span>
+    </button>
+</div>

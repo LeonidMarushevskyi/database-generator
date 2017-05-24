@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <!--
+        Added the constraints for entity Facility.
+    -->
+    <changeSet id="20170501060639-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="assigned_worker_id"
+                                 baseTableName="facility"
+                                 constraintName="fk_facility_assigned_worker_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="assigned_worker"/>
+
+        <addForeignKeyConstraint baseColumnNames="district_office_id"
+                                 baseTableName="facility"
+                                 constraintName="fk_facility_district_office_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="district_office"/>
+
+        <addForeignKeyConstraint baseColumnNames="type_id"
+                                 baseTableName="facility"
+                                 constraintName="fk_facility_type_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="facility_type"/>
+
+        <addForeignKeyConstraint baseColumnNames="status_id"
+                                 baseTableName="facility"
+                                 constraintName="fk_facility_status_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="facility_status"/>
+
+        <addForeignKeyConstraint baseColumnNames="county_id"
+                                 baseTableName="facility"
+                                 constraintName="fk_facility_county_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="county"/>
+
+    </changeSet>
+</databaseChangeLog>

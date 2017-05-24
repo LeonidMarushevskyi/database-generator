@@ -1,0 +1,51 @@
+
+<div *ngIf="person">
+    <h2><span>Person</span> {{person.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span>First Name</span></dt>
+        <dd>
+            <span>{{person.firstName}}</span>
+        </dd>
+        <dt><span>Last Name</span></dt>
+        <dd>
+            <span>{{person.lastName}}</span>
+        </dd>
+        <dt><span>Gender</span></dt>
+        <dd>
+            <span>{{person.gender}}</span>
+        </dd>
+        <dt><span>Age</span></dt>
+        <dd>
+            <span>{{person.age}}</span>
+        </dd>
+        <dt><span>Date Of Birth</span></dt>
+        <dd>
+            <span>{{person.dateOfBirth | date:'mediumDate'}}</span>
+        </dd>
+        <dt><span>Ssn</span></dt>
+        <dd>
+            <span>{{person.ssn}}</span>
+        </dd>
+        <dt><span>Ethnicity</span></dt>
+        <dd>
+            <div *ngIf="person.ethnicityId">
+                <a [routerLink]="['/person-ethnicity', person.ethnicityId]">{{person.ethnicityId}}</a>
+            </div>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            (click)="previousState()"
+            class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span> Back</span>
+    </button>
+
+    <button type="button"
+            [routerLink]="['/', { outlets: { popup: 'person/'+ person.id + '/edit'} }]"
+            replaceUrl="true"
+            class="btn btn-primary">
+        <span class="fa fa-pencil"></span>&nbsp;<span> Edit</span>
+    </button>
+</div>

@@ -1,0 +1,131 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "address",
+            "otherEntityName": "facilityAddress",
+            "otherEntityRelationshipName": "facility"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "phone",
+            "otherEntityName": "facilityPhone",
+            "otherEntityRelationshipName": "facility"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "child",
+            "otherEntityName": "facilityChild",
+            "otherEntityRelationshipName": "facility"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "relationshipName": "assignedWorker",
+            "otherEntityName": "assignedWorker",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "relationshipName": "districtOffice",
+            "otherEntityName": "districtOffice",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "relationshipName": "type",
+            "otherEntityName": "facilityType",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "relationshipName": "status",
+            "otherEntityName": "facilityStatus",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "relationshipName": "county",
+            "otherEntityName": "county",
+            "otherEntityField": "id"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": 50
+        },
+        {
+            "fieldName": "licenseeName",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength",
+                "required"
+            ],
+            "fieldValidateRulesMaxlength": 50
+        },
+        {
+            "fieldName": "licenseeType",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "licenseNumber",
+            "fieldType": "Long",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "licenseStatus",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "capacity",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "licenseEffectiveDate",
+            "fieldType": "LocalDate",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "originalApplicationRecievedDate",
+            "fieldType": "LocalDate",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "lastVisitDate",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "emailAddress",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": 50
+        },
+        {
+            "fieldName": "lastVisitReason",
+            "fieldType": "String"
+        }
+    ],
+    "changelogDate": "20170501060639",
+    "javadoc": "@author CALS API team.",
+    "entityTableName": "facility",
+    "dto": "mapstruct",
+    "pagination": "pager",
+    "service": "no"
+}

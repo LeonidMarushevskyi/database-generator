@@ -1,0 +1,20 @@
+{
+    "fluentMethods": true,
+    "relationships": [],
+    "fields": [
+        {
+            "fieldName": "number",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": 16
+        }
+    ],
+    "changelogDate": "20170501195703",
+    "entityTableName": "phone",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "no"
+}

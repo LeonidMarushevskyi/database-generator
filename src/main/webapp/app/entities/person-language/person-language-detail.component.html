@@ -1,0 +1,33 @@
+
+<div *ngIf="personLanguage">
+    <h2><span>Person Language</span> {{personLanguage.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span>Person</span></dt>
+        <dd>
+            <div *ngIf="personLanguage.personId">
+                <a [routerLink]="['/person', personLanguage.personId]">{{personLanguage.personId}}</a>
+            </div>
+        </dd>
+        <dt><span>Language</span></dt>
+        <dd>
+            <div *ngIf="personLanguage.languageId">
+                <a [routerLink]="['/language-type', personLanguage.languageId]">{{personLanguage.languageId}}</a>
+            </div>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            (click)="previousState()"
+            class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span> Back</span>
+    </button>
+
+    <button type="button"
+            [routerLink]="['/', { outlets: { popup: 'person-language/'+ personLanguage.id + '/edit'} }]"
+            replaceUrl="true"
+            class="btn btn-primary">
+        <span class="fa fa-pencil"></span>&nbsp;<span> Edit</span>
+    </button>
+</div>

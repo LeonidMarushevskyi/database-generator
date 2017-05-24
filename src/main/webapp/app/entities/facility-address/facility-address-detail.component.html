@@ -1,0 +1,39 @@
+
+<div *ngIf="facilityAddress">
+    <h2><span>Facility Address</span> {{facilityAddress.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span>Facility</span></dt>
+        <dd>
+            <div *ngIf="facilityAddress.facilityId">
+                <a [routerLink]="['/facility', facilityAddress.facilityId]">{{facilityAddress.facilityId}}</a>
+            </div>
+        </dd>
+        <dt><span>Address</span></dt>
+        <dd>
+            <div *ngIf="facilityAddress.addressId">
+                <a [routerLink]="['/address', facilityAddress.addressId]">{{facilityAddress.addressId}}</a>
+            </div>
+        </dd>
+        <dt><span>Type</span></dt>
+        <dd>
+            <div *ngIf="facilityAddress.typeId">
+                <a [routerLink]="['/address-type', facilityAddress.typeId]">{{facilityAddress.typeId}}</a>
+            </div>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            (click)="previousState()"
+            class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span> Back</span>
+    </button>
+
+    <button type="button"
+            [routerLink]="['/', { outlets: { popup: 'facility-address/'+ facilityAddress.id + '/edit'} }]"
+            replaceUrl="true"
+            class="btn btn-primary">
+        <span class="fa fa-pencil"></span>&nbsp;<span> Edit</span>
+    </button>
+</div>

@@ -1,0 +1,198 @@
+
+
+<form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+
+    <div class="modal-header">
+        <h4 class="modal-title" id="myFacilityLabel">Create or edit a Facility</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                (click)="clear()">&times;</button>
+    </div>
+    <div class="modal-body">
+        <jhi-alert-error></jhi-alert-error>
+        <div class="form-group" [hidden]="!facility.id">
+            <label for="id">ID</label>
+            <input type="text" class="form-control" id="id" name="id"
+                   [(ngModel)]="facility.id" readonly />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_name">Name</label>
+            <input type="text" class="form-control" name="name" id="field_name"
+                [(ngModel)]="facility.name"
+            required maxlength="50" />
+            <div [hidden]="!(editForm.controls.name?.dirty && editForm.controls.name?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.name?.errors?.required">
+                   This field is required.
+                </small>
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.name?.errors?.maxlength">
+                   This field cannot be longer than 50 characters.
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_licenseeName">Licensee Name</label>
+            <input type="text" class="form-control" name="licenseeName" id="field_licenseeName"
+                [(ngModel)]="facility.licenseeName"
+            required maxlength="50" />
+            <div [hidden]="!(editForm.controls.licenseeName?.dirty && editForm.controls.licenseeName?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.licenseeName?.errors?.required">
+                   This field is required.
+                </small>
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.licenseeName?.errors?.maxlength">
+                   This field cannot be longer than 50 characters.
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_licenseeType">Licensee Type</label>
+            <input type="text" class="form-control" name="licenseeType" id="field_licenseeType"
+                [(ngModel)]="facility.licenseeType"
+             />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_licenseNumber">License Number</label>
+            <input type="number" class="form-control" name="licenseNumber" id="field_licenseNumber"
+                [(ngModel)]="facility.licenseNumber"
+            required />
+            <div [hidden]="!(editForm.controls.licenseNumber?.dirty && editForm.controls.licenseNumber?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.licenseNumber?.errors?.required">
+                   This field is required.
+                </small>
+                <small class="form-text text-danger"
+                    [hidden]="!editForm.controls.licenseNumber?.errors?.number">
+                    This field should be a number.
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_licenseStatus">License Status</label>
+            <input type="text" class="form-control" name="licenseStatus" id="field_licenseStatus"
+                [(ngModel)]="facility.licenseStatus"
+             />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_capacity">Capacity</label>
+            <input type="number" class="form-control" name="capacity" id="field_capacity"
+                [(ngModel)]="facility.capacity"
+            required />
+            <div [hidden]="!(editForm.controls.capacity?.dirty && editForm.controls.capacity?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.capacity?.errors?.required">
+                   This field is required.
+                </small>
+                <small class="form-text text-danger"
+                    [hidden]="!editForm.controls.capacity?.errors?.number">
+                    This field should be a number.
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_licenseEffectiveDate">License Effective Date</label>
+            <div class="input-group">
+                <input id="field_licenseEffectiveDate" type="text" class="form-control" name="licenseEffectiveDate" ngbDatepicker  #licenseEffectiveDateDp="ngbDatepicker" [(ngModel)]="facility.licenseEffectiveDate"
+                required/>
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-default" (click)="licenseEffectiveDateDp.toggle()"><i class="fa fa-calendar"></i></button>
+                </span>
+            </div>
+            <div [hidden]="!(editForm.controls.licenseEffectiveDate?.dirty && editForm.controls.licenseEffectiveDate?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.licenseEffectiveDate?.errors?.required">
+                   This field is required.
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_originalApplicationRecievedDate">Original Application Recieved Date</label>
+            <div class="input-group">
+                <input id="field_originalApplicationRecievedDate" type="text" class="form-control" name="originalApplicationRecievedDate" ngbDatepicker  #originalApplicationRecievedDateDp="ngbDatepicker" [(ngModel)]="facility.originalApplicationRecievedDate"
+                required/>
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-default" (click)="originalApplicationRecievedDateDp.toggle()"><i class="fa fa-calendar"></i></button>
+                </span>
+            </div>
+            <div [hidden]="!(editForm.controls.originalApplicationRecievedDate?.dirty && editForm.controls.originalApplicationRecievedDate?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.originalApplicationRecievedDate?.errors?.required">
+                   This field is required.
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_lastVisitDate">Last Visit Date</label>
+            <div class="input-group">
+                <input id="field_lastVisitDate" type="text" class="form-control" name="lastVisitDate" ngbDatepicker  #lastVisitDateDp="ngbDatepicker" [(ngModel)]="facility.lastVisitDate"
+                />
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-default" (click)="lastVisitDateDp.toggle()"><i class="fa fa-calendar"></i></button>
+                </span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_emailAddress">Email Address</label>
+            <input type="text" class="form-control" name="emailAddress" id="field_emailAddress"
+                [(ngModel)]="facility.emailAddress"
+            maxlength="50" />
+            <div [hidden]="!(editForm.controls.emailAddress?.dirty && editForm.controls.emailAddress?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.emailAddress?.errors?.maxlength">
+                   This field cannot be longer than 50 characters.
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_lastVisitReason">Last Visit Reason</label>
+            <input type="text" class="form-control" name="lastVisitReason" id="field_lastVisitReason"
+                [(ngModel)]="facility.lastVisitReason"
+             />
+        </div>
+
+        <div class="form-group">
+            <label for="field_assignedWorker">Assigned Worker</label>
+            <select class="form-control" id="field_assignedWorker" name="assignedWorker" [(ngModel)]="facility.assignedWorkerId" >
+                <option [ngValue]="null"></option>
+                <option [ngValue]="assignedWorkerOption.id" *ngFor="let assignedWorkerOption of assignedworkers; trackBy: trackAssignedWorkerById">{{assignedWorkerOption.id}}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="field_districtOffice">District Office</label>
+            <select class="form-control" id="field_districtOffice" name="districtOffice" [(ngModel)]="facility.districtOfficeId" >
+                <option [ngValue]="null"></option>
+                <option [ngValue]="districtOfficeOption.id" *ngFor="let districtOfficeOption of districtoffices; trackBy: trackDistrictOfficeById">{{districtOfficeOption.id}}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="field_type">Type</label>
+            <select class="form-control" id="field_type" name="type" [(ngModel)]="facility.typeId" >
+                <option [ngValue]="null"></option>
+                <option [ngValue]="facilityTypeOption.id" *ngFor="let facilityTypeOption of facilitytypes; trackBy: trackFacilityTypeById">{{facilityTypeOption.id}}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="field_status">Status</label>
+            <select class="form-control" id="field_status" name="status" [(ngModel)]="facility.statusId" >
+                <option [ngValue]="null"></option>
+                <option [ngValue]="facilityStatusOption.id" *ngFor="let facilityStatusOption of facilitystatuses; trackBy: trackFacilityStatusById">{{facilityStatusOption.id}}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="field_county">County</label>
+            <select class="form-control" id="field_county" name="county" [(ngModel)]="facility.countyId" >
+                <option [ngValue]="null"></option>
+                <option [ngValue]="countyOption.id" *ngFor="let countyOption of counties; trackBy: trackCountyById">{{countyOption.id}}</option>
+            </select>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" (click)="clear()">
+            <span class="fa fa-ban"></span>&nbsp;<span>Cancel</span>
+        </button>
+        <button type="submit" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+            <span class="fa fa-save"></span>&nbsp;<span>Save</span>
+        </button>
+    </div>
+</form>

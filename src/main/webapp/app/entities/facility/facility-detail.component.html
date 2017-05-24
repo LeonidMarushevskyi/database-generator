@@ -1,0 +1,95 @@
+
+<div *ngIf="facility">
+    <h2><span>Facility</span> {{facility.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span>Name</span></dt>
+        <dd>
+            <span>{{facility.name}}</span>
+        </dd>
+        <dt><span>Licensee Name</span></dt>
+        <dd>
+            <span>{{facility.licenseeName}}</span>
+        </dd>
+        <dt><span>Licensee Type</span></dt>
+        <dd>
+            <span>{{facility.licenseeType}}</span>
+        </dd>
+        <dt><span>License Number</span></dt>
+        <dd>
+            <span>{{facility.licenseNumber}}</span>
+        </dd>
+        <dt><span>License Status</span></dt>
+        <dd>
+            <span>{{facility.licenseStatus}}</span>
+        </dd>
+        <dt><span>Capacity</span></dt>
+        <dd>
+            <span>{{facility.capacity}}</span>
+        </dd>
+        <dt><span>License Effective Date</span></dt>
+        <dd>
+            <span>{{facility.licenseEffectiveDate | date:'mediumDate'}}</span>
+        </dd>
+        <dt><span>Original Application Recieved Date</span></dt>
+        <dd>
+            <span>{{facility.originalApplicationRecievedDate | date:'mediumDate'}}</span>
+        </dd>
+        <dt><span>Last Visit Date</span></dt>
+        <dd>
+            <span>{{facility.lastVisitDate | date:'mediumDate'}}</span>
+        </dd>
+        <dt><span>Email Address</span></dt>
+        <dd>
+            <span>{{facility.emailAddress}}</span>
+        </dd>
+        <dt><span>Last Visit Reason</span></dt>
+        <dd>
+            <span>{{facility.lastVisitReason}}</span>
+        </dd>
+        <dt><span>Assigned Worker</span></dt>
+        <dd>
+            <div *ngIf="facility.assignedWorkerId">
+                <a [routerLink]="['/assigned-worker', facility.assignedWorkerId]">{{facility.assignedWorkerId}}</a>
+            </div>
+        </dd>
+        <dt><span>District Office</span></dt>
+        <dd>
+            <div *ngIf="facility.districtOfficeId">
+                <a [routerLink]="['/district-office', facility.districtOfficeId]">{{facility.districtOfficeId}}</a>
+            </div>
+        </dd>
+        <dt><span>Type</span></dt>
+        <dd>
+            <div *ngIf="facility.typeId">
+                <a [routerLink]="['/facility-type', facility.typeId]">{{facility.typeId}}</a>
+            </div>
+        </dd>
+        <dt><span>Status</span></dt>
+        <dd>
+            <div *ngIf="facility.statusId">
+                <a [routerLink]="['/facility-status', facility.statusId]">{{facility.statusId}}</a>
+            </div>
+        </dd>
+        <dt><span>County</span></dt>
+        <dd>
+            <div *ngIf="facility.countyId">
+                <a [routerLink]="['/county', facility.countyId]">{{facility.countyId}}</a>
+            </div>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            (click)="previousState()"
+            class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span> Back</span>
+    </button>
+
+    <button type="button"
+            [routerLink]="['/', { outlets: { popup: 'facility/'+ facility.id + '/edit'} }]"
+            replaceUrl="true"
+            class="btn btn-primary">
+        <span class="fa fa-pencil"></span>&nbsp;<span> Edit</span>
+    </button>
+</div>

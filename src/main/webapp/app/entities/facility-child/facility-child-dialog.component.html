@@ -1,0 +1,69 @@
+
+
+<form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+
+    <div class="modal-header">
+        <h4 class="modal-title" id="myFacilityChildLabel">Create or edit a Facility Child</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                (click)="clear()">&times;</button>
+    </div>
+    <div class="modal-body">
+        <jhi-alert-error></jhi-alert-error>
+        <div class="form-group" [hidden]="!facilityChild.id">
+            <label for="id">ID</label>
+            <input type="text" class="form-control" id="id" name="id"
+                   [(ngModel)]="facilityChild.id" readonly />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_dateOfPlacement">Date Of Placement</label>
+            <div class="input-group">
+                <input id="field_dateOfPlacement" type="text" class="form-control" name="dateOfPlacement" ngbDatepicker  #dateOfPlacementDp="ngbDatepicker" [(ngModel)]="facilityChild.dateOfPlacement"
+                />
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-default" (click)="dateOfPlacementDp.toggle()"><i class="fa fa-calendar"></i></button>
+                </span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_assignedWorker">Assigned Worker</label>
+            <input type="text" class="form-control" name="assignedWorker" id="field_assignedWorker"
+                [(ngModel)]="facilityChild.assignedWorker"
+             />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_countyOfOrigin">County Of Origin</label>
+            <input type="text" class="form-control" name="countyOfOrigin" id="field_countyOfOrigin"
+                [(ngModel)]="facilityChild.countyOfOrigin"
+            required />
+            <div [hidden]="!(editForm.controls.countyOfOrigin?.dirty && editForm.controls.countyOfOrigin?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.countyOfOrigin?.errors?.required">
+                   This field is required.
+                </small>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="field_facility">Facility</label>
+            <select class="form-control" id="field_facility" name="facility" [(ngModel)]="facilityChild.facilityId" >
+                <option [ngValue]="null"></option>
+                <option [ngValue]="facilityOption.id" *ngFor="let facilityOption of facilities; trackBy: trackFacilityById">{{facilityOption.id}}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="field_person">Person</label>
+            <select class="form-control" id="field_person" name="person" [(ngModel)]="facilityChild.personId">
+                <option [ngValue]="null"></option>
+                <option [ngValue]="personOption.id" *ngFor="let personOption of people; trackBy: trackPersonById">{{personOption.id}}</option>
+            </select>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" (click)="clear()">
+            <span class="fa fa-ban"></span>&nbsp;<span>Cancel</span>
+        </button>
+        <button type="submit" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+            <span class="fa fa-save"></span>&nbsp;<span>Save</span>
+        </button>
+    </div>
+</form>
