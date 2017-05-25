@@ -1,0 +1,72 @@
+<div>
+    <h2>
+        <span>Deficiencies</span>
+        <button class="btn btn-primary float-right create-deficiency" [routerLink]="['/', { outlets: { popup: ['deficiency-new'] } }]">
+            <span class="fa fa-plus"></span>
+            <span >
+            Create new Deficiency
+            </span>
+        </button>
+    </h2>
+    <jhi-alert></jhi-alert>
+    <div class="row">
+    </div>
+    <br/>
+    <div class="table-responsive" *ngIf="deficiencies">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+            <th><span>ID</span></th>
+            <th><span>Deficiency Type</span></th>
+            <th><span>Deficiency Type Description</span></th>
+            <th><span>Poc Date</span></th>
+            <th><span>Fac Section Violated</span></th>
+            <th><span>Deficiency</span></th>
+            <th><span>Correction Plan</span></th>
+            <th><span>Inspection</span></th>
+            <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let deficiency of deficiencies ;trackBy: trackId">
+                <td><a [routerLink]="['../deficiency', deficiency.id ]">{{deficiency.id}}</a></td>
+                <td>{{deficiency.deficiencyType}}</td>
+                <td>{{deficiency.deficiencyTypeDescription}}</td>
+                <td>{{deficiency.pocDate | date:'medium'}}</td>
+                <td>{{deficiency.facSectionViolated}}</td>
+                <td>{{deficiency.deficiency}}</td>
+                <td>{{deficiency.correctionPlan}}</td>
+                <td>
+                    <div *ngIf="deficiency.inspectionId">
+                        <a [routerLink]="['../inspection', deficiency.inspectionId  ]" >{{deficiency.inspectionId}}</a>
+                    </div>
+                </td>
+                <td class="text-right">
+                    <div class="btn-group flex-btn-group-container">
+                        <button type="submit"
+                                [routerLink]="['../deficiency', deficiency.id ]"
+                                class="btn btn-info btn-sm">
+                            <span class="fa fa-eye"></span>
+                            <span class="hidden-md-down">View</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', { outlets: { popup: 'deficiency/'+ deficiency.id + '/edit'} }]"
+                                replaceUrl="true"
+                                class="btn btn-primary btn-sm">
+                            <span class="fa fa-pencil"></span>
+                            <span class="hidden-md-down">Edit</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', { outlets: { popup: 'deficiency/'+ deficiency.id + '/delete'} }]"
+                                replaceUrl="true"
+                                class="btn btn-danger btn-sm">
+                            <span class="fa fa-remove"></span>
+                            <span class="hidden-md-down">Delete</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

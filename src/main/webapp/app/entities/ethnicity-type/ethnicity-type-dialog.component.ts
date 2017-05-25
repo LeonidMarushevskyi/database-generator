@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Response } from '@angular/http';
 
+import { Observable } from 'rxjs/Rx';
 import { NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { EventManager, AlertService } from 'ng-jhipster';
 
@@ -18,6 +19,7 @@ export class EthnicityTypeDialogComponent implements OnInit {
     ethnicityType: EthnicityType;
     authorities: any[];
     isSaving: boolean;
+
     constructor(
         public activeModal: NgbActiveModal,
         private alertService: AlertService,
@@ -30,35 +32,43 @@ export class EthnicityTypeDialogComponent implements OnInit {
         this.isSaving = false;
         this.authorities = ['ROLE_USER', 'ROLE_ADMIN'];
     }
-    clear () {
+    clear() {
         this.activeModal.dismiss('cancel');
     }
 
-    save () {
+    save() {
         this.isSaving = true;
         if (this.ethnicityType.id !== undefined) {
-            this.ethnicityTypeService.update(this.ethnicityType)
-                .subscribe((res: EthnicityType) =>
-                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
+            this.subscribeToSaveResponse(
+                this.ethnicityTypeService.update(this.ethnicityType));
         } else {
-            this.ethnicityTypeService.create(this.ethnicityType)
-                .subscribe((res: EthnicityType) =>
-                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
+            this.subscribeToSaveResponse(
+                this.ethnicityTypeService.create(this.ethnicityType));
         }
     }
 
-    private onSaveSuccess (result: EthnicityType) {
+    private subscribeToSaveResponse(result: Observable<EthnicityType>) {
+        result.subscribe((res: EthnicityType) =>
+            this.onSaveSuccess(res), (res: Response) => this.onSaveError(res));
+    }
+
+    private onSaveSuccess(result: EthnicityType) {
         this.eventManager.broadcast({ name: 'ethnicityTypeListModification', content: 'OK'});
         this.isSaving = false;
         this.activeModal.dismiss(result);
     }
 
-    private onSaveError (error) {
+    private onSaveError(error) {
+        try {
+            error.json();
+        } catch (exception) {
+            error.message = error.text();
+        }
         this.isSaving = false;
         this.onError(error);
     }
 
-    private onError (error) {
+    private onError(error) {
         this.alertService.error(error.message, null, null);
     }
 }
@@ -72,13 +82,13 @@ export class EthnicityTypePopupComponent implements OnInit, OnDestroy {
     modalRef: NgbModalRef;
     routeSub: any;
 
-    constructor (
+    constructor(
         private route: ActivatedRoute,
         private ethnicityTypePopupService: EthnicityTypePopupService
     ) {}
 
     ngOnInit() {
-        this.routeSub = this.route.params.subscribe(params => {
+        this.routeSub = this.route.params.subscribe((params) => {
             if ( params['id'] ) {
                 this.modalRef = this.ethnicityTypePopupService
                     .open(EthnicityTypeDialogComponent, params['id']);
@@ -86,7 +96,6 @@ export class EthnicityTypePopupComponent implements OnInit, OnDestroy {
                 this.modalRef = this.ethnicityTypePopupService
                     .open(EthnicityTypeDialogComponent);
             }
-
         });
     }
 

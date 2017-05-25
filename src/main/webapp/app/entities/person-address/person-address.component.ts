@@ -1,12 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Response } from '@angular/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Rx';
 import { EventManager, ParseLinks, PaginationUtil, AlertService } from 'ng-jhipster';
 
 import { PersonAddress } from './person-address.model';
 import { PersonAddressService } from './person-address.service';
-import { ITEMS_PER_PAGE, Principal } from '../../shared';
+import { ITEMS_PER_PAGE, Principal, ResponseWrapper } from '../../shared';
 import { PaginationConfig } from '../../blocks/config/uib-pagination.config';
 
 @Component({
@@ -28,10 +27,10 @@ personAddresses: PersonAddress[];
 
     loadAll() {
         this.personAddressService.query().subscribe(
-            (res: Response) => {
-                this.personAddresses = res.json();
+            (res: ResponseWrapper) => {
+                this.personAddresses = res.json;
             },
-            (res: Response) => this.onError(res.json())
+            (res: ResponseWrapper) => this.onError(res.json)
         );
     }
     ngOnInit() {
@@ -46,18 +45,14 @@ personAddresses: PersonAddress[];
         this.eventManager.destroy(this.eventSubscriber);
     }
 
-    trackId (index: number, item: PersonAddress) {
+    trackId(index: number, item: PersonAddress) {
         return item.id;
     }
-
-
-
     registerChangeInPersonAddresses() {
         this.eventSubscriber = this.eventManager.subscribe('personAddressListModification', (response) => this.loadAll());
     }
 
-
-    private onError (error) {
+    private onError(error) {
         this.alertService.error(error.message, null, null);
     }
 }

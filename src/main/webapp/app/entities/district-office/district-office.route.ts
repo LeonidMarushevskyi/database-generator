@@ -11,51 +11,55 @@ import { DistrictOfficeDeletePopupComponent } from './district-office-delete-dia
 
 import { Principal } from '../../shared';
 
-
 export const districtOfficeRoute: Routes = [
-  {
-    path: 'district-office',
-    component: DistrictOfficeComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'DistrictOffices'
+    {
+        path: 'district-office',
+        component: DistrictOfficeComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'DistrictOffices'
+        },
+        canActivate: [UserRouteAccessService]
+    }, {
+        path: 'district-office/:id',
+        component: DistrictOfficeDetailComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'DistrictOffices'
+        },
+        canActivate: [UserRouteAccessService]
     }
-  }, {
-    path: 'district-office/:id',
-    component: DistrictOfficeDetailComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'DistrictOffices'
-    }
-  }
 ];
 
 export const districtOfficePopupRoute: Routes = [
-  {
-    path: 'district-office-new',
-    component: DistrictOfficePopupComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'DistrictOffices'
+    {
+        path: 'district-office-new',
+        component: DistrictOfficePopupComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'DistrictOffices'
+        },
+        canActivate: [UserRouteAccessService],
+        outlet: 'popup'
     },
-    outlet: 'popup'
-  },
-  {
-    path: 'district-office/:id/edit',
-    component: DistrictOfficePopupComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'DistrictOffices'
+    {
+        path: 'district-office/:id/edit',
+        component: DistrictOfficePopupComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'DistrictOffices'
+        },
+        canActivate: [UserRouteAccessService],
+        outlet: 'popup'
     },
-    outlet: 'popup'
-  },
-  {
-    path: 'district-office/:id/delete',
-    component: DistrictOfficeDeletePopupComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'DistrictOffices'
-    },
-    outlet: 'popup'
-  }
+    {
+        path: 'district-office/:id/delete',
+        component: DistrictOfficeDeletePopupComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'DistrictOffices'
+        },
+        canActivate: [UserRouteAccessService],
+        outlet: 'popup'
+    }
 ];

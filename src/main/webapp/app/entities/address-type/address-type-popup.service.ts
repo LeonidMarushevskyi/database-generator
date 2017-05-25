@@ -6,21 +6,21 @@ import { AddressTypeService } from './address-type.service';
 @Injectable()
 export class AddressTypePopupService {
     private isOpen = false;
-    constructor (
+    constructor(
         private modalService: NgbModal,
         private router: Router,
         private addressTypeService: AddressTypeService
 
     ) {}
 
-    open (component: Component, id?: number | any): NgbModalRef {
+    open(component: Component, id?: number | any): NgbModalRef {
         if (this.isOpen) {
             return;
         }
         this.isOpen = true;
 
         if (id) {
-            this.addressTypeService.find(id).subscribe(addressType => {
+            this.addressTypeService.find(id).subscribe((addressType) => {
                 this.addressTypeModalRef(component, addressType);
             });
         } else {
@@ -29,9 +29,9 @@ export class AddressTypePopupService {
     }
 
     addressTypeModalRef(component: Component, addressType: AddressType): NgbModalRef {
-        let modalRef = this.modalService.open(component, { size: 'lg', backdrop: 'static'});
+        const modalRef = this.modalService.open(component, { size: 'lg', backdrop: 'static'});
         modalRef.componentInstance.addressType = addressType;
-        modalRef.result.then(result => {
+        modalRef.result.then((result) => {
             this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true });
             this.isOpen = false;
         }, (reason) => {

@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Response } from '@angular/http';
 
+import { Observable } from 'rxjs/Rx';
 import { NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { EventManager, AlertService } from 'ng-jhipster';
 
@@ -18,6 +19,7 @@ export class CountyDialogComponent implements OnInit {
     county: County;
     authorities: any[];
     isSaving: boolean;
+
     constructor(
         public activeModal: NgbActiveModal,
         private alertService: AlertService,
@@ -30,35 +32,43 @@ export class CountyDialogComponent implements OnInit {
         this.isSaving = false;
         this.authorities = ['ROLE_USER', 'ROLE_ADMIN'];
     }
-    clear () {
+    clear() {
         this.activeModal.dismiss('cancel');
     }
 
-    save () {
+    save() {
         this.isSaving = true;
         if (this.county.id !== undefined) {
-            this.countyService.update(this.county)
-                .subscribe((res: County) =>
-                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
+            this.subscribeToSaveResponse(
+                this.countyService.update(this.county));
         } else {
-            this.countyService.create(this.county)
-                .subscribe((res: County) =>
-                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
+            this.subscribeToSaveResponse(
+                this.countyService.create(this.county));
         }
     }
 
-    private onSaveSuccess (result: County) {
+    private subscribeToSaveResponse(result: Observable<County>) {
+        result.subscribe((res: County) =>
+            this.onSaveSuccess(res), (res: Response) => this.onSaveError(res));
+    }
+
+    private onSaveSuccess(result: County) {
         this.eventManager.broadcast({ name: 'countyListModification', content: 'OK'});
         this.isSaving = false;
         this.activeModal.dismiss(result);
     }
 
-    private onSaveError (error) {
+    private onSaveError(error) {
+        try {
+            error.json();
+        } catch (exception) {
+            error.message = error.text();
+        }
         this.isSaving = false;
         this.onError(error);
     }
 
-    private onError (error) {
+    private onError(error) {
         this.alertService.error(error.message, null, null);
     }
 }
@@ -72,13 +82,13 @@ export class CountyPopupComponent implements OnInit, OnDestroy {
     modalRef: NgbModalRef;
     routeSub: any;
 
-    constructor (
+    constructor(
         private route: ActivatedRoute,
         private countyPopupService: CountyPopupService
     ) {}
 
     ngOnInit() {
-        this.routeSub = this.route.params.subscribe(params => {
+        this.routeSub = this.route.params.subscribe((params) => {
             if ( params['id'] ) {
                 this.modalRef = this.countyPopupService
                     .open(CountyDialogComponent, params['id']);
@@ -86,7 +96,6 @@ export class CountyPopupComponent implements OnInit, OnDestroy {
                 this.modalRef = this.countyPopupService
                     .open(CountyDialogComponent);
             }
-
         });
     }
 

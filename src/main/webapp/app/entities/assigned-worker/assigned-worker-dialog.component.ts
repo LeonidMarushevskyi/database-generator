@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Response } from '@angular/http';
 
+import { Observable } from 'rxjs/Rx';
 import { NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { EventManager, AlertService } from 'ng-jhipster';
 
@@ -9,6 +10,7 @@ import { AssignedWorker } from './assigned-worker.model';
 import { AssignedWorkerPopupService } from './assigned-worker-popup.service';
 import { AssignedWorkerService } from './assigned-worker.service';
 import { Person, PersonService } from '../person';
+import { ResponseWrapper } from '../../shared';
 
 @Component({
     selector: 'jhi-assigned-worker-dialog',
@@ -21,6 +23,7 @@ export class AssignedWorkerDialogComponent implements OnInit {
     isSaving: boolean;
 
     people: Person[];
+
     constructor(
         public activeModal: NgbActiveModal,
         private alertService: AlertService,
@@ -33,45 +36,57 @@ export class AssignedWorkerDialogComponent implements OnInit {
     ngOnInit() {
         this.isSaving = false;
         this.authorities = ['ROLE_USER', 'ROLE_ADMIN'];
-        this.personService.query({filter: 'assignedworker-is-null'}).subscribe((res: Response) => {
-            if (!this.assignedWorker.personId) {
-                this.people = res.json();
-            } else {
-                this.personService.find(this.assignedWorker.personId).subscribe((subRes: Person) => {
-                    this.people = [subRes].concat(res.json());
-                }, (subRes: Response) => this.onError(subRes.json()));
-            }
-        }, (res: Response) => this.onError(res.json()));
+        this.personService
+            .query({filter: 'assignedworker-is-null'})
+            .subscribe((res: ResponseWrapper) => {
+                if (!this.assignedWorker.personId) {
+                    this.people = res.json;
+                } else {
+                    this.personService
+                        .find(this.assignedWorker.personId)
+                        .subscribe((subRes: Person) => {
+                            this.people = [subRes].concat(res.json);
+                        }, (subRes: ResponseWrapper) => this.onError(subRes.json));
+                }
+            }, (res: ResponseWrapper) => this.onError(res.json));
     }
-    clear () {
+    clear() {
         this.activeModal.dismiss('cancel');
     }
 
-    save () {
+    save() {
         this.isSaving = true;
         if (this.assignedWorker.id !== undefined) {
-            this.assignedWorkerService.update(this.assignedWorker)
-                .subscribe((res: AssignedWorker) =>
-                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
+            this.subscribeToSaveResponse(
+                this.assignedWorkerService.update(this.assignedWorker));
         } else {
-            this.assignedWorkerService.create(this.assignedWorker)
-                .subscribe((res: AssignedWorker) =>
-                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
+            this.subscribeToSaveResponse(
+                this.assignedWorkerService.create(this.assignedWorker));
         }
     }
 
-    private onSaveSuccess (result: AssignedWorker) {
+    private subscribeToSaveResponse(result: Observable<AssignedWorker>) {
+        result.subscribe((res: AssignedWorker) =>
+            this.onSaveSuccess(res), (res: Response) => this.onSaveError(res));
+    }
+
+    private onSaveSuccess(result: AssignedWorker) {
         this.eventManager.broadcast({ name: 'assignedWorkerListModification', content: 'OK'});
         this.isSaving = false;
         this.activeModal.dismiss(result);
     }
 
-    private onSaveError (error) {
+    private onSaveError(error) {
+        try {
+            error.json();
+        } catch (exception) {
+            error.message = error.text();
+        }
         this.isSaving = false;
         this.onError(error);
     }
 
-    private onError (error) {
+    private onError(error) {
         this.alertService.error(error.message, null, null);
     }
 
@@ -89,13 +104,13 @@ export class AssignedWorkerPopupComponent implements OnInit, OnDestroy {
     modalRef: NgbModalRef;
     routeSub: any;
 
-    constructor (
+    constructor(
         private route: ActivatedRoute,
         private assignedWorkerPopupService: AssignedWorkerPopupService
     ) {}
 
     ngOnInit() {
-        this.routeSub = this.route.params.subscribe(params => {
+        this.routeSub = this.route.params.subscribe((params) => {
             if ( params['id'] ) {
                 this.modalRef = this.assignedWorkerPopupService
                     .open(AssignedWorkerDialogComponent, params['id']);
@@ -103,7 +118,6 @@ export class AssignedWorkerPopupComponent implements OnInit, OnDestroy {
                 this.modalRef = this.assignedWorkerPopupService
                     .open(AssignedWorkerDialogComponent);
             }
-
         });
     }
 

@@ -16,10 +16,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.LinkedList;
+
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * REST controller for managing County.
@@ -55,9 +54,9 @@ public class CountyResource {
         if (countyDTO.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new county cannot already have an ID")).body(null);
         }
-        County county = countyMapper.countyDTOToCounty(countyDTO);
+        County county = countyMapper.toEntity(countyDTO);
         county = countyRepository.save(county);
-        CountyDTO result = countyMapper.countyToCountyDTO(county);
+        CountyDTO result = countyMapper.toDto(county);
         return ResponseEntity.created(new URI("/api/counties/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -79,9 +78,9 @@ public class CountyResource {
         if (countyDTO.getId() == null) {
             return createCounty(countyDTO);
         }
-        County county = countyMapper.countyDTOToCounty(countyDTO);
+        County county = countyMapper.toEntity(countyDTO);
         county = countyRepository.save(county);
-        CountyDTO result = countyMapper.countyToCountyDTO(county);
+        CountyDTO result = countyMapper.toDto(county);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, countyDTO.getId().toString()))
             .body(result);
@@ -97,7 +96,7 @@ public class CountyResource {
     public List<CountyDTO> getAllCounties() {
         log.debug("REST request to get all Counties");
         List<County> counties = countyRepository.findAll();
-        return countyMapper.countiesToCountyDTOs(counties);
+        return countyMapper.toDto(counties);
     }
 
     /**
@@ -111,7 +110,7 @@ public class CountyResource {
     public ResponseEntity<CountyDTO> getCounty(@PathVariable Long id) {
         log.debug("REST request to get County : {}", id);
         County county = countyRepository.findOne(id);
-        CountyDTO countyDTO = countyMapper.countyToCountyDTO(county);
+        CountyDTO countyDTO = countyMapper.toDto(county);
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(countyDTO));
     }
 

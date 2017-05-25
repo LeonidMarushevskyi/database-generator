@@ -11,51 +11,55 @@ import { LanguageTypeDeletePopupComponent } from './language-type-delete-dialog.
 
 import { Principal } from '../../shared';
 
-
 export const languageTypeRoute: Routes = [
-  {
-    path: 'language-type',
-    component: LanguageTypeComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'LanguageTypes'
+    {
+        path: 'language-type',
+        component: LanguageTypeComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'LanguageTypes'
+        },
+        canActivate: [UserRouteAccessService]
+    }, {
+        path: 'language-type/:id',
+        component: LanguageTypeDetailComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'LanguageTypes'
+        },
+        canActivate: [UserRouteAccessService]
     }
-  }, {
-    path: 'language-type/:id',
-    component: LanguageTypeDetailComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'LanguageTypes'
-    }
-  }
 ];
 
 export const languageTypePopupRoute: Routes = [
-  {
-    path: 'language-type-new',
-    component: LanguageTypePopupComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'LanguageTypes'
+    {
+        path: 'language-type-new',
+        component: LanguageTypePopupComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'LanguageTypes'
+        },
+        canActivate: [UserRouteAccessService],
+        outlet: 'popup'
     },
-    outlet: 'popup'
-  },
-  {
-    path: 'language-type/:id/edit',
-    component: LanguageTypePopupComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'LanguageTypes'
+    {
+        path: 'language-type/:id/edit',
+        component: LanguageTypePopupComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'LanguageTypes'
+        },
+        canActivate: [UserRouteAccessService],
+        outlet: 'popup'
     },
-    outlet: 'popup'
-  },
-  {
-    path: 'language-type/:id/delete',
-    component: LanguageTypeDeletePopupComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'LanguageTypes'
-    },
-    outlet: 'popup'
-  }
+    {
+        path: 'language-type/:id/delete',
+        component: LanguageTypeDeletePopupComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'LanguageTypes'
+        },
+        canActivate: [UserRouteAccessService],
+        outlet: 'popup'
+    }
 ];

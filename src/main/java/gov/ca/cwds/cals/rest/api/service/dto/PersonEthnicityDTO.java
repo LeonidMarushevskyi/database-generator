@@ -51,21 +51,21 @@ public class PersonEthnicityDTO implements Serializable {
         }
 
         PersonEthnicityDTO personEthnicityDTO = (PersonEthnicityDTO) o;
-
-        if ( ! Objects.equals(id, personEthnicityDTO.id)) { return false; }
-
-        return true;
+        if(personEthnicityDTO.getId() == null || getId() == null) {
+            return false;
+        }
+        return Objects.equals(getId(), personEthnicityDTO.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hashCode(getId());
     }
 
     @Override
     public String toString() {
         return "PersonEthnicityDTO{" +
-            "id=" + id +
-            '}';
+            "id=" + getId() +
+            "}";
     }
 }

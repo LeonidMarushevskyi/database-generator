@@ -1,5 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs/Rx';
+import { EventManager  } from 'ng-jhipster';
+
 import { PersonPhone } from './person-phone.model';
 import { PersonPhoneService } from './person-phone.service';
 
@@ -10,22 +13,25 @@ import { PersonPhoneService } from './person-phone.service';
 export class PersonPhoneDetailComponent implements OnInit, OnDestroy {
 
     personPhone: PersonPhone;
-    private subscription: any;
+    private subscription: Subscription;
+    private eventSubscriber: Subscription;
 
     constructor(
+        private eventManager: EventManager,
         private personPhoneService: PersonPhoneService,
         private route: ActivatedRoute
     ) {
     }
 
     ngOnInit() {
-        this.subscription = this.route.params.subscribe(params => {
+        this.subscription = this.route.params.subscribe((params) => {
             this.load(params['id']);
         });
+        this.registerChangeInPersonPhones();
     }
 
-    load (id) {
-        this.personPhoneService.find(id).subscribe(personPhone => {
+    load(id) {
+        this.personPhoneService.find(id).subscribe((personPhone) => {
             this.personPhone = personPhone;
         });
     }
@@ -35,6 +41,13 @@ export class PersonPhoneDetailComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.subscription.unsubscribe();
+        this.eventManager.destroy(this.eventSubscriber);
     }
 
+    registerChangeInPersonPhones() {
+        this.eventSubscriber = this.eventManager.subscribe(
+            'personPhoneListModification',
+            (response) => this.load(this.personPhone.id)
+        );
+    }
 }

@@ -1,5 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs/Rx';
+import { EventManager  } from 'ng-jhipster';
+
 import { PhoneType } from './phone-type.model';
 import { PhoneTypeService } from './phone-type.service';
 
@@ -10,22 +13,25 @@ import { PhoneTypeService } from './phone-type.service';
 export class PhoneTypeDetailComponent implements OnInit, OnDestroy {
 
     phoneType: PhoneType;
-    private subscription: any;
+    private subscription: Subscription;
+    private eventSubscriber: Subscription;
 
     constructor(
+        private eventManager: EventManager,
         private phoneTypeService: PhoneTypeService,
         private route: ActivatedRoute
     ) {
     }
 
     ngOnInit() {
-        this.subscription = this.route.params.subscribe(params => {
+        this.subscription = this.route.params.subscribe((params) => {
             this.load(params['id']);
         });
+        this.registerChangeInPhoneTypes();
     }
 
-    load (id) {
-        this.phoneTypeService.find(id).subscribe(phoneType => {
+    load(id) {
+        this.phoneTypeService.find(id).subscribe((phoneType) => {
             this.phoneType = phoneType;
         });
     }
@@ -35,6 +41,13 @@ export class PhoneTypeDetailComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.subscription.unsubscribe();
+        this.eventManager.destroy(this.eventSubscriber);
     }
 
+    registerChangeInPhoneTypes() {
+        this.eventSubscriber = this.eventManager.subscribe(
+            'phoneTypeListModification',
+            (response) => this.load(this.phoneType.id)
+        );
+    }
 }

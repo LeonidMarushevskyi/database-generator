@@ -33,7 +33,9 @@ public class LoggingAspect {
     /**
      * Pointcut that matches all repositories, services and Web REST endpoints.
      */
-    @Pointcut("within(gov.ca.cwds.cals.rest.api.repository..*) || within(gov.ca.cwds.cals.rest.api.service..*) || within(gov.ca.cwds.cals.rest.api.web.rest..*)")
+    @Pointcut("(within(gov.ca.cwds.cals.rest.api.repository..*) && @annotation(org.springframework.stereotype.Repository))"+
+        " || (within(gov.ca.cwds.cals.rest.api.service..*) && @annotation(org.springframework.stereotype.Service))"+
+        " || (within(gov.ca.cwds.cals.rest.api.web.rest..*) && @annotation(org.springframework.web.bind.annotation.RestController))")
     public void loggingPointcut() {
         // Method is empty as this is just a Pointcut, the implementations are in the advices.
     }
@@ -78,7 +80,7 @@ public class LoggingAspect {
             return result;
         } catch (IllegalArgumentException e) {
             log.error("Illegal argument: {} in {}.{}()", Arrays.toString(joinPoint.getArgs()),
-                    joinPoint.getSignature().getDeclaringTypeName(), joinPoint.getSignature().getName());
+                joinPoint.getSignature().getDeclaringTypeName(), joinPoint.getSignature().getName());
 
             throw e;
         }

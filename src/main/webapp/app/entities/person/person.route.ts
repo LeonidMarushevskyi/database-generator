@@ -11,51 +11,55 @@ import { PersonDeletePopupComponent } from './person-delete-dialog.component';
 
 import { Principal } from '../../shared';
 
-
 export const personRoute: Routes = [
-  {
-    path: 'person',
-    component: PersonComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'People'
+    {
+        path: 'person',
+        component: PersonComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'People'
+        },
+        canActivate: [UserRouteAccessService]
+    }, {
+        path: 'person/:id',
+        component: PersonDetailComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'People'
+        },
+        canActivate: [UserRouteAccessService]
     }
-  }, {
-    path: 'person/:id',
-    component: PersonDetailComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'People'
-    }
-  }
 ];
 
 export const personPopupRoute: Routes = [
-  {
-    path: 'person-new',
-    component: PersonPopupComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'People'
+    {
+        path: 'person-new',
+        component: PersonPopupComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'People'
+        },
+        canActivate: [UserRouteAccessService],
+        outlet: 'popup'
     },
-    outlet: 'popup'
-  },
-  {
-    path: 'person/:id/edit',
-    component: PersonPopupComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'People'
+    {
+        path: 'person/:id/edit',
+        component: PersonPopupComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'People'
+        },
+        canActivate: [UserRouteAccessService],
+        outlet: 'popup'
     },
-    outlet: 'popup'
-  },
-  {
-    path: 'person/:id/delete',
-    component: PersonDeletePopupComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'People'
-    },
-    outlet: 'popup'
-  }
+    {
+        path: 'person/:id/delete',
+        component: PersonDeletePopupComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'People'
+        },
+        canActivate: [UserRouteAccessService],
+        outlet: 'popup'
+    }
 ];

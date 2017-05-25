@@ -6,21 +6,21 @@ import { PersonLanguageService } from './person-language.service';
 @Injectable()
 export class PersonLanguagePopupService {
     private isOpen = false;
-    constructor (
+    constructor(
         private modalService: NgbModal,
         private router: Router,
         private personLanguageService: PersonLanguageService
 
     ) {}
 
-    open (component: Component, id?: number | any): NgbModalRef {
+    open(component: Component, id?: number | any): NgbModalRef {
         if (this.isOpen) {
             return;
         }
         this.isOpen = true;
 
         if (id) {
-            this.personLanguageService.find(id).subscribe(personLanguage => {
+            this.personLanguageService.find(id).subscribe((personLanguage) => {
                 this.personLanguageModalRef(component, personLanguage);
             });
         } else {
@@ -29,9 +29,9 @@ export class PersonLanguagePopupService {
     }
 
     personLanguageModalRef(component: Component, personLanguage: PersonLanguage): NgbModalRef {
-        let modalRef = this.modalService.open(component, { size: 'lg', backdrop: 'static'});
+        const modalRef = this.modalService.open(component, { size: 'lg', backdrop: 'static'});
         modalRef.componentInstance.personLanguage = personLanguage;
-        modalRef.result.then(result => {
+        modalRef.result.then((result) => {
             this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true });
             this.isOpen = false;
         }, (reason) => {

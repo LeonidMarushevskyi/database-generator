@@ -6,21 +6,21 @@ import { FacilityPhoneService } from './facility-phone.service';
 @Injectable()
 export class FacilityPhonePopupService {
     private isOpen = false;
-    constructor (
+    constructor(
         private modalService: NgbModal,
         private router: Router,
         private facilityPhoneService: FacilityPhoneService
 
     ) {}
 
-    open (component: Component, id?: number | any): NgbModalRef {
+    open(component: Component, id?: number | any): NgbModalRef {
         if (this.isOpen) {
             return;
         }
         this.isOpen = true;
 
         if (id) {
-            this.facilityPhoneService.find(id).subscribe(facilityPhone => {
+            this.facilityPhoneService.find(id).subscribe((facilityPhone) => {
                 this.facilityPhoneModalRef(component, facilityPhone);
             });
         } else {
@@ -29,9 +29,9 @@ export class FacilityPhonePopupService {
     }
 
     facilityPhoneModalRef(component: Component, facilityPhone: FacilityPhone): NgbModalRef {
-        let modalRef = this.modalService.open(component, { size: 'lg', backdrop: 'static'});
+        const modalRef = this.modalService.open(component, { size: 'lg', backdrop: 'static'});
         modalRef.componentInstance.facilityPhone = facilityPhone;
-        modalRef.result.then(result => {
+        modalRef.result.then((result) => {
             this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true });
             this.isOpen = false;
         }, (reason) => {

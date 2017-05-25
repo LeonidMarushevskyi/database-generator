@@ -93,7 +93,7 @@ public class PersonLanguageResourceIntTest {
         int databaseSizeBeforeCreate = personLanguageRepository.findAll().size();
 
         // Create the PersonLanguage
-        PersonLanguageDTO personLanguageDTO = personLanguageMapper.personLanguageToPersonLanguageDTO(personLanguage);
+        PersonLanguageDTO personLanguageDTO = personLanguageMapper.toDto(personLanguage);
         restPersonLanguageMockMvc.perform(post("/api/person-languages")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(personLanguageDTO)))
@@ -112,7 +112,7 @@ public class PersonLanguageResourceIntTest {
 
         // Create the PersonLanguage with an existing ID
         personLanguage.setId(1L);
-        PersonLanguageDTO personLanguageDTO = personLanguageMapper.personLanguageToPersonLanguageDTO(personLanguage);
+        PersonLanguageDTO personLanguageDTO = personLanguageMapper.toDto(personLanguage);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restPersonLanguageMockMvc.perform(post("/api/person-languages")
@@ -168,7 +168,7 @@ public class PersonLanguageResourceIntTest {
 
         // Update the personLanguage
         PersonLanguage updatedPersonLanguage = personLanguageRepository.findOne(personLanguage.getId());
-        PersonLanguageDTO personLanguageDTO = personLanguageMapper.personLanguageToPersonLanguageDTO(updatedPersonLanguage);
+        PersonLanguageDTO personLanguageDTO = personLanguageMapper.toDto(updatedPersonLanguage);
 
         restPersonLanguageMockMvc.perform(put("/api/person-languages")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -187,7 +187,7 @@ public class PersonLanguageResourceIntTest {
         int databaseSizeBeforeUpdate = personLanguageRepository.findAll().size();
 
         // Create the PersonLanguage
-        PersonLanguageDTO personLanguageDTO = personLanguageMapper.personLanguageToPersonLanguageDTO(personLanguage);
+        PersonLanguageDTO personLanguageDTO = personLanguageMapper.toDto(personLanguage);
 
         // If the entity doesn't have an ID, it will be created instead of just being updated
         restPersonLanguageMockMvc.perform(put("/api/person-languages")
@@ -221,5 +221,37 @@ public class PersonLanguageResourceIntTest {
     @Transactional
     public void equalsVerifier() throws Exception {
         TestUtil.equalsVerifier(PersonLanguage.class);
+        PersonLanguage personLanguage1 = new PersonLanguage();
+        personLanguage1.setId(1L);
+        PersonLanguage personLanguage2 = new PersonLanguage();
+        personLanguage2.setId(personLanguage1.getId());
+        assertThat(personLanguage1).isEqualTo(personLanguage2);
+        personLanguage2.setId(2L);
+        assertThat(personLanguage1).isNotEqualTo(personLanguage2);
+        personLanguage1.setId(null);
+        assertThat(personLanguage1).isNotEqualTo(personLanguage2);
+    }
+
+    @Test
+    @Transactional
+    public void dtoEqualsVerifier() throws Exception {
+        TestUtil.equalsVerifier(PersonLanguageDTO.class);
+        PersonLanguageDTO personLanguageDTO1 = new PersonLanguageDTO();
+        personLanguageDTO1.setId(1L);
+        PersonLanguageDTO personLanguageDTO2 = new PersonLanguageDTO();
+        assertThat(personLanguageDTO1).isNotEqualTo(personLanguageDTO2);
+        personLanguageDTO2.setId(personLanguageDTO1.getId());
+        assertThat(personLanguageDTO1).isEqualTo(personLanguageDTO2);
+        personLanguageDTO2.setId(2L);
+        assertThat(personLanguageDTO1).isNotEqualTo(personLanguageDTO2);
+        personLanguageDTO1.setId(null);
+        assertThat(personLanguageDTO1).isNotEqualTo(personLanguageDTO2);
+    }
+
+    @Test
+    @Transactional
+    public void testEntityFromId() {
+        assertThat(personLanguageMapper.fromId(42L).getId()).isEqualTo(42);
+        assertThat(personLanguageMapper.fromId(null)).isNull();
     }
 }

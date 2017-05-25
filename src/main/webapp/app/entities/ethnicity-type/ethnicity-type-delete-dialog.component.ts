@@ -23,12 +23,12 @@ export class EthnicityTypeDeleteDialogComponent {
     ) {
     }
 
-    clear () {
+    clear() {
         this.activeModal.dismiss('cancel');
     }
 
-    confirmDelete (id: number) {
-        this.ethnicityTypeService.delete(id).subscribe(response => {
+    confirmDelete(id: number) {
+        this.ethnicityTypeService.delete(id).subscribe((response) => {
             this.eventManager.broadcast({
                 name: 'ethnicityTypeListModification',
                 content: 'Deleted an ethnicityType'
@@ -47,13 +47,13 @@ export class EthnicityTypeDeletePopupComponent implements OnInit, OnDestroy {
     modalRef: NgbModalRef;
     routeSub: any;
 
-    constructor (
+    constructor(
         private route: ActivatedRoute,
         private ethnicityTypePopupService: EthnicityTypePopupService
     ) {}
 
     ngOnInit() {
-        this.routeSub = this.route.params.subscribe(params => {
+        this.routeSub = this.route.params.subscribe((params) => {
             this.modalRef = this.ethnicityTypePopupService
                 .open(EthnicityTypeDeleteDialogComponent, params['id']);
         });

@@ -22,10 +22,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.LinkedList;
+
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * REST controller for managing Facility.
@@ -61,9 +60,9 @@ public class FacilityResource {
         if (facilityDTO.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new facility cannot already have an ID")).body(null);
         }
-        Facility facility = facilityMapper.facilityDTOToFacility(facilityDTO);
+        Facility facility = facilityMapper.toEntity(facilityDTO);
         facility = facilityRepository.save(facility);
-        FacilityDTO result = facilityMapper.facilityToFacilityDTO(facility);
+        FacilityDTO result = facilityMapper.toDto(facility);
         return ResponseEntity.created(new URI("/api/facilities/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -85,9 +84,9 @@ public class FacilityResource {
         if (facilityDTO.getId() == null) {
             return createFacility(facilityDTO);
         }
-        Facility facility = facilityMapper.facilityDTOToFacility(facilityDTO);
+        Facility facility = facilityMapper.toEntity(facilityDTO);
         facility = facilityRepository.save(facility);
-        FacilityDTO result = facilityMapper.facilityToFacilityDTO(facility);
+        FacilityDTO result = facilityMapper.toDto(facility);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, facilityDTO.getId().toString()))
             .body(result);
@@ -105,7 +104,7 @@ public class FacilityResource {
         log.debug("REST request to get a page of Facilities");
         Page<Facility> page = facilityRepository.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/facilities");
-        return new ResponseEntity<>(facilityMapper.facilitiesToFacilityDTOs(page.getContent()), headers, HttpStatus.OK);
+        return new ResponseEntity<>(facilityMapper.toDto(page.getContent()), headers, HttpStatus.OK);
     }
 
     /**
@@ -119,7 +118,7 @@ public class FacilityResource {
     public ResponseEntity<FacilityDTO> getFacility(@PathVariable Long id) {
         log.debug("REST request to get Facility : {}", id);
         Facility facility = facilityRepository.findOne(id);
-        FacilityDTO facilityDTO = facilityMapper.facilityToFacilityDTO(facility);
+        FacilityDTO facilityDTO = facilityMapper.toDto(facility);
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(facilityDTO));
     }
 

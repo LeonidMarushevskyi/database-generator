@@ -93,7 +93,7 @@ public class PersonPhoneResourceIntTest {
         int databaseSizeBeforeCreate = personPhoneRepository.findAll().size();
 
         // Create the PersonPhone
-        PersonPhoneDTO personPhoneDTO = personPhoneMapper.personPhoneToPersonPhoneDTO(personPhone);
+        PersonPhoneDTO personPhoneDTO = personPhoneMapper.toDto(personPhone);
         restPersonPhoneMockMvc.perform(post("/api/person-phones")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(personPhoneDTO)))
@@ -112,7 +112,7 @@ public class PersonPhoneResourceIntTest {
 
         // Create the PersonPhone with an existing ID
         personPhone.setId(1L);
-        PersonPhoneDTO personPhoneDTO = personPhoneMapper.personPhoneToPersonPhoneDTO(personPhone);
+        PersonPhoneDTO personPhoneDTO = personPhoneMapper.toDto(personPhone);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restPersonPhoneMockMvc.perform(post("/api/person-phones")
@@ -168,7 +168,7 @@ public class PersonPhoneResourceIntTest {
 
         // Update the personPhone
         PersonPhone updatedPersonPhone = personPhoneRepository.findOne(personPhone.getId());
-        PersonPhoneDTO personPhoneDTO = personPhoneMapper.personPhoneToPersonPhoneDTO(updatedPersonPhone);
+        PersonPhoneDTO personPhoneDTO = personPhoneMapper.toDto(updatedPersonPhone);
 
         restPersonPhoneMockMvc.perform(put("/api/person-phones")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -187,7 +187,7 @@ public class PersonPhoneResourceIntTest {
         int databaseSizeBeforeUpdate = personPhoneRepository.findAll().size();
 
         // Create the PersonPhone
-        PersonPhoneDTO personPhoneDTO = personPhoneMapper.personPhoneToPersonPhoneDTO(personPhone);
+        PersonPhoneDTO personPhoneDTO = personPhoneMapper.toDto(personPhone);
 
         // If the entity doesn't have an ID, it will be created instead of just being updated
         restPersonPhoneMockMvc.perform(put("/api/person-phones")
@@ -221,5 +221,37 @@ public class PersonPhoneResourceIntTest {
     @Transactional
     public void equalsVerifier() throws Exception {
         TestUtil.equalsVerifier(PersonPhone.class);
+        PersonPhone personPhone1 = new PersonPhone();
+        personPhone1.setId(1L);
+        PersonPhone personPhone2 = new PersonPhone();
+        personPhone2.setId(personPhone1.getId());
+        assertThat(personPhone1).isEqualTo(personPhone2);
+        personPhone2.setId(2L);
+        assertThat(personPhone1).isNotEqualTo(personPhone2);
+        personPhone1.setId(null);
+        assertThat(personPhone1).isNotEqualTo(personPhone2);
+    }
+
+    @Test
+    @Transactional
+    public void dtoEqualsVerifier() throws Exception {
+        TestUtil.equalsVerifier(PersonPhoneDTO.class);
+        PersonPhoneDTO personPhoneDTO1 = new PersonPhoneDTO();
+        personPhoneDTO1.setId(1L);
+        PersonPhoneDTO personPhoneDTO2 = new PersonPhoneDTO();
+        assertThat(personPhoneDTO1).isNotEqualTo(personPhoneDTO2);
+        personPhoneDTO2.setId(personPhoneDTO1.getId());
+        assertThat(personPhoneDTO1).isEqualTo(personPhoneDTO2);
+        personPhoneDTO2.setId(2L);
+        assertThat(personPhoneDTO1).isNotEqualTo(personPhoneDTO2);
+        personPhoneDTO1.setId(null);
+        assertThat(personPhoneDTO1).isNotEqualTo(personPhoneDTO2);
+    }
+
+    @Test
+    @Transactional
+    public void testEntityFromId() {
+        assertThat(personPhoneMapper.fromId(42L).getId()).isEqualTo(42);
+        assertThat(personPhoneMapper.fromId(null)).isNull();
     }
 }

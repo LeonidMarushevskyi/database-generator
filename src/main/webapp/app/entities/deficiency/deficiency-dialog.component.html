@@ -1,0 +1,69 @@
+<form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+
+    <div class="modal-header">
+        <h4 class="modal-title" id="myDeficiencyLabel">Create or edit a Deficiency</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                (click)="clear()">&times;</button>
+    </div>
+    <div class="modal-body">
+        <jhi-alert-error></jhi-alert-error>
+        <div class="form-group" [hidden]="!deficiency.id">
+            <label for="id">ID</label>
+            <input type="text" class="form-control" id="id" name="id"
+                   [(ngModel)]="deficiency.id" readonly />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_deficiencyType">Deficiency Type</label>
+            <input type="text" class="form-control" name="deficiencyType" id="field_deficiencyType"
+                [(ngModel)]="deficiency.deficiencyType"
+             />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_deficiencyTypeDescription">Deficiency Type Description</label>
+            <input type="text" class="form-control" name="deficiencyTypeDescription" id="field_deficiencyTypeDescription"
+                [(ngModel)]="deficiency.deficiencyTypeDescription"
+             />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_pocDate">Poc Date</label>
+            <div class="d-flex">
+                <input id="field_pocDate" type="datetime-local" class="form-control" name="pocDate" [(ngModel)]="deficiency.pocDate"
+                  />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_facSectionViolated">Fac Section Violated</label>
+            <input type="text" class="form-control" name="facSectionViolated" id="field_facSectionViolated"
+                [(ngModel)]="deficiency.facSectionViolated"
+             />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_deficiency">Deficiency</label>
+            <input type="text" class="form-control" name="deficiency" id="field_deficiency"
+                [(ngModel)]="deficiency.deficiency"
+             />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_correctionPlan">Correction Plan</label>
+            <input type="text" class="form-control" name="correctionPlan" id="field_correctionPlan"
+                [(ngModel)]="deficiency.correctionPlan"
+             />
+        </div>
+
+        <div class="form-group">
+            <label for="field_inspection">Inspection</label>
+            <select class="form-control" id="field_inspection" name="inspection" [(ngModel)]="deficiency.inspectionId" >
+                <option [ngValue]="null"></option>
+                <option [ngValue]="inspectionOption.id" *ngFor="let inspectionOption of inspections; trackBy: trackInspectionById">{{inspectionOption.id}}</option>
+            </select>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" (click)="clear()">
+            <span class="fa fa-ban"></span>&nbsp;<span>Cancel</span>
+        </button>
+        <button type="submit" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+            <span class="fa fa-save"></span>&nbsp;<span>Save</span>
+        </button>
+    </div>
+</form>

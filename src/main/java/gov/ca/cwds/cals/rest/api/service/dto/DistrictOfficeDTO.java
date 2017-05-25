@@ -26,6 +26,7 @@ public class DistrictOfficeDTO implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
+
     public Long getFacilityNumber() {
         return facilityNumber;
     }
@@ -33,6 +34,7 @@ public class DistrictOfficeDTO implements Serializable {
     public void setFacilityNumber(Long facilityNumber) {
         this.facilityNumber = facilityNumber;
     }
+
     public String getName() {
         return name;
     }
@@ -51,23 +53,23 @@ public class DistrictOfficeDTO implements Serializable {
         }
 
         DistrictOfficeDTO districtOfficeDTO = (DistrictOfficeDTO) o;
-
-        if ( ! Objects.equals(id, districtOfficeDTO.id)) { return false; }
-
-        return true;
+        if(districtOfficeDTO.getId() == null || getId() == null) {
+            return false;
+        }
+        return Objects.equals(getId(), districtOfficeDTO.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hashCode(getId());
     }
 
     @Override
     public String toString() {
         return "DistrictOfficeDTO{" +
-            "id=" + id +
-            ", facilityNumber='" + facilityNumber + "'" +
-            ", name='" + name + "'" +
-            '}';
+            "id=" + getId() +
+            ", facilityNumber='" + getFacilityNumber() + "'" +
+            ", name='" + getName() + "'" +
+            "}";
     }
 }

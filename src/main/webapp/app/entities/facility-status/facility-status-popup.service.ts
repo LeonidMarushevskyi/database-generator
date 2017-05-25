@@ -6,21 +6,21 @@ import { FacilityStatusService } from './facility-status.service';
 @Injectable()
 export class FacilityStatusPopupService {
     private isOpen = false;
-    constructor (
+    constructor(
         private modalService: NgbModal,
         private router: Router,
         private facilityStatusService: FacilityStatusService
 
     ) {}
 
-    open (component: Component, id?: number | any): NgbModalRef {
+    open(component: Component, id?: number | any): NgbModalRef {
         if (this.isOpen) {
             return;
         }
         this.isOpen = true;
 
         if (id) {
-            this.facilityStatusService.find(id).subscribe(facilityStatus => {
+            this.facilityStatusService.find(id).subscribe((facilityStatus) => {
                 this.facilityStatusModalRef(component, facilityStatus);
             });
         } else {
@@ -29,9 +29,9 @@ export class FacilityStatusPopupService {
     }
 
     facilityStatusModalRef(component: Component, facilityStatus: FacilityStatus): NgbModalRef {
-        let modalRef = this.modalService.open(component, { size: 'lg', backdrop: 'static'});
+        const modalRef = this.modalService.open(component, { size: 'lg', backdrop: 'static'});
         modalRef.componentInstance.facilityStatus = facilityStatus;
-        modalRef.result.then(result => {
+        modalRef.result.then((result) => {
             this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true });
             this.isOpen = false;
         }, (reason) => {

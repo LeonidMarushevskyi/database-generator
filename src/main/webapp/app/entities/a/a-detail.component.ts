@@ -1,6 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { DataUtils } from 'ng-jhipster';
+import { Subscription } from 'rxjs/Rx';
+import { EventManager , DataUtils } from 'ng-jhipster';
+
 import { A } from './a.model';
 import { AService } from './a.service';
 
@@ -11,9 +13,11 @@ import { AService } from './a.service';
 export class ADetailComponent implements OnInit, OnDestroy {
 
     a: A;
-    private subscription: any;
+    private subscription: Subscription;
+    private eventSubscriber: Subscription;
 
     constructor(
+        private eventManager: EventManager,
         private dataUtils: DataUtils,
         private aService: AService,
         private route: ActivatedRoute
@@ -21,13 +25,14 @@ export class ADetailComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.subscription = this.route.params.subscribe(params => {
+        this.subscription = this.route.params.subscribe((params) => {
             this.load(params['id']);
         });
+        this.registerChangeInAS();
     }
 
-    load (id) {
-        this.aService.find(id).subscribe(a => {
+    load(id) {
+        this.aService.find(id).subscribe((a) => {
             this.a = a;
         });
     }
@@ -44,6 +49,13 @@ export class ADetailComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.subscription.unsubscribe();
+        this.eventManager.destroy(this.eventSubscriber);
     }
 
+    registerChangeInAS() {
+        this.eventSubscriber = this.eventManager.subscribe(
+            'aListModification',
+            (response) => this.load(this.a.id)
+        );
+    }
 }

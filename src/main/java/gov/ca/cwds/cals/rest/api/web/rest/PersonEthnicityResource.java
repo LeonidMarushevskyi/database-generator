@@ -15,10 +15,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.LinkedList;
+
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * REST controller for managing PersonEthnicity.
@@ -54,9 +53,9 @@ public class PersonEthnicityResource {
         if (personEthnicityDTO.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new personEthnicity cannot already have an ID")).body(null);
         }
-        PersonEthnicity personEthnicity = personEthnicityMapper.personEthnicityDTOToPersonEthnicity(personEthnicityDTO);
+        PersonEthnicity personEthnicity = personEthnicityMapper.toEntity(personEthnicityDTO);
         personEthnicity = personEthnicityRepository.save(personEthnicity);
-        PersonEthnicityDTO result = personEthnicityMapper.personEthnicityToPersonEthnicityDTO(personEthnicity);
+        PersonEthnicityDTO result = personEthnicityMapper.toDto(personEthnicity);
         return ResponseEntity.created(new URI("/api/person-ethnicities/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -78,9 +77,9 @@ public class PersonEthnicityResource {
         if (personEthnicityDTO.getId() == null) {
             return createPersonEthnicity(personEthnicityDTO);
         }
-        PersonEthnicity personEthnicity = personEthnicityMapper.personEthnicityDTOToPersonEthnicity(personEthnicityDTO);
+        PersonEthnicity personEthnicity = personEthnicityMapper.toEntity(personEthnicityDTO);
         personEthnicity = personEthnicityRepository.save(personEthnicity);
-        PersonEthnicityDTO result = personEthnicityMapper.personEthnicityToPersonEthnicityDTO(personEthnicity);
+        PersonEthnicityDTO result = personEthnicityMapper.toDto(personEthnicity);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, personEthnicityDTO.getId().toString()))
             .body(result);
@@ -96,7 +95,7 @@ public class PersonEthnicityResource {
     public List<PersonEthnicityDTO> getAllPersonEthnicities() {
         log.debug("REST request to get all PersonEthnicities");
         List<PersonEthnicity> personEthnicities = personEthnicityRepository.findAll();
-        return personEthnicityMapper.personEthnicitiesToPersonEthnicityDTOs(personEthnicities);
+        return personEthnicityMapper.toDto(personEthnicities);
     }
 
     /**
@@ -110,7 +109,7 @@ public class PersonEthnicityResource {
     public ResponseEntity<PersonEthnicityDTO> getPersonEthnicity(@PathVariable Long id) {
         log.debug("REST request to get PersonEthnicity : {}", id);
         PersonEthnicity personEthnicity = personEthnicityRepository.findOne(id);
-        PersonEthnicityDTO personEthnicityDTO = personEthnicityMapper.personEthnicityToPersonEthnicityDTO(personEthnicity);
+        PersonEthnicityDTO personEthnicityDTO = personEthnicityMapper.toDto(personEthnicity);
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(personEthnicityDTO));
     }
 

@@ -249,5 +249,14 @@ public class LanguageTypeResourceIntTest {
     @Transactional
     public void equalsVerifier() throws Exception {
         TestUtil.equalsVerifier(LanguageType.class);
+        LanguageType languageType1 = new LanguageType();
+        languageType1.setId(1L);
+        LanguageType languageType2 = new LanguageType();
+        languageType2.setId(languageType1.getId());
+        assertThat(languageType1).isEqualTo(languageType2);
+        languageType2.setId(2L);
+        assertThat(languageType1).isNotEqualTo(languageType2);
+        languageType1.setId(null);
+        assertThat(languageType1).isNotEqualTo(languageType2);
     }
 }

@@ -1,0 +1,38 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipName": "inspection",
+            "otherEntityName": "inspection",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "pocduedate",
+            "fieldType": "ZonedDateTime"
+        },
+        {
+            "fieldName": "pocsectionviolated",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "poccorrectionplan",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "pocdatecleared",
+            "fieldType": "ZonedDateTime"
+        },
+        {
+            "fieldName": "poccomments",
+            "fieldType": "String"
+        }
+    ],
+    "changelogDate": "20170525060349",
+    "entityTableName": "cleared_poc",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "no"
+}

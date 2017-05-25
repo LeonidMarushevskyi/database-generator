@@ -16,10 +16,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.LinkedList;
+
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * REST controller for managing FacilityStatus.
@@ -55,9 +54,9 @@ public class FacilityStatusResource {
         if (facilityStatusDTO.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new facilityStatus cannot already have an ID")).body(null);
         }
-        FacilityStatus facilityStatus = facilityStatusMapper.facilityStatusDTOToFacilityStatus(facilityStatusDTO);
+        FacilityStatus facilityStatus = facilityStatusMapper.toEntity(facilityStatusDTO);
         facilityStatus = facilityStatusRepository.save(facilityStatus);
-        FacilityStatusDTO result = facilityStatusMapper.facilityStatusToFacilityStatusDTO(facilityStatus);
+        FacilityStatusDTO result = facilityStatusMapper.toDto(facilityStatus);
         return ResponseEntity.created(new URI("/api/facility-statuses/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -79,9 +78,9 @@ public class FacilityStatusResource {
         if (facilityStatusDTO.getId() == null) {
             return createFacilityStatus(facilityStatusDTO);
         }
-        FacilityStatus facilityStatus = facilityStatusMapper.facilityStatusDTOToFacilityStatus(facilityStatusDTO);
+        FacilityStatus facilityStatus = facilityStatusMapper.toEntity(facilityStatusDTO);
         facilityStatus = facilityStatusRepository.save(facilityStatus);
-        FacilityStatusDTO result = facilityStatusMapper.facilityStatusToFacilityStatusDTO(facilityStatus);
+        FacilityStatusDTO result = facilityStatusMapper.toDto(facilityStatus);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, facilityStatusDTO.getId().toString()))
             .body(result);
@@ -97,7 +96,7 @@ public class FacilityStatusResource {
     public List<FacilityStatusDTO> getAllFacilityStatuses() {
         log.debug("REST request to get all FacilityStatuses");
         List<FacilityStatus> facilityStatuses = facilityStatusRepository.findAll();
-        return facilityStatusMapper.facilityStatusesToFacilityStatusDTOs(facilityStatuses);
+        return facilityStatusMapper.toDto(facilityStatuses);
     }
 
     /**
@@ -111,7 +110,7 @@ public class FacilityStatusResource {
     public ResponseEntity<FacilityStatusDTO> getFacilityStatus(@PathVariable Long id) {
         log.debug("REST request to get FacilityStatus : {}", id);
         FacilityStatus facilityStatus = facilityStatusRepository.findOne(id);
-        FacilityStatusDTO facilityStatusDTO = facilityStatusMapper.facilityStatusToFacilityStatusDTO(facilityStatus);
+        FacilityStatusDTO facilityStatusDTO = facilityStatusMapper.toDto(facilityStatus);
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(facilityStatusDTO));
     }
 

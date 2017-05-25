@@ -1,0 +1,38 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipName": "facility",
+            "otherEntityName": "facility",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "deficiency",
+            "otherEntityName": "deficiency",
+            "otherEntityRelationshipName": "inspection"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "clearedPOC",
+            "otherEntityName": "clearedPOC",
+            "otherEntityRelationshipName": "inspection"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "representativeSignatureDate",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "form809PrintDate",
+            "fieldType": "LocalDate"
+        }
+    ],
+    "changelogDate": "20170525060347",
+    "entityTableName": "inspection",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "no"
+}

@@ -15,10 +15,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.LinkedList;
+
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * REST controller for managing PersonAddress.
@@ -54,9 +53,9 @@ public class PersonAddressResource {
         if (personAddressDTO.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new personAddress cannot already have an ID")).body(null);
         }
-        PersonAddress personAddress = personAddressMapper.personAddressDTOToPersonAddress(personAddressDTO);
+        PersonAddress personAddress = personAddressMapper.toEntity(personAddressDTO);
         personAddress = personAddressRepository.save(personAddress);
-        PersonAddressDTO result = personAddressMapper.personAddressToPersonAddressDTO(personAddress);
+        PersonAddressDTO result = personAddressMapper.toDto(personAddress);
         return ResponseEntity.created(new URI("/api/person-addresses/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -78,9 +77,9 @@ public class PersonAddressResource {
         if (personAddressDTO.getId() == null) {
             return createPersonAddress(personAddressDTO);
         }
-        PersonAddress personAddress = personAddressMapper.personAddressDTOToPersonAddress(personAddressDTO);
+        PersonAddress personAddress = personAddressMapper.toEntity(personAddressDTO);
         personAddress = personAddressRepository.save(personAddress);
-        PersonAddressDTO result = personAddressMapper.personAddressToPersonAddressDTO(personAddress);
+        PersonAddressDTO result = personAddressMapper.toDto(personAddress);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, personAddressDTO.getId().toString()))
             .body(result);
@@ -96,7 +95,7 @@ public class PersonAddressResource {
     public List<PersonAddressDTO> getAllPersonAddresses() {
         log.debug("REST request to get all PersonAddresses");
         List<PersonAddress> personAddresses = personAddressRepository.findAll();
-        return personAddressMapper.personAddressesToPersonAddressDTOs(personAddresses);
+        return personAddressMapper.toDto(personAddresses);
     }
 
     /**
@@ -110,7 +109,7 @@ public class PersonAddressResource {
     public ResponseEntity<PersonAddressDTO> getPersonAddress(@PathVariable Long id) {
         log.debug("REST request to get PersonAddress : {}", id);
         PersonAddress personAddress = personAddressRepository.findOne(id);
-        PersonAddressDTO personAddressDTO = personAddressMapper.personAddressToPersonAddressDTO(personAddress);
+        PersonAddressDTO personAddressDTO = personAddressMapper.toDto(personAddress);
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(personAddressDTO));
     }
 

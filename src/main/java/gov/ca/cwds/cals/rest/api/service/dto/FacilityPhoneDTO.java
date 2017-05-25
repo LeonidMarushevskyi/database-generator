@@ -61,21 +61,21 @@ public class FacilityPhoneDTO implements Serializable {
         }
 
         FacilityPhoneDTO facilityPhoneDTO = (FacilityPhoneDTO) o;
-
-        if ( ! Objects.equals(id, facilityPhoneDTO.id)) { return false; }
-
-        return true;
+        if(facilityPhoneDTO.getId() == null || getId() == null) {
+            return false;
+        }
+        return Objects.equals(getId(), facilityPhoneDTO.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hashCode(getId());
     }
 
     @Override
     public String toString() {
         return "FacilityPhoneDTO{" +
-            "id=" + id +
-            '}';
+            "id=" + getId() +
+            "}";
     }
 }

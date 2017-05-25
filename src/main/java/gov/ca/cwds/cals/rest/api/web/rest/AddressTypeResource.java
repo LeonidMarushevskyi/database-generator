@@ -16,10 +16,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.LinkedList;
+
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * REST controller for managing AddressType.
@@ -55,9 +54,9 @@ public class AddressTypeResource {
         if (addressTypeDTO.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new addressType cannot already have an ID")).body(null);
         }
-        AddressType addressType = addressTypeMapper.addressTypeDTOToAddressType(addressTypeDTO);
+        AddressType addressType = addressTypeMapper.toEntity(addressTypeDTO);
         addressType = addressTypeRepository.save(addressType);
-        AddressTypeDTO result = addressTypeMapper.addressTypeToAddressTypeDTO(addressType);
+        AddressTypeDTO result = addressTypeMapper.toDto(addressType);
         return ResponseEntity.created(new URI("/api/address-types/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -79,9 +78,9 @@ public class AddressTypeResource {
         if (addressTypeDTO.getId() == null) {
             return createAddressType(addressTypeDTO);
         }
-        AddressType addressType = addressTypeMapper.addressTypeDTOToAddressType(addressTypeDTO);
+        AddressType addressType = addressTypeMapper.toEntity(addressTypeDTO);
         addressType = addressTypeRepository.save(addressType);
-        AddressTypeDTO result = addressTypeMapper.addressTypeToAddressTypeDTO(addressType);
+        AddressTypeDTO result = addressTypeMapper.toDto(addressType);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, addressTypeDTO.getId().toString()))
             .body(result);
@@ -97,7 +96,7 @@ public class AddressTypeResource {
     public List<AddressTypeDTO> getAllAddressTypes() {
         log.debug("REST request to get all AddressTypes");
         List<AddressType> addressTypes = addressTypeRepository.findAll();
-        return addressTypeMapper.addressTypesToAddressTypeDTOs(addressTypes);
+        return addressTypeMapper.toDto(addressTypes);
     }
 
     /**
@@ -111,7 +110,7 @@ public class AddressTypeResource {
     public ResponseEntity<AddressTypeDTO> getAddressType(@PathVariable Long id) {
         log.debug("REST request to get AddressType : {}", id);
         AddressType addressType = addressTypeRepository.findOne(id);
-        AddressTypeDTO addressTypeDTO = addressTypeMapper.addressTypeToAddressTypeDTO(addressType);
+        AddressTypeDTO addressTypeDTO = addressTypeMapper.toDto(addressType);
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(addressTypeDTO));
     }
 

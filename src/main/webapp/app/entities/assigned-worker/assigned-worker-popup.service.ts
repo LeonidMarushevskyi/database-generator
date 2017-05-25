@@ -6,21 +6,21 @@ import { AssignedWorkerService } from './assigned-worker.service';
 @Injectable()
 export class AssignedWorkerPopupService {
     private isOpen = false;
-    constructor (
+    constructor(
         private modalService: NgbModal,
         private router: Router,
         private assignedWorkerService: AssignedWorkerService
 
     ) {}
 
-    open (component: Component, id?: number | any): NgbModalRef {
+    open(component: Component, id?: number | any): NgbModalRef {
         if (this.isOpen) {
             return;
         }
         this.isOpen = true;
 
         if (id) {
-            this.assignedWorkerService.find(id).subscribe(assignedWorker => {
+            this.assignedWorkerService.find(id).subscribe((assignedWorker) => {
                 this.assignedWorkerModalRef(component, assignedWorker);
             });
         } else {
@@ -29,9 +29,9 @@ export class AssignedWorkerPopupService {
     }
 
     assignedWorkerModalRef(component: Component, assignedWorker: AssignedWorker): NgbModalRef {
-        let modalRef = this.modalService.open(component, { size: 'lg', backdrop: 'static'});
+        const modalRef = this.modalService.open(component, { size: 'lg', backdrop: 'static'});
         modalRef.componentInstance.assignedWorker = assignedWorker;
-        modalRef.result.then(result => {
+        modalRef.result.then((result) => {
             this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true });
             this.isOpen = false;
         }, (reason) => {

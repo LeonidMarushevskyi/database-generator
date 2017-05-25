@@ -23,12 +23,12 @@ export class FacilityStatusDeleteDialogComponent {
     ) {
     }
 
-    clear () {
+    clear() {
         this.activeModal.dismiss('cancel');
     }
 
-    confirmDelete (id: number) {
-        this.facilityStatusService.delete(id).subscribe(response => {
+    confirmDelete(id: number) {
+        this.facilityStatusService.delete(id).subscribe((response) => {
             this.eventManager.broadcast({
                 name: 'facilityStatusListModification',
                 content: 'Deleted an facilityStatus'
@@ -47,13 +47,13 @@ export class FacilityStatusDeletePopupComponent implements OnInit, OnDestroy {
     modalRef: NgbModalRef;
     routeSub: any;
 
-    constructor (
+    constructor(
         private route: ActivatedRoute,
         private facilityStatusPopupService: FacilityStatusPopupService
     ) {}
 
     ngOnInit() {
-        this.routeSub = this.route.params.subscribe(params => {
+        this.routeSub = this.route.params.subscribe((params) => {
             this.modalRef = this.facilityStatusPopupService
                 .open(FacilityStatusDeleteDialogComponent, params['id']);
         });

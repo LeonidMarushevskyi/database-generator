@@ -1,0 +1,42 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipName": "inspection",
+            "otherEntityName": "inspection",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "deficiencyType",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "deficiencyTypeDescription",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "pocDate",
+            "fieldType": "ZonedDateTime"
+        },
+        {
+            "fieldName": "facSectionViolated",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "deficiency",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "correctionPlan",
+            "fieldType": "String"
+        }
+    ],
+    "changelogDate": "20170525060348",
+    "entityTableName": "deficiency",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "no"
+}

@@ -23,12 +23,12 @@ export class PersonLanguageDeleteDialogComponent {
     ) {
     }
 
-    clear () {
+    clear() {
         this.activeModal.dismiss('cancel');
     }
 
-    confirmDelete (id: number) {
-        this.personLanguageService.delete(id).subscribe(response => {
+    confirmDelete(id: number) {
+        this.personLanguageService.delete(id).subscribe((response) => {
             this.eventManager.broadcast({
                 name: 'personLanguageListModification',
                 content: 'Deleted an personLanguage'
@@ -47,13 +47,13 @@ export class PersonLanguageDeletePopupComponent implements OnInit, OnDestroy {
     modalRef: NgbModalRef;
     routeSub: any;
 
-    constructor (
+    constructor(
         private route: ActivatedRoute,
         private personLanguagePopupService: PersonLanguagePopupService
     ) {}
 
     ngOnInit() {
-        this.routeSub = this.route.params.subscribe(params => {
+        this.routeSub = this.route.params.subscribe((params) => {
             this.modalRef = this.personLanguagePopupService
                 .open(PersonLanguageDeleteDialogComponent, params['id']);
         });

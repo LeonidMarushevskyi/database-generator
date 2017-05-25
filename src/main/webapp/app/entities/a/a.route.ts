@@ -11,51 +11,55 @@ import { ADeletePopupComponent } from './a-delete-dialog.component';
 
 import { Principal } from '../../shared';
 
-
 export const aRoute: Routes = [
-  {
-    path: 'a',
-    component: AComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'AS'
+    {
+        path: 'a',
+        component: AComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'AS'
+        },
+        canActivate: [UserRouteAccessService]
+    }, {
+        path: 'a/:id',
+        component: ADetailComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'AS'
+        },
+        canActivate: [UserRouteAccessService]
     }
-  }, {
-    path: 'a/:id',
-    component: ADetailComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'AS'
-    }
-  }
 ];
 
 export const aPopupRoute: Routes = [
-  {
-    path: 'a-new',
-    component: APopupComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'AS'
+    {
+        path: 'a-new',
+        component: APopupComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'AS'
+        },
+        canActivate: [UserRouteAccessService],
+        outlet: 'popup'
     },
-    outlet: 'popup'
-  },
-  {
-    path: 'a/:id/edit',
-    component: APopupComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'AS'
+    {
+        path: 'a/:id/edit',
+        component: APopupComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'AS'
+        },
+        canActivate: [UserRouteAccessService],
+        outlet: 'popup'
     },
-    outlet: 'popup'
-  },
-  {
-    path: 'a/:id/delete',
-    component: ADeletePopupComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'AS'
-    },
-    outlet: 'popup'
-  }
+    {
+        path: 'a/:id/delete',
+        component: ADeletePopupComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'AS'
+        },
+        canActivate: [UserRouteAccessService],
+        outlet: 'popup'
+    }
 ];

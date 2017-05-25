@@ -6,21 +6,21 @@ import { RaceTypeService } from './race-type.service';
 @Injectable()
 export class RaceTypePopupService {
     private isOpen = false;
-    constructor (
+    constructor(
         private modalService: NgbModal,
         private router: Router,
         private raceTypeService: RaceTypeService
 
     ) {}
 
-    open (component: Component, id?: number | any): NgbModalRef {
+    open(component: Component, id?: number | any): NgbModalRef {
         if (this.isOpen) {
             return;
         }
         this.isOpen = true;
 
         if (id) {
-            this.raceTypeService.find(id).subscribe(raceType => {
+            this.raceTypeService.find(id).subscribe((raceType) => {
                 this.raceTypeModalRef(component, raceType);
             });
         } else {
@@ -29,9 +29,9 @@ export class RaceTypePopupService {
     }
 
     raceTypeModalRef(component: Component, raceType: RaceType): NgbModalRef {
-        let modalRef = this.modalService.open(component, { size: 'lg', backdrop: 'static'});
+        const modalRef = this.modalService.open(component, { size: 'lg', backdrop: 'static'});
         modalRef.componentInstance.raceType = raceType;
-        modalRef.result.then(result => {
+        modalRef.result.then((result) => {
             this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true });
             this.isOpen = false;
         }, (reason) => {

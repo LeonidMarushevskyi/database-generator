@@ -75,22 +75,22 @@ public class AssignedWorker implements Serializable {
             return false;
         }
         AssignedWorker assignedWorker = (AssignedWorker) o;
-        if (assignedWorker.id == null || id == null) {
+        if (assignedWorker.getId() == null || getId() == null) {
             return false;
         }
-        return Objects.equals(id, assignedWorker.id);
+        return Objects.equals(getId(), assignedWorker.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hashCode(getId());
     }
 
     @Override
     public String toString() {
         return "AssignedWorker{" +
-            "id=" + id +
-            ", code='" + code + "'" +
-            '}';
+            "id=" + getId() +
+            ", code='" + getCode() + "'" +
+            "}";
     }
 }

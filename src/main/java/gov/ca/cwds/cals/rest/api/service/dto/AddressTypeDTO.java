@@ -26,6 +26,7 @@ public class AddressTypeDTO implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
+
     public String getCode() {
         return code;
     }
@@ -33,6 +34,7 @@ public class AddressTypeDTO implements Serializable {
     public void setCode(String code) {
         this.code = code;
     }
+
     public String getType() {
         return type;
     }
@@ -51,23 +53,23 @@ public class AddressTypeDTO implements Serializable {
         }
 
         AddressTypeDTO addressTypeDTO = (AddressTypeDTO) o;
-
-        if ( ! Objects.equals(id, addressTypeDTO.id)) { return false; }
-
-        return true;
+        if(addressTypeDTO.getId() == null || getId() == null) {
+            return false;
+        }
+        return Objects.equals(getId(), addressTypeDTO.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hashCode(getId());
     }
 
     @Override
     public String toString() {
         return "AddressTypeDTO{" +
-            "id=" + id +
-            ", code='" + code + "'" +
-            ", type='" + type + "'" +
-            '}';
+            "id=" + getId() +
+            ", code='" + getCode() + "'" +
+            ", type='" + getType() + "'" +
+            "}";
     }
 }

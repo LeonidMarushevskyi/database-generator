@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Response } from '@angular/http';
 
+import { Observable } from 'rxjs/Rx';
 import { NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { EventManager, AlertService } from 'ng-jhipster';
 
@@ -18,6 +19,7 @@ export class RaceTypeDialogComponent implements OnInit {
     raceType: RaceType;
     authorities: any[];
     isSaving: boolean;
+
     constructor(
         public activeModal: NgbActiveModal,
         private alertService: AlertService,
@@ -30,35 +32,43 @@ export class RaceTypeDialogComponent implements OnInit {
         this.isSaving = false;
         this.authorities = ['ROLE_USER', 'ROLE_ADMIN'];
     }
-    clear () {
+    clear() {
         this.activeModal.dismiss('cancel');
     }
 
-    save () {
+    save() {
         this.isSaving = true;
         if (this.raceType.id !== undefined) {
-            this.raceTypeService.update(this.raceType)
-                .subscribe((res: RaceType) =>
-                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
+            this.subscribeToSaveResponse(
+                this.raceTypeService.update(this.raceType));
         } else {
-            this.raceTypeService.create(this.raceType)
-                .subscribe((res: RaceType) =>
-                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
+            this.subscribeToSaveResponse(
+                this.raceTypeService.create(this.raceType));
         }
     }
 
-    private onSaveSuccess (result: RaceType) {
+    private subscribeToSaveResponse(result: Observable<RaceType>) {
+        result.subscribe((res: RaceType) =>
+            this.onSaveSuccess(res), (res: Response) => this.onSaveError(res));
+    }
+
+    private onSaveSuccess(result: RaceType) {
         this.eventManager.broadcast({ name: 'raceTypeListModification', content: 'OK'});
         this.isSaving = false;
         this.activeModal.dismiss(result);
     }
 
-    private onSaveError (error) {
+    private onSaveError(error) {
+        try {
+            error.json();
+        } catch (exception) {
+            error.message = error.text();
+        }
         this.isSaving = false;
         this.onError(error);
     }
 
-    private onError (error) {
+    private onError(error) {
         this.alertService.error(error.message, null, null);
     }
 }
@@ -72,13 +82,13 @@ export class RaceTypePopupComponent implements OnInit, OnDestroy {
     modalRef: NgbModalRef;
     routeSub: any;
 
-    constructor (
+    constructor(
         private route: ActivatedRoute,
         private raceTypePopupService: RaceTypePopupService
     ) {}
 
     ngOnInit() {
-        this.routeSub = this.route.params.subscribe(params => {
+        this.routeSub = this.route.params.subscribe((params) => {
             if ( params['id'] ) {
                 this.modalRef = this.raceTypePopupService
                     .open(RaceTypeDialogComponent, params['id']);
@@ -86,7 +96,6 @@ export class RaceTypePopupComponent implements OnInit, OnDestroy {
                 this.modalRef = this.raceTypePopupService
                     .open(RaceTypeDialogComponent);
             }
-
         });
     }
 

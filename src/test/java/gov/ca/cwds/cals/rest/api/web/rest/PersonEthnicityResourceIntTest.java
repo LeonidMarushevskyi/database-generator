@@ -93,7 +93,7 @@ public class PersonEthnicityResourceIntTest {
         int databaseSizeBeforeCreate = personEthnicityRepository.findAll().size();
 
         // Create the PersonEthnicity
-        PersonEthnicityDTO personEthnicityDTO = personEthnicityMapper.personEthnicityToPersonEthnicityDTO(personEthnicity);
+        PersonEthnicityDTO personEthnicityDTO = personEthnicityMapper.toDto(personEthnicity);
         restPersonEthnicityMockMvc.perform(post("/api/person-ethnicities")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(personEthnicityDTO)))
@@ -112,7 +112,7 @@ public class PersonEthnicityResourceIntTest {
 
         // Create the PersonEthnicity with an existing ID
         personEthnicity.setId(1L);
-        PersonEthnicityDTO personEthnicityDTO = personEthnicityMapper.personEthnicityToPersonEthnicityDTO(personEthnicity);
+        PersonEthnicityDTO personEthnicityDTO = personEthnicityMapper.toDto(personEthnicity);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restPersonEthnicityMockMvc.perform(post("/api/person-ethnicities")
@@ -168,7 +168,7 @@ public class PersonEthnicityResourceIntTest {
 
         // Update the personEthnicity
         PersonEthnicity updatedPersonEthnicity = personEthnicityRepository.findOne(personEthnicity.getId());
-        PersonEthnicityDTO personEthnicityDTO = personEthnicityMapper.personEthnicityToPersonEthnicityDTO(updatedPersonEthnicity);
+        PersonEthnicityDTO personEthnicityDTO = personEthnicityMapper.toDto(updatedPersonEthnicity);
 
         restPersonEthnicityMockMvc.perform(put("/api/person-ethnicities")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -187,7 +187,7 @@ public class PersonEthnicityResourceIntTest {
         int databaseSizeBeforeUpdate = personEthnicityRepository.findAll().size();
 
         // Create the PersonEthnicity
-        PersonEthnicityDTO personEthnicityDTO = personEthnicityMapper.personEthnicityToPersonEthnicityDTO(personEthnicity);
+        PersonEthnicityDTO personEthnicityDTO = personEthnicityMapper.toDto(personEthnicity);
 
         // If the entity doesn't have an ID, it will be created instead of just being updated
         restPersonEthnicityMockMvc.perform(put("/api/person-ethnicities")
@@ -221,5 +221,37 @@ public class PersonEthnicityResourceIntTest {
     @Transactional
     public void equalsVerifier() throws Exception {
         TestUtil.equalsVerifier(PersonEthnicity.class);
+        PersonEthnicity personEthnicity1 = new PersonEthnicity();
+        personEthnicity1.setId(1L);
+        PersonEthnicity personEthnicity2 = new PersonEthnicity();
+        personEthnicity2.setId(personEthnicity1.getId());
+        assertThat(personEthnicity1).isEqualTo(personEthnicity2);
+        personEthnicity2.setId(2L);
+        assertThat(personEthnicity1).isNotEqualTo(personEthnicity2);
+        personEthnicity1.setId(null);
+        assertThat(personEthnicity1).isNotEqualTo(personEthnicity2);
+    }
+
+    @Test
+    @Transactional
+    public void dtoEqualsVerifier() throws Exception {
+        TestUtil.equalsVerifier(PersonEthnicityDTO.class);
+        PersonEthnicityDTO personEthnicityDTO1 = new PersonEthnicityDTO();
+        personEthnicityDTO1.setId(1L);
+        PersonEthnicityDTO personEthnicityDTO2 = new PersonEthnicityDTO();
+        assertThat(personEthnicityDTO1).isNotEqualTo(personEthnicityDTO2);
+        personEthnicityDTO2.setId(personEthnicityDTO1.getId());
+        assertThat(personEthnicityDTO1).isEqualTo(personEthnicityDTO2);
+        personEthnicityDTO2.setId(2L);
+        assertThat(personEthnicityDTO1).isNotEqualTo(personEthnicityDTO2);
+        personEthnicityDTO1.setId(null);
+        assertThat(personEthnicityDTO1).isNotEqualTo(personEthnicityDTO2);
+    }
+
+    @Test
+    @Transactional
+    public void testEntityFromId() {
+        assertThat(personEthnicityMapper.fromId(42L).getId()).isEqualTo(42);
+        assertThat(personEthnicityMapper.fromId(null)).isNull();
     }
 }

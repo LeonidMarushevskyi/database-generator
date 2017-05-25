@@ -5,7 +5,6 @@ import { GeneratorSharedModule } from '../shared';
 
 import { HOME_ROUTE, HomeComponent } from './';
 
-
 @NgModule({
     imports: [
         GeneratorSharedModule,

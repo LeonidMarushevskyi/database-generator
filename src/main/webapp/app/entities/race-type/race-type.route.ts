@@ -11,51 +11,55 @@ import { RaceTypeDeletePopupComponent } from './race-type-delete-dialog.componen
 
 import { Principal } from '../../shared';
 
-
 export const raceTypeRoute: Routes = [
-  {
-    path: 'race-type',
-    component: RaceTypeComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'RaceTypes'
+    {
+        path: 'race-type',
+        component: RaceTypeComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'RaceTypes'
+        },
+        canActivate: [UserRouteAccessService]
+    }, {
+        path: 'race-type/:id',
+        component: RaceTypeDetailComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'RaceTypes'
+        },
+        canActivate: [UserRouteAccessService]
     }
-  }, {
-    path: 'race-type/:id',
-    component: RaceTypeDetailComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'RaceTypes'
-    }
-  }
 ];
 
 export const raceTypePopupRoute: Routes = [
-  {
-    path: 'race-type-new',
-    component: RaceTypePopupComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'RaceTypes'
+    {
+        path: 'race-type-new',
+        component: RaceTypePopupComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'RaceTypes'
+        },
+        canActivate: [UserRouteAccessService],
+        outlet: 'popup'
     },
-    outlet: 'popup'
-  },
-  {
-    path: 'race-type/:id/edit',
-    component: RaceTypePopupComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'RaceTypes'
+    {
+        path: 'race-type/:id/edit',
+        component: RaceTypePopupComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'RaceTypes'
+        },
+        canActivate: [UserRouteAccessService],
+        outlet: 'popup'
     },
-    outlet: 'popup'
-  },
-  {
-    path: 'race-type/:id/delete',
-    component: RaceTypeDeletePopupComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'RaceTypes'
-    },
-    outlet: 'popup'
-  }
+    {
+        path: 'race-type/:id/delete',
+        component: RaceTypeDeletePopupComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'RaceTypes'
+        },
+        canActivate: [UserRouteAccessService],
+        outlet: 'popup'
+    }
 ];

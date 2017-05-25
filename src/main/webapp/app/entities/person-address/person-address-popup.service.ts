@@ -6,21 +6,21 @@ import { PersonAddressService } from './person-address.service';
 @Injectable()
 export class PersonAddressPopupService {
     private isOpen = false;
-    constructor (
+    constructor(
         private modalService: NgbModal,
         private router: Router,
         private personAddressService: PersonAddressService
 
     ) {}
 
-    open (component: Component, id?: number | any): NgbModalRef {
+    open(component: Component, id?: number | any): NgbModalRef {
         if (this.isOpen) {
             return;
         }
         this.isOpen = true;
 
         if (id) {
-            this.personAddressService.find(id).subscribe(personAddress => {
+            this.personAddressService.find(id).subscribe((personAddress) => {
                 this.personAddressModalRef(component, personAddress);
             });
         } else {
@@ -29,9 +29,9 @@ export class PersonAddressPopupService {
     }
 
     personAddressModalRef(component: Component, personAddress: PersonAddress): NgbModalRef {
-        let modalRef = this.modalService.open(component, { size: 'lg', backdrop: 'static'});
+        const modalRef = this.modalService.open(component, { size: 'lg', backdrop: 'static'});
         modalRef.componentInstance.personAddress = personAddress;
-        modalRef.result.then(result => {
+        modalRef.result.then((result) => {
             this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true });
             this.isOpen = false;
         }, (reason) => {

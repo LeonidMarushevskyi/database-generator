@@ -93,7 +93,7 @@ public class FacilityAddressResourceIntTest {
         int databaseSizeBeforeCreate = facilityAddressRepository.findAll().size();
 
         // Create the FacilityAddress
-        FacilityAddressDTO facilityAddressDTO = facilityAddressMapper.facilityAddressToFacilityAddressDTO(facilityAddress);
+        FacilityAddressDTO facilityAddressDTO = facilityAddressMapper.toDto(facilityAddress);
         restFacilityAddressMockMvc.perform(post("/api/facility-addresses")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(facilityAddressDTO)))
@@ -112,7 +112,7 @@ public class FacilityAddressResourceIntTest {
 
         // Create the FacilityAddress with an existing ID
         facilityAddress.setId(1L);
-        FacilityAddressDTO facilityAddressDTO = facilityAddressMapper.facilityAddressToFacilityAddressDTO(facilityAddress);
+        FacilityAddressDTO facilityAddressDTO = facilityAddressMapper.toDto(facilityAddress);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restFacilityAddressMockMvc.perform(post("/api/facility-addresses")
@@ -168,7 +168,7 @@ public class FacilityAddressResourceIntTest {
 
         // Update the facilityAddress
         FacilityAddress updatedFacilityAddress = facilityAddressRepository.findOne(facilityAddress.getId());
-        FacilityAddressDTO facilityAddressDTO = facilityAddressMapper.facilityAddressToFacilityAddressDTO(updatedFacilityAddress);
+        FacilityAddressDTO facilityAddressDTO = facilityAddressMapper.toDto(updatedFacilityAddress);
 
         restFacilityAddressMockMvc.perform(put("/api/facility-addresses")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -187,7 +187,7 @@ public class FacilityAddressResourceIntTest {
         int databaseSizeBeforeUpdate = facilityAddressRepository.findAll().size();
 
         // Create the FacilityAddress
-        FacilityAddressDTO facilityAddressDTO = facilityAddressMapper.facilityAddressToFacilityAddressDTO(facilityAddress);
+        FacilityAddressDTO facilityAddressDTO = facilityAddressMapper.toDto(facilityAddress);
 
         // If the entity doesn't have an ID, it will be created instead of just being updated
         restFacilityAddressMockMvc.perform(put("/api/facility-addresses")
@@ -221,5 +221,37 @@ public class FacilityAddressResourceIntTest {
     @Transactional
     public void equalsVerifier() throws Exception {
         TestUtil.equalsVerifier(FacilityAddress.class);
+        FacilityAddress facilityAddress1 = new FacilityAddress();
+        facilityAddress1.setId(1L);
+        FacilityAddress facilityAddress2 = new FacilityAddress();
+        facilityAddress2.setId(facilityAddress1.getId());
+        assertThat(facilityAddress1).isEqualTo(facilityAddress2);
+        facilityAddress2.setId(2L);
+        assertThat(facilityAddress1).isNotEqualTo(facilityAddress2);
+        facilityAddress1.setId(null);
+        assertThat(facilityAddress1).isNotEqualTo(facilityAddress2);
+    }
+
+    @Test
+    @Transactional
+    public void dtoEqualsVerifier() throws Exception {
+        TestUtil.equalsVerifier(FacilityAddressDTO.class);
+        FacilityAddressDTO facilityAddressDTO1 = new FacilityAddressDTO();
+        facilityAddressDTO1.setId(1L);
+        FacilityAddressDTO facilityAddressDTO2 = new FacilityAddressDTO();
+        assertThat(facilityAddressDTO1).isNotEqualTo(facilityAddressDTO2);
+        facilityAddressDTO2.setId(facilityAddressDTO1.getId());
+        assertThat(facilityAddressDTO1).isEqualTo(facilityAddressDTO2);
+        facilityAddressDTO2.setId(2L);
+        assertThat(facilityAddressDTO1).isNotEqualTo(facilityAddressDTO2);
+        facilityAddressDTO1.setId(null);
+        assertThat(facilityAddressDTO1).isNotEqualTo(facilityAddressDTO2);
+    }
+
+    @Test
+    @Transactional
+    public void testEntityFromId() {
+        assertThat(facilityAddressMapper.fromId(42L).getId()).isEqualTo(42);
+        assertThat(facilityAddressMapper.fromId(null)).isNull();
     }
 }

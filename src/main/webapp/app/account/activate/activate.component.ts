@@ -19,10 +19,10 @@ export class ActivateComponent implements OnInit {
         private loginModalService: LoginModalService,
         private route: ActivatedRoute
     ) {
-        }
+    }
 
-    ngOnInit () {
-        this.route.queryParams.subscribe(params => {
+    ngOnInit() {
+        this.route.queryParams.subscribe((params) => {
             this.activate.get(params['key']).subscribe(() => {
                 this.error = null;
                 this.success = 'OK';

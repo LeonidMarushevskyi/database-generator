@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Response } from '@angular/http';
 
+import { Observable } from 'rxjs/Rx';
 import { NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { EventManager, AlertService } from 'ng-jhipster';
 
@@ -11,6 +12,7 @@ import { PersonAddressService } from './person-address.service';
 import { Person, PersonService } from '../person';
 import { Address, AddressService } from '../address';
 import { AddressType, AddressTypeService } from '../address-type';
+import { ResponseWrapper } from '../../shared';
 
 @Component({
     selector: 'jhi-person-address-dialog',
@@ -27,6 +29,7 @@ export class PersonAddressDialogComponent implements OnInit {
     races: Address[];
 
     addresstypes: AddressType[];
+
     constructor(
         public activeModal: NgbActiveModal,
         private alertService: AlertService,
@@ -41,49 +44,61 @@ export class PersonAddressDialogComponent implements OnInit {
     ngOnInit() {
         this.isSaving = false;
         this.authorities = ['ROLE_USER', 'ROLE_ADMIN'];
-        this.personService.query().subscribe(
-            (res: Response) => { this.people = res.json(); }, (res: Response) => this.onError(res.json()));
-        this.addressService.query({filter: 'personaddress-is-null'}).subscribe((res: Response) => {
-            if (!this.personAddress.raceId) {
-                this.races = res.json();
-            } else {
-                this.addressService.find(this.personAddress.raceId).subscribe((subRes: Address) => {
-                    this.races = [subRes].concat(res.json());
-                }, (subRes: Response) => this.onError(subRes.json()));
-            }
-        }, (res: Response) => this.onError(res.json()));
-        this.addressTypeService.query().subscribe(
-            (res: Response) => { this.addresstypes = res.json(); }, (res: Response) => this.onError(res.json()));
+        this.personService.query()
+            .subscribe((res: ResponseWrapper) => { this.people = res.json; }, (res: ResponseWrapper) => this.onError(res.json));
+        this.addressService
+            .query({filter: 'personaddress-is-null'})
+            .subscribe((res: ResponseWrapper) => {
+                if (!this.personAddress.raceId) {
+                    this.races = res.json;
+                } else {
+                    this.addressService
+                        .find(this.personAddress.raceId)
+                        .subscribe((subRes: Address) => {
+                            this.races = [subRes].concat(res.json);
+                        }, (subRes: ResponseWrapper) => this.onError(subRes.json));
+                }
+            }, (res: ResponseWrapper) => this.onError(res.json));
+        this.addressTypeService.query()
+            .subscribe((res: ResponseWrapper) => { this.addresstypes = res.json; }, (res: ResponseWrapper) => this.onError(res.json));
     }
-    clear () {
+    clear() {
         this.activeModal.dismiss('cancel');
     }
 
-    save () {
+    save() {
         this.isSaving = true;
         if (this.personAddress.id !== undefined) {
-            this.personAddressService.update(this.personAddress)
-                .subscribe((res: PersonAddress) =>
-                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
+            this.subscribeToSaveResponse(
+                this.personAddressService.update(this.personAddress));
         } else {
-            this.personAddressService.create(this.personAddress)
-                .subscribe((res: PersonAddress) =>
-                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
+            this.subscribeToSaveResponse(
+                this.personAddressService.create(this.personAddress));
         }
     }
 
-    private onSaveSuccess (result: PersonAddress) {
+    private subscribeToSaveResponse(result: Observable<PersonAddress>) {
+        result.subscribe((res: PersonAddress) =>
+            this.onSaveSuccess(res), (res: Response) => this.onSaveError(res));
+    }
+
+    private onSaveSuccess(result: PersonAddress) {
         this.eventManager.broadcast({ name: 'personAddressListModification', content: 'OK'});
         this.isSaving = false;
         this.activeModal.dismiss(result);
     }
 
-    private onSaveError (error) {
+    private onSaveError(error) {
+        try {
+            error.json();
+        } catch (exception) {
+            error.message = error.text();
+        }
         this.isSaving = false;
         this.onError(error);
     }
 
-    private onError (error) {
+    private onError(error) {
         this.alertService.error(error.message, null, null);
     }
 
@@ -109,13 +124,13 @@ export class PersonAddressPopupComponent implements OnInit, OnDestroy {
     modalRef: NgbModalRef;
     routeSub: any;
 
-    constructor (
+    constructor(
         private route: ActivatedRoute,
         private personAddressPopupService: PersonAddressPopupService
     ) {}
 
     ngOnInit() {
-        this.routeSub = this.route.params.subscribe(params => {
+        this.routeSub = this.route.params.subscribe((params) => {
             if ( params['id'] ) {
                 this.modalRef = this.personAddressPopupService
                     .open(PersonAddressDialogComponent, params['id']);
@@ -123,7 +138,6 @@ export class PersonAddressPopupComponent implements OnInit, OnDestroy {
                 this.modalRef = this.personAddressPopupService
                     .open(PersonAddressDialogComponent);
             }
-
         });
     }
 

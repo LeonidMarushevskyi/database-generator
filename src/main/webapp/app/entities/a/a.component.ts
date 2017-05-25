@@ -1,12 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Response } from '@angular/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Rx';
 import { EventManager, ParseLinks, PaginationUtil, AlertService, DataUtils } from 'ng-jhipster';
 
 import { A } from './a.model';
 import { AService } from './a.service';
-import { ITEMS_PER_PAGE, Principal } from '../../shared';
+import { ITEMS_PER_PAGE, Principal, ResponseWrapper } from '../../shared';
 import { PaginationConfig } from '../../blocks/config/uib-pagination.config';
 
 @Component({
@@ -29,10 +28,10 @@ as: A[];
 
     loadAll() {
         this.aService.query().subscribe(
-            (res: Response) => {
-                this.as = res.json();
+            (res: ResponseWrapper) => {
+                this.as = res.json;
             },
-            (res: Response) => this.onError(res.json())
+            (res: ResponseWrapper) => this.onError(res.json)
         );
     }
     ngOnInit() {
@@ -47,11 +46,9 @@ as: A[];
         this.eventManager.destroy(this.eventSubscriber);
     }
 
-    trackId (index: number, item: A) {
+    trackId(index: number, item: A) {
         return item.id;
     }
-
-
 
     byteSize(field) {
         return this.dataUtils.byteSize(field);
@@ -64,8 +61,7 @@ as: A[];
         this.eventSubscriber = this.eventManager.subscribe('aListModification', (response) => this.loadAll());
     }
 
-
-    private onError (error) {
+    private onError(error) {
         this.alertService.error(error.message, null, null);
     }
 }

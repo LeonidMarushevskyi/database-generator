@@ -15,10 +15,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.LinkedList;
+
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * REST controller for managing FacilityAddress.
@@ -54,9 +53,9 @@ public class FacilityAddressResource {
         if (facilityAddressDTO.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new facilityAddress cannot already have an ID")).body(null);
         }
-        FacilityAddress facilityAddress = facilityAddressMapper.facilityAddressDTOToFacilityAddress(facilityAddressDTO);
+        FacilityAddress facilityAddress = facilityAddressMapper.toEntity(facilityAddressDTO);
         facilityAddress = facilityAddressRepository.save(facilityAddress);
-        FacilityAddressDTO result = facilityAddressMapper.facilityAddressToFacilityAddressDTO(facilityAddress);
+        FacilityAddressDTO result = facilityAddressMapper.toDto(facilityAddress);
         return ResponseEntity.created(new URI("/api/facility-addresses/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -78,9 +77,9 @@ public class FacilityAddressResource {
         if (facilityAddressDTO.getId() == null) {
             return createFacilityAddress(facilityAddressDTO);
         }
-        FacilityAddress facilityAddress = facilityAddressMapper.facilityAddressDTOToFacilityAddress(facilityAddressDTO);
+        FacilityAddress facilityAddress = facilityAddressMapper.toEntity(facilityAddressDTO);
         facilityAddress = facilityAddressRepository.save(facilityAddress);
-        FacilityAddressDTO result = facilityAddressMapper.facilityAddressToFacilityAddressDTO(facilityAddress);
+        FacilityAddressDTO result = facilityAddressMapper.toDto(facilityAddress);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, facilityAddressDTO.getId().toString()))
             .body(result);
@@ -96,7 +95,7 @@ public class FacilityAddressResource {
     public List<FacilityAddressDTO> getAllFacilityAddresses() {
         log.debug("REST request to get all FacilityAddresses");
         List<FacilityAddress> facilityAddresses = facilityAddressRepository.findAll();
-        return facilityAddressMapper.facilityAddressesToFacilityAddressDTOs(facilityAddresses);
+        return facilityAddressMapper.toDto(facilityAddresses);
     }
 
     /**
@@ -110,7 +109,7 @@ public class FacilityAddressResource {
     public ResponseEntity<FacilityAddressDTO> getFacilityAddress(@PathVariable Long id) {
         log.debug("REST request to get FacilityAddress : {}", id);
         FacilityAddress facilityAddress = facilityAddressRepository.findOne(id);
-        FacilityAddressDTO facilityAddressDTO = facilityAddressMapper.facilityAddressToFacilityAddressDTO(facilityAddress);
+        FacilityAddressDTO facilityAddressDTO = facilityAddressMapper.toDto(facilityAddress);
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(facilityAddressDTO));
     }
 

@@ -4,6 +4,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const StringReplacePlugin = require('string-replace-webpack-plugin');
 const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin');
+const WebpackNotifierPlugin = require('webpack-notifier');
 const path = require('path');
 
 module.exports = function (options) {
@@ -63,20 +64,8 @@ module.exports = function (options) {
                     loaders: ['style-loader', 'css-loader']
                 },
                 {
-                    test: /\.(jpe?g|png|gif|svg|woff|woff2|ttf|eot)$/i,
-                    loaders: [
-                        'file-loader?hash=sha512&digest=hex&name=[hash].[ext]', {
-                            loader: 'image-webpack-loader',
-                            query: {
-                                gifsicle: {
-                                    interlaced: false
-                                },
-                                optipng: {
-                                    optimizationLevel: 7
-                                }
-                            }
-                        }
-                    ]
+                    test: /\.(jpe?g|png|gif|svg|woff2?|ttf|eot)$/i,
+                    loaders: ['file-loader?hash=sha512&digest=hex&name=[hash].[ext]']
                 },
                 {
                     test: /app.constants.ts$/,
@@ -97,9 +86,10 @@ module.exports = function (options) {
             }),
             new webpack.DllReferencePlugin({
                 context: './',
-                manifest: require(path.resolve('./build/www/vendor.json')),
+                manifest: require(path.resolve('./build/www/vendor.json'))
             }),
             new CopyWebpackPlugin([
+                { from: './node_modules/core-js/client/shim.min.js', to: 'core-js-shim.min.js' },
                 { from: './node_modules/swagger-ui/dist', to: 'swagger-ui/dist' },
                 { from: './src/main/webapp/swagger-ui/', to: 'swagger-ui' },
                 { from: './src/main/webapp/favicon.ico', to: 'favicon.ico' },
@@ -117,7 +107,11 @@ module.exports = function (options) {
             new AddAssetHtmlPlugin([
                 { filepath: path.resolve('./build/www/vendor.dll.js'), includeSourcemap: false }
             ]),
-            new StringReplacePlugin()
+            new StringReplacePlugin(),
+            new WebpackNotifierPlugin({
+                title: 'JHipster',
+                contentImage: path.join(__dirname, 'logo-jhipster.png')
+            })
         ]
     };
 };

@@ -139,7 +139,7 @@ public class FacilityResourceIntTest {
         int databaseSizeBeforeCreate = facilityRepository.findAll().size();
 
         // Create the Facility
-        FacilityDTO facilityDTO = facilityMapper.facilityToFacilityDTO(facility);
+        FacilityDTO facilityDTO = facilityMapper.toDto(facility);
         restFacilityMockMvc.perform(post("/api/facilities")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(facilityDTO)))
@@ -169,7 +169,7 @@ public class FacilityResourceIntTest {
 
         // Create the Facility with an existing ID
         facility.setId(1L);
-        FacilityDTO facilityDTO = facilityMapper.facilityToFacilityDTO(facility);
+        FacilityDTO facilityDTO = facilityMapper.toDto(facility);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restFacilityMockMvc.perform(post("/api/facilities")
@@ -190,7 +190,7 @@ public class FacilityResourceIntTest {
         facility.setName(null);
 
         // Create the Facility, which fails.
-        FacilityDTO facilityDTO = facilityMapper.facilityToFacilityDTO(facility);
+        FacilityDTO facilityDTO = facilityMapper.toDto(facility);
 
         restFacilityMockMvc.perform(post("/api/facilities")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -209,7 +209,7 @@ public class FacilityResourceIntTest {
         facility.setLicenseeName(null);
 
         // Create the Facility, which fails.
-        FacilityDTO facilityDTO = facilityMapper.facilityToFacilityDTO(facility);
+        FacilityDTO facilityDTO = facilityMapper.toDto(facility);
 
         restFacilityMockMvc.perform(post("/api/facilities")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -228,7 +228,7 @@ public class FacilityResourceIntTest {
         facility.setLicenseNumber(null);
 
         // Create the Facility, which fails.
-        FacilityDTO facilityDTO = facilityMapper.facilityToFacilityDTO(facility);
+        FacilityDTO facilityDTO = facilityMapper.toDto(facility);
 
         restFacilityMockMvc.perform(post("/api/facilities")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -247,7 +247,7 @@ public class FacilityResourceIntTest {
         facility.setCapacity(null);
 
         // Create the Facility, which fails.
-        FacilityDTO facilityDTO = facilityMapper.facilityToFacilityDTO(facility);
+        FacilityDTO facilityDTO = facilityMapper.toDto(facility);
 
         restFacilityMockMvc.perform(post("/api/facilities")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -266,7 +266,7 @@ public class FacilityResourceIntTest {
         facility.setLicenseEffectiveDate(null);
 
         // Create the Facility, which fails.
-        FacilityDTO facilityDTO = facilityMapper.facilityToFacilityDTO(facility);
+        FacilityDTO facilityDTO = facilityMapper.toDto(facility);
 
         restFacilityMockMvc.perform(post("/api/facilities")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -285,7 +285,7 @@ public class FacilityResourceIntTest {
         facility.setOriginalApplicationRecievedDate(null);
 
         // Create the Facility, which fails.
-        FacilityDTO facilityDTO = facilityMapper.facilityToFacilityDTO(facility);
+        FacilityDTO facilityDTO = facilityMapper.toDto(facility);
 
         restFacilityMockMvc.perform(post("/api/facilities")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -373,7 +373,7 @@ public class FacilityResourceIntTest {
             .lastVisitDate(UPDATED_LAST_VISIT_DATE)
             .emailAddress(UPDATED_EMAIL_ADDRESS)
             .lastVisitReason(UPDATED_LAST_VISIT_REASON);
-        FacilityDTO facilityDTO = facilityMapper.facilityToFacilityDTO(updatedFacility);
+        FacilityDTO facilityDTO = facilityMapper.toDto(updatedFacility);
 
         restFacilityMockMvc.perform(put("/api/facilities")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -403,7 +403,7 @@ public class FacilityResourceIntTest {
         int databaseSizeBeforeUpdate = facilityRepository.findAll().size();
 
         // Create the Facility
-        FacilityDTO facilityDTO = facilityMapper.facilityToFacilityDTO(facility);
+        FacilityDTO facilityDTO = facilityMapper.toDto(facility);
 
         // If the entity doesn't have an ID, it will be created instead of just being updated
         restFacilityMockMvc.perform(put("/api/facilities")
@@ -437,5 +437,37 @@ public class FacilityResourceIntTest {
     @Transactional
     public void equalsVerifier() throws Exception {
         TestUtil.equalsVerifier(Facility.class);
+        Facility facility1 = new Facility();
+        facility1.setId(1L);
+        Facility facility2 = new Facility();
+        facility2.setId(facility1.getId());
+        assertThat(facility1).isEqualTo(facility2);
+        facility2.setId(2L);
+        assertThat(facility1).isNotEqualTo(facility2);
+        facility1.setId(null);
+        assertThat(facility1).isNotEqualTo(facility2);
+    }
+
+    @Test
+    @Transactional
+    public void dtoEqualsVerifier() throws Exception {
+        TestUtil.equalsVerifier(FacilityDTO.class);
+        FacilityDTO facilityDTO1 = new FacilityDTO();
+        facilityDTO1.setId(1L);
+        FacilityDTO facilityDTO2 = new FacilityDTO();
+        assertThat(facilityDTO1).isNotEqualTo(facilityDTO2);
+        facilityDTO2.setId(facilityDTO1.getId());
+        assertThat(facilityDTO1).isEqualTo(facilityDTO2);
+        facilityDTO2.setId(2L);
+        assertThat(facilityDTO1).isNotEqualTo(facilityDTO2);
+        facilityDTO1.setId(null);
+        assertThat(facilityDTO1).isNotEqualTo(facilityDTO2);
+    }
+
+    @Test
+    @Transactional
+    public void testEntityFromId() {
+        assertThat(facilityMapper.fromId(42L).getId()).isEqualTo(42);
+        assertThat(facilityMapper.fromId(null)).isNull();
     }
 }

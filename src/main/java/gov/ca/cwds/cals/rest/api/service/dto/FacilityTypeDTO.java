@@ -25,6 +25,7 @@ public class FacilityTypeDTO implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
+
     public Integer getCode() {
         return code;
     }
@@ -32,6 +33,7 @@ public class FacilityTypeDTO implements Serializable {
     public void setCode(Integer code) {
         this.code = code;
     }
+
     public String getDescription() {
         return description;
     }
@@ -50,23 +52,23 @@ public class FacilityTypeDTO implements Serializable {
         }
 
         FacilityTypeDTO facilityTypeDTO = (FacilityTypeDTO) o;
-
-        if ( ! Objects.equals(id, facilityTypeDTO.id)) { return false; }
-
-        return true;
+        if(facilityTypeDTO.getId() == null || getId() == null) {
+            return false;
+        }
+        return Objects.equals(getId(), facilityTypeDTO.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hashCode(getId());
     }
 
     @Override
     public String toString() {
         return "FacilityTypeDTO{" +
-            "id=" + id +
-            ", code='" + code + "'" +
-            ", description='" + description + "'" +
-            '}';
+            "id=" + getId() +
+            ", code='" + getCode() + "'" +
+            ", description='" + getDescription() + "'" +
+            "}";
     }
 }

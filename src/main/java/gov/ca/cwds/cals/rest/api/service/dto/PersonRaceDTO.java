@@ -51,21 +51,21 @@ public class PersonRaceDTO implements Serializable {
         }
 
         PersonRaceDTO personRaceDTO = (PersonRaceDTO) o;
-
-        if ( ! Objects.equals(id, personRaceDTO.id)) { return false; }
-
-        return true;
+        if(personRaceDTO.getId() == null || getId() == null) {
+            return false;
+        }
+        return Objects.equals(getId(), personRaceDTO.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hashCode(getId());
     }
 
     @Override
     public String toString() {
         return "PersonRaceDTO{" +
-            "id=" + id +
-            '}';
+            "id=" + getId() +
+            "}";
     }
 }

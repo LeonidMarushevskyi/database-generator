@@ -279,27 +279,27 @@ public class Person implements Serializable {
             return false;
         }
         Person person = (Person) o;
-        if (person.id == null || id == null) {
+        if (person.getId() == null || getId() == null) {
             return false;
         }
-        return Objects.equals(id, person.id);
+        return Objects.equals(getId(), person.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hashCode(getId());
     }
 
     @Override
     public String toString() {
         return "Person{" +
-            "id=" + id +
-            ", firstName='" + firstName + "'" +
-            ", lastName='" + lastName + "'" +
-            ", gender='" + gender + "'" +
-            ", age='" + age + "'" +
-            ", dateOfBirth='" + dateOfBirth + "'" +
-            ", ssn='" + ssn + "'" +
-            '}';
+            "id=" + getId() +
+            ", firstName='" + getFirstName() + "'" +
+            ", lastName='" + getLastName() + "'" +
+            ", gender='" + getGender() + "'" +
+            ", age='" + getAge() + "'" +
+            ", dateOfBirth='" + getDateOfBirth() + "'" +
+            ", ssn='" + getSsn() + "'" +
+            "}";
     }
 }

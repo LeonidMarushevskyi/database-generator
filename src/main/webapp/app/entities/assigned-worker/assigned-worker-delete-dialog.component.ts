@@ -23,12 +23,12 @@ export class AssignedWorkerDeleteDialogComponent {
     ) {
     }
 
-    clear () {
+    clear() {
         this.activeModal.dismiss('cancel');
     }
 
-    confirmDelete (id: number) {
-        this.assignedWorkerService.delete(id).subscribe(response => {
+    confirmDelete(id: number) {
+        this.assignedWorkerService.delete(id).subscribe((response) => {
             this.eventManager.broadcast({
                 name: 'assignedWorkerListModification',
                 content: 'Deleted an assignedWorker'
@@ -47,13 +47,13 @@ export class AssignedWorkerDeletePopupComponent implements OnInit, OnDestroy {
     modalRef: NgbModalRef;
     routeSub: any;
 
-    constructor (
+    constructor(
         private route: ActivatedRoute,
         private assignedWorkerPopupService: AssignedWorkerPopupService
     ) {}
 
     ngOnInit() {
-        this.routeSub = this.route.params.subscribe(params => {
+        this.routeSub = this.route.params.subscribe((params) => {
             this.modalRef = this.assignedWorkerPopupService
                 .open(AssignedWorkerDeleteDialogComponent, params['id']);
         });

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <property name="now" value="now()" dbms="h2"/>
+
+    <property name="now" value="current_timestamp" dbms="postgresql"/>
+
+    <property name="floatType" value="float4" dbms="postgresql, h2"/>
+    <property name="floatType" value="float" dbms="mysql, oracle, mssql"/>
+
+    <!--
+        Added the entity Deficiency.
+    -->
+    <changeSet id="20170525060348-1" author="jhipster">
+        <createTable tableName="deficiency">
+            <column name="id" type="bigint" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="deficiency_type" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="deficiency_type_description" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="poc_date" type="timestamp">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="fac_section_violated" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="deficiency" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="correction_plan" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="inspection_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+
+            <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
+        </createTable>
+        <dropDefaultValue tableName="deficiency" columnName="poc_date" columnDataType="datetime"/>
+        
+    </changeSet>
+</databaseChangeLog>

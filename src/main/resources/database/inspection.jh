@@ -13,7 +13,7 @@ entity Deficiency {
 }
 
 entity ClearedPOC {
-	poc_due_date LocalDateTime,
+	poc_due_date ZonedDateTime,
     poc_section_violated String,
     poc_correction_plan String,
     poc_date_cleared ZonedDateTime,

@@ -107,7 +107,7 @@ public class FacilityChildResourceIntTest {
         int databaseSizeBeforeCreate = facilityChildRepository.findAll().size();
 
         // Create the FacilityChild
-        FacilityChildDTO facilityChildDTO = facilityChildMapper.facilityChildToFacilityChildDTO(facilityChild);
+        FacilityChildDTO facilityChildDTO = facilityChildMapper.toDto(facilityChild);
         restFacilityChildMockMvc.perform(post("/api/facility-children")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(facilityChildDTO)))
@@ -129,7 +129,7 @@ public class FacilityChildResourceIntTest {
 
         // Create the FacilityChild with an existing ID
         facilityChild.setId(1L);
-        FacilityChildDTO facilityChildDTO = facilityChildMapper.facilityChildToFacilityChildDTO(facilityChild);
+        FacilityChildDTO facilityChildDTO = facilityChildMapper.toDto(facilityChild);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restFacilityChildMockMvc.perform(post("/api/facility-children")
@@ -150,7 +150,7 @@ public class FacilityChildResourceIntTest {
         facilityChild.setCountyOfOrigin(null);
 
         // Create the FacilityChild, which fails.
-        FacilityChildDTO facilityChildDTO = facilityChildMapper.facilityChildToFacilityChildDTO(facilityChild);
+        FacilityChildDTO facilityChildDTO = facilityChildMapper.toDto(facilityChild);
 
         restFacilityChildMockMvc.perform(post("/api/facility-children")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -214,7 +214,7 @@ public class FacilityChildResourceIntTest {
             .dateOfPlacement(UPDATED_DATE_OF_PLACEMENT)
             .assignedWorker(UPDATED_ASSIGNED_WORKER)
             .countyOfOrigin(UPDATED_COUNTY_OF_ORIGIN);
-        FacilityChildDTO facilityChildDTO = facilityChildMapper.facilityChildToFacilityChildDTO(updatedFacilityChild);
+        FacilityChildDTO facilityChildDTO = facilityChildMapper.toDto(updatedFacilityChild);
 
         restFacilityChildMockMvc.perform(put("/api/facility-children")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -236,7 +236,7 @@ public class FacilityChildResourceIntTest {
         int databaseSizeBeforeUpdate = facilityChildRepository.findAll().size();
 
         // Create the FacilityChild
-        FacilityChildDTO facilityChildDTO = facilityChildMapper.facilityChildToFacilityChildDTO(facilityChild);
+        FacilityChildDTO facilityChildDTO = facilityChildMapper.toDto(facilityChild);
 
         // If the entity doesn't have an ID, it will be created instead of just being updated
         restFacilityChildMockMvc.perform(put("/api/facility-children")
@@ -270,5 +270,37 @@ public class FacilityChildResourceIntTest {
     @Transactional
     public void equalsVerifier() throws Exception {
         TestUtil.equalsVerifier(FacilityChild.class);
+        FacilityChild facilityChild1 = new FacilityChild();
+        facilityChild1.setId(1L);
+        FacilityChild facilityChild2 = new FacilityChild();
+        facilityChild2.setId(facilityChild1.getId());
+        assertThat(facilityChild1).isEqualTo(facilityChild2);
+        facilityChild2.setId(2L);
+        assertThat(facilityChild1).isNotEqualTo(facilityChild2);
+        facilityChild1.setId(null);
+        assertThat(facilityChild1).isNotEqualTo(facilityChild2);
+    }
+
+    @Test
+    @Transactional
+    public void dtoEqualsVerifier() throws Exception {
+        TestUtil.equalsVerifier(FacilityChildDTO.class);
+        FacilityChildDTO facilityChildDTO1 = new FacilityChildDTO();
+        facilityChildDTO1.setId(1L);
+        FacilityChildDTO facilityChildDTO2 = new FacilityChildDTO();
+        assertThat(facilityChildDTO1).isNotEqualTo(facilityChildDTO2);
+        facilityChildDTO2.setId(facilityChildDTO1.getId());
+        assertThat(facilityChildDTO1).isEqualTo(facilityChildDTO2);
+        facilityChildDTO2.setId(2L);
+        assertThat(facilityChildDTO1).isNotEqualTo(facilityChildDTO2);
+        facilityChildDTO1.setId(null);
+        assertThat(facilityChildDTO1).isNotEqualTo(facilityChildDTO2);
+    }
+
+    @Test
+    @Transactional
+    public void testEntityFromId() {
+        assertThat(facilityChildMapper.fromId(42L).getId()).isEqualTo(42);
+        assertThat(facilityChildMapper.fromId(null)).isNull();
     }
 }

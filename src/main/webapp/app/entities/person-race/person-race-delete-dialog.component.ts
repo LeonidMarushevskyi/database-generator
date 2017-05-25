@@ -23,12 +23,12 @@ export class PersonRaceDeleteDialogComponent {
     ) {
     }
 
-    clear () {
+    clear() {
         this.activeModal.dismiss('cancel');
     }
 
-    confirmDelete (id: number) {
-        this.personRaceService.delete(id).subscribe(response => {
+    confirmDelete(id: number) {
+        this.personRaceService.delete(id).subscribe((response) => {
             this.eventManager.broadcast({
                 name: 'personRaceListModification',
                 content: 'Deleted an personRace'
@@ -47,13 +47,13 @@ export class PersonRaceDeletePopupComponent implements OnInit, OnDestroy {
     modalRef: NgbModalRef;
     routeSub: any;
 
-    constructor (
+    constructor(
         private route: ActivatedRoute,
         private personRacePopupService: PersonRacePopupService
     ) {}
 
     ngOnInit() {
-        this.routeSub = this.route.params.subscribe(params => {
+        this.routeSub = this.route.params.subscribe((params) => {
             this.modalRef = this.personRacePopupService
                 .open(PersonRaceDeleteDialogComponent, params['id']);
         });

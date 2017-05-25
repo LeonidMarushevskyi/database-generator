@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Response } from '@angular/http';
 
+import { Observable } from 'rxjs/Rx';
 import { NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { EventManager, AlertService } from 'ng-jhipster';
 
@@ -9,6 +10,7 @@ import { PersonEthnicity } from './person-ethnicity.model';
 import { PersonEthnicityPopupService } from './person-ethnicity-popup.service';
 import { PersonEthnicityService } from './person-ethnicity.service';
 import { EthnicityType, EthnicityTypeService } from '../ethnicity-type';
+import { ResponseWrapper } from '../../shared';
 
 @Component({
     selector: 'jhi-person-ethnicity-dialog',
@@ -21,6 +23,7 @@ export class PersonEthnicityDialogComponent implements OnInit {
     isSaving: boolean;
 
     ethnicitytypes: EthnicityType[];
+
     constructor(
         public activeModal: NgbActiveModal,
         private alertService: AlertService,
@@ -33,38 +36,46 @@ export class PersonEthnicityDialogComponent implements OnInit {
     ngOnInit() {
         this.isSaving = false;
         this.authorities = ['ROLE_USER', 'ROLE_ADMIN'];
-        this.ethnicityTypeService.query().subscribe(
-            (res: Response) => { this.ethnicitytypes = res.json(); }, (res: Response) => this.onError(res.json()));
+        this.ethnicityTypeService.query()
+            .subscribe((res: ResponseWrapper) => { this.ethnicitytypes = res.json; }, (res: ResponseWrapper) => this.onError(res.json));
     }
-    clear () {
+    clear() {
         this.activeModal.dismiss('cancel');
     }
 
-    save () {
+    save() {
         this.isSaving = true;
         if (this.personEthnicity.id !== undefined) {
-            this.personEthnicityService.update(this.personEthnicity)
-                .subscribe((res: PersonEthnicity) =>
-                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
+            this.subscribeToSaveResponse(
+                this.personEthnicityService.update(this.personEthnicity));
         } else {
-            this.personEthnicityService.create(this.personEthnicity)
-                .subscribe((res: PersonEthnicity) =>
-                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
+            this.subscribeToSaveResponse(
+                this.personEthnicityService.create(this.personEthnicity));
         }
     }
 
-    private onSaveSuccess (result: PersonEthnicity) {
+    private subscribeToSaveResponse(result: Observable<PersonEthnicity>) {
+        result.subscribe((res: PersonEthnicity) =>
+            this.onSaveSuccess(res), (res: Response) => this.onSaveError(res));
+    }
+
+    private onSaveSuccess(result: PersonEthnicity) {
         this.eventManager.broadcast({ name: 'personEthnicityListModification', content: 'OK'});
         this.isSaving = false;
         this.activeModal.dismiss(result);
     }
 
-    private onSaveError (error) {
+    private onSaveError(error) {
+        try {
+            error.json();
+        } catch (exception) {
+            error.message = error.text();
+        }
         this.isSaving = false;
         this.onError(error);
     }
 
-    private onError (error) {
+    private onError(error) {
         this.alertService.error(error.message, null, null);
     }
 
@@ -82,13 +93,13 @@ export class PersonEthnicityPopupComponent implements OnInit, OnDestroy {
     modalRef: NgbModalRef;
     routeSub: any;
 
-    constructor (
+    constructor(
         private route: ActivatedRoute,
         private personEthnicityPopupService: PersonEthnicityPopupService
     ) {}
 
     ngOnInit() {
-        this.routeSub = this.route.params.subscribe(params => {
+        this.routeSub = this.route.params.subscribe((params) => {
             if ( params['id'] ) {
                 this.modalRef = this.personEthnicityPopupService
                     .open(PersonEthnicityDialogComponent, params['id']);
@@ -96,7 +107,6 @@ export class PersonEthnicityPopupComponent implements OnInit, OnDestroy {
                 this.modalRef = this.personEthnicityPopupService
                     .open(PersonEthnicityDialogComponent);
             }
-
         });
     }
 

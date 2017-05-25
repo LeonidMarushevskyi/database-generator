@@ -29,7 +29,7 @@ public class LanguageType implements Serializable {
     private String code;
 
     @Size(max = 20)
-    @Column(name = "type", length = 20)
+    @Column(name = "jhi_type", length = 20)
     private String type;
 
     public Long getId() {
@@ -75,23 +75,23 @@ public class LanguageType implements Serializable {
             return false;
         }
         LanguageType languageType = (LanguageType) o;
-        if (languageType.id == null || id == null) {
+        if (languageType.getId() == null || getId() == null) {
             return false;
         }
-        return Objects.equals(id, languageType.id);
+        return Objects.equals(getId(), languageType.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hashCode(getId());
     }
 
     @Override
     public String toString() {
         return "LanguageType{" +
-            "id=" + id +
-            ", code='" + code + "'" +
-            ", type='" + type + "'" +
-            '}';
+            "id=" + getId() +
+            ", code='" + getCode() + "'" +
+            ", type='" + getType() + "'" +
+            "}";
     }
 }

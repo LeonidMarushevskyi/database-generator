@@ -11,51 +11,55 @@ import { AddressDeletePopupComponent } from './address-delete-dialog.component';
 
 import { Principal } from '../../shared';
 
-
 export const addressRoute: Routes = [
-  {
-    path: 'address',
-    component: AddressComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'Addresses'
+    {
+        path: 'address',
+        component: AddressComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'Addresses'
+        },
+        canActivate: [UserRouteAccessService]
+    }, {
+        path: 'address/:id',
+        component: AddressDetailComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'Addresses'
+        },
+        canActivate: [UserRouteAccessService]
     }
-  }, {
-    path: 'address/:id',
-    component: AddressDetailComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'Addresses'
-    }
-  }
 ];
 
 export const addressPopupRoute: Routes = [
-  {
-    path: 'address-new',
-    component: AddressPopupComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'Addresses'
+    {
+        path: 'address-new',
+        component: AddressPopupComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'Addresses'
+        },
+        canActivate: [UserRouteAccessService],
+        outlet: 'popup'
     },
-    outlet: 'popup'
-  },
-  {
-    path: 'address/:id/edit',
-    component: AddressPopupComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'Addresses'
+    {
+        path: 'address/:id/edit',
+        component: AddressPopupComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'Addresses'
+        },
+        canActivate: [UserRouteAccessService],
+        outlet: 'popup'
     },
-    outlet: 'popup'
-  },
-  {
-    path: 'address/:id/delete',
-    component: AddressDeletePopupComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'Addresses'
-    },
-    outlet: 'popup'
-  }
+    {
+        path: 'address/:id/delete',
+        component: AddressDeletePopupComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'Addresses'
+        },
+        canActivate: [UserRouteAccessService],
+        outlet: 'popup'
+    }
 ];

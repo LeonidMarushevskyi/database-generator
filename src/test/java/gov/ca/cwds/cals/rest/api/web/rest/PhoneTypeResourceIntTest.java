@@ -101,7 +101,7 @@ public class PhoneTypeResourceIntTest {
         int databaseSizeBeforeCreate = phoneTypeRepository.findAll().size();
 
         // Create the PhoneType
-        PhoneTypeDTO phoneTypeDTO = phoneTypeMapper.phoneTypeToPhoneTypeDTO(phoneType);
+        PhoneTypeDTO phoneTypeDTO = phoneTypeMapper.toDto(phoneType);
         restPhoneTypeMockMvc.perform(post("/api/phone-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(phoneTypeDTO)))
@@ -122,7 +122,7 @@ public class PhoneTypeResourceIntTest {
 
         // Create the PhoneType with an existing ID
         phoneType.setId(1L);
-        PhoneTypeDTO phoneTypeDTO = phoneTypeMapper.phoneTypeToPhoneTypeDTO(phoneType);
+        PhoneTypeDTO phoneTypeDTO = phoneTypeMapper.toDto(phoneType);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restPhoneTypeMockMvc.perform(post("/api/phone-types")
@@ -143,7 +143,7 @@ public class PhoneTypeResourceIntTest {
         phoneType.setCode(null);
 
         // Create the PhoneType, which fails.
-        PhoneTypeDTO phoneTypeDTO = phoneTypeMapper.phoneTypeToPhoneTypeDTO(phoneType);
+        PhoneTypeDTO phoneTypeDTO = phoneTypeMapper.toDto(phoneType);
 
         restPhoneTypeMockMvc.perform(post("/api/phone-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -204,7 +204,7 @@ public class PhoneTypeResourceIntTest {
         updatedPhoneType
             .code(UPDATED_CODE)
             .type(UPDATED_TYPE);
-        PhoneTypeDTO phoneTypeDTO = phoneTypeMapper.phoneTypeToPhoneTypeDTO(updatedPhoneType);
+        PhoneTypeDTO phoneTypeDTO = phoneTypeMapper.toDto(updatedPhoneType);
 
         restPhoneTypeMockMvc.perform(put("/api/phone-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -225,7 +225,7 @@ public class PhoneTypeResourceIntTest {
         int databaseSizeBeforeUpdate = phoneTypeRepository.findAll().size();
 
         // Create the PhoneType
-        PhoneTypeDTO phoneTypeDTO = phoneTypeMapper.phoneTypeToPhoneTypeDTO(phoneType);
+        PhoneTypeDTO phoneTypeDTO = phoneTypeMapper.toDto(phoneType);
 
         // If the entity doesn't have an ID, it will be created instead of just being updated
         restPhoneTypeMockMvc.perform(put("/api/phone-types")
@@ -259,5 +259,37 @@ public class PhoneTypeResourceIntTest {
     @Transactional
     public void equalsVerifier() throws Exception {
         TestUtil.equalsVerifier(PhoneType.class);
+        PhoneType phoneType1 = new PhoneType();
+        phoneType1.setId(1L);
+        PhoneType phoneType2 = new PhoneType();
+        phoneType2.setId(phoneType1.getId());
+        assertThat(phoneType1).isEqualTo(phoneType2);
+        phoneType2.setId(2L);
+        assertThat(phoneType1).isNotEqualTo(phoneType2);
+        phoneType1.setId(null);
+        assertThat(phoneType1).isNotEqualTo(phoneType2);
+    }
+
+    @Test
+    @Transactional
+    public void dtoEqualsVerifier() throws Exception {
+        TestUtil.equalsVerifier(PhoneTypeDTO.class);
+        PhoneTypeDTO phoneTypeDTO1 = new PhoneTypeDTO();
+        phoneTypeDTO1.setId(1L);
+        PhoneTypeDTO phoneTypeDTO2 = new PhoneTypeDTO();
+        assertThat(phoneTypeDTO1).isNotEqualTo(phoneTypeDTO2);
+        phoneTypeDTO2.setId(phoneTypeDTO1.getId());
+        assertThat(phoneTypeDTO1).isEqualTo(phoneTypeDTO2);
+        phoneTypeDTO2.setId(2L);
+        assertThat(phoneTypeDTO1).isNotEqualTo(phoneTypeDTO2);
+        phoneTypeDTO1.setId(null);
+        assertThat(phoneTypeDTO1).isNotEqualTo(phoneTypeDTO2);
+    }
+
+    @Test
+    @Transactional
+    public void testEntityFromId() {
+        assertThat(phoneTypeMapper.fromId(42L).getId()).isEqualTo(42);
+        assertThat(phoneTypeMapper.fromId(null)).isNull();
     }
 }

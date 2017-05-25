@@ -25,6 +25,7 @@ public class CountyDTO implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
+
     public Integer getCode() {
         return code;
     }
@@ -32,6 +33,7 @@ public class CountyDTO implements Serializable {
     public void setCode(Integer code) {
         this.code = code;
     }
+
     public String getDescription() {
         return description;
     }
@@ -50,23 +52,23 @@ public class CountyDTO implements Serializable {
         }
 
         CountyDTO countyDTO = (CountyDTO) o;
-
-        if ( ! Objects.equals(id, countyDTO.id)) { return false; }
-
-        return true;
+        if(countyDTO.getId() == null || getId() == null) {
+            return false;
+        }
+        return Objects.equals(getId(), countyDTO.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hashCode(getId());
     }
 
     @Override
     public String toString() {
         return "CountyDTO{" +
-            "id=" + id +
-            ", code='" + code + "'" +
-            ", description='" + description + "'" +
-            '}';
+            "id=" + getId() +
+            ", code='" + getCode() + "'" +
+            ", description='" + getDescription() + "'" +
+            "}";
     }
 }

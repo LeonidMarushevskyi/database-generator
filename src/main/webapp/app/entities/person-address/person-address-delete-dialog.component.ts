@@ -23,12 +23,12 @@ export class PersonAddressDeleteDialogComponent {
     ) {
     }
 
-    clear () {
+    clear() {
         this.activeModal.dismiss('cancel');
     }
 
-    confirmDelete (id: number) {
-        this.personAddressService.delete(id).subscribe(response => {
+    confirmDelete(id: number) {
+        this.personAddressService.delete(id).subscribe((response) => {
             this.eventManager.broadcast({
                 name: 'personAddressListModification',
                 content: 'Deleted an personAddress'
@@ -47,13 +47,13 @@ export class PersonAddressDeletePopupComponent implements OnInit, OnDestroy {
     modalRef: NgbModalRef;
     routeSub: any;
 
-    constructor (
+    constructor(
         private route: ActivatedRoute,
         private personAddressPopupService: PersonAddressPopupService
     ) {}
 
     ngOnInit() {
-        this.routeSub = this.route.params.subscribe(params => {
+        this.routeSub = this.route.params.subscribe((params) => {
             this.modalRef = this.personAddressPopupService
                 .open(PersonAddressDeleteDialogComponent, params['id']);
         });

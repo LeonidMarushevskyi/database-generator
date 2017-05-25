@@ -1,12 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Response } from '@angular/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Rx';
 import { EventManager, ParseLinks, PaginationUtil, AlertService } from 'ng-jhipster';
 
 import { Phone } from './phone.model';
 import { PhoneService } from './phone.service';
-import { ITEMS_PER_PAGE, Principal } from '../../shared';
+import { ITEMS_PER_PAGE, Principal, ResponseWrapper } from '../../shared';
 import { PaginationConfig } from '../../blocks/config/uib-pagination.config';
 
 @Component({
@@ -28,10 +27,10 @@ phones: Phone[];
 
     loadAll() {
         this.phoneService.query().subscribe(
-            (res: Response) => {
-                this.phones = res.json();
+            (res: ResponseWrapper) => {
+                this.phones = res.json;
             },
-            (res: Response) => this.onError(res.json())
+            (res: ResponseWrapper) => this.onError(res.json)
         );
     }
     ngOnInit() {
@@ -46,18 +45,14 @@ phones: Phone[];
         this.eventManager.destroy(this.eventSubscriber);
     }
 
-    trackId (index: number, item: Phone) {
+    trackId(index: number, item: Phone) {
         return item.id;
     }
-
-
-
     registerChangeInPhones() {
         this.eventSubscriber = this.eventManager.subscribe('phoneListModification', (response) => this.loadAll());
     }
 
-
-    private onError (error) {
+    private onError(error) {
         this.alertService.error(error.message, null, null);
     }
 }

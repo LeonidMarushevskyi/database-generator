@@ -97,7 +97,7 @@ public class AssignedWorkerResourceIntTest {
         int databaseSizeBeforeCreate = assignedWorkerRepository.findAll().size();
 
         // Create the AssignedWorker
-        AssignedWorkerDTO assignedWorkerDTO = assignedWorkerMapper.assignedWorkerToAssignedWorkerDTO(assignedWorker);
+        AssignedWorkerDTO assignedWorkerDTO = assignedWorkerMapper.toDto(assignedWorker);
         restAssignedWorkerMockMvc.perform(post("/api/assigned-workers")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(assignedWorkerDTO)))
@@ -117,7 +117,7 @@ public class AssignedWorkerResourceIntTest {
 
         // Create the AssignedWorker with an existing ID
         assignedWorker.setId(1L);
-        AssignedWorkerDTO assignedWorkerDTO = assignedWorkerMapper.assignedWorkerToAssignedWorkerDTO(assignedWorker);
+        AssignedWorkerDTO assignedWorkerDTO = assignedWorkerMapper.toDto(assignedWorker);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restAssignedWorkerMockMvc.perform(post("/api/assigned-workers")
@@ -138,7 +138,7 @@ public class AssignedWorkerResourceIntTest {
         assignedWorker.setCode(null);
 
         // Create the AssignedWorker, which fails.
-        AssignedWorkerDTO assignedWorkerDTO = assignedWorkerMapper.assignedWorkerToAssignedWorkerDTO(assignedWorker);
+        AssignedWorkerDTO assignedWorkerDTO = assignedWorkerMapper.toDto(assignedWorker);
 
         restAssignedWorkerMockMvc.perform(post("/api/assigned-workers")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -196,7 +196,7 @@ public class AssignedWorkerResourceIntTest {
         AssignedWorker updatedAssignedWorker = assignedWorkerRepository.findOne(assignedWorker.getId());
         updatedAssignedWorker
             .code(UPDATED_CODE);
-        AssignedWorkerDTO assignedWorkerDTO = assignedWorkerMapper.assignedWorkerToAssignedWorkerDTO(updatedAssignedWorker);
+        AssignedWorkerDTO assignedWorkerDTO = assignedWorkerMapper.toDto(updatedAssignedWorker);
 
         restAssignedWorkerMockMvc.perform(put("/api/assigned-workers")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -216,7 +216,7 @@ public class AssignedWorkerResourceIntTest {
         int databaseSizeBeforeUpdate = assignedWorkerRepository.findAll().size();
 
         // Create the AssignedWorker
-        AssignedWorkerDTO assignedWorkerDTO = assignedWorkerMapper.assignedWorkerToAssignedWorkerDTO(assignedWorker);
+        AssignedWorkerDTO assignedWorkerDTO = assignedWorkerMapper.toDto(assignedWorker);
 
         // If the entity doesn't have an ID, it will be created instead of just being updated
         restAssignedWorkerMockMvc.perform(put("/api/assigned-workers")
@@ -250,5 +250,37 @@ public class AssignedWorkerResourceIntTest {
     @Transactional
     public void equalsVerifier() throws Exception {
         TestUtil.equalsVerifier(AssignedWorker.class);
+        AssignedWorker assignedWorker1 = new AssignedWorker();
+        assignedWorker1.setId(1L);
+        AssignedWorker assignedWorker2 = new AssignedWorker();
+        assignedWorker2.setId(assignedWorker1.getId());
+        assertThat(assignedWorker1).isEqualTo(assignedWorker2);
+        assignedWorker2.setId(2L);
+        assertThat(assignedWorker1).isNotEqualTo(assignedWorker2);
+        assignedWorker1.setId(null);
+        assertThat(assignedWorker1).isNotEqualTo(assignedWorker2);
+    }
+
+    @Test
+    @Transactional
+    public void dtoEqualsVerifier() throws Exception {
+        TestUtil.equalsVerifier(AssignedWorkerDTO.class);
+        AssignedWorkerDTO assignedWorkerDTO1 = new AssignedWorkerDTO();
+        assignedWorkerDTO1.setId(1L);
+        AssignedWorkerDTO assignedWorkerDTO2 = new AssignedWorkerDTO();
+        assertThat(assignedWorkerDTO1).isNotEqualTo(assignedWorkerDTO2);
+        assignedWorkerDTO2.setId(assignedWorkerDTO1.getId());
+        assertThat(assignedWorkerDTO1).isEqualTo(assignedWorkerDTO2);
+        assignedWorkerDTO2.setId(2L);
+        assertThat(assignedWorkerDTO1).isNotEqualTo(assignedWorkerDTO2);
+        assignedWorkerDTO1.setId(null);
+        assertThat(assignedWorkerDTO1).isNotEqualTo(assignedWorkerDTO2);
+    }
+
+    @Test
+    @Transactional
+    public void testEntityFromId() {
+        assertThat(assignedWorkerMapper.fromId(42L).getId()).isEqualTo(42);
+        assertThat(assignedWorkerMapper.fromId(null)).isNull();
     }
 }

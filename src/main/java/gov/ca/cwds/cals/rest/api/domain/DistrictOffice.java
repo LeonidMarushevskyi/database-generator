@@ -75,23 +75,23 @@ public class DistrictOffice implements Serializable {
             return false;
         }
         DistrictOffice districtOffice = (DistrictOffice) o;
-        if (districtOffice.id == null || id == null) {
+        if (districtOffice.getId() == null || getId() == null) {
             return false;
         }
-        return Objects.equals(id, districtOffice.id);
+        return Objects.equals(getId(), districtOffice.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hashCode(getId());
     }
 
     @Override
     public String toString() {
         return "DistrictOffice{" +
-            "id=" + id +
-            ", facilityNumber='" + facilityNumber + "'" +
-            ", name='" + name + "'" +
-            '}';
+            "id=" + getId() +
+            ", facilityNumber='" + getFacilityNumber() + "'" +
+            ", name='" + getName() + "'" +
+            "}";
     }
 }

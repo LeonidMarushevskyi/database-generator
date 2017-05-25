@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Response } from '@angular/http';
 
+import { Observable } from 'rxjs/Rx';
 import { NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { EventManager, AlertService } from 'ng-jhipster';
 
@@ -18,6 +19,7 @@ export class PhoneDialogComponent implements OnInit {
     phone: Phone;
     authorities: any[];
     isSaving: boolean;
+
     constructor(
         public activeModal: NgbActiveModal,
         private alertService: AlertService,
@@ -30,35 +32,43 @@ export class PhoneDialogComponent implements OnInit {
         this.isSaving = false;
         this.authorities = ['ROLE_USER', 'ROLE_ADMIN'];
     }
-    clear () {
+    clear() {
         this.activeModal.dismiss('cancel');
     }
 
-    save () {
+    save() {
         this.isSaving = true;
         if (this.phone.id !== undefined) {
-            this.phoneService.update(this.phone)
-                .subscribe((res: Phone) =>
-                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
+            this.subscribeToSaveResponse(
+                this.phoneService.update(this.phone));
         } else {
-            this.phoneService.create(this.phone)
-                .subscribe((res: Phone) =>
-                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
+            this.subscribeToSaveResponse(
+                this.phoneService.create(this.phone));
         }
     }
 
-    private onSaveSuccess (result: Phone) {
+    private subscribeToSaveResponse(result: Observable<Phone>) {
+        result.subscribe((res: Phone) =>
+            this.onSaveSuccess(res), (res: Response) => this.onSaveError(res));
+    }
+
+    private onSaveSuccess(result: Phone) {
         this.eventManager.broadcast({ name: 'phoneListModification', content: 'OK'});
         this.isSaving = false;
         this.activeModal.dismiss(result);
     }
 
-    private onSaveError (error) {
+    private onSaveError(error) {
+        try {
+            error.json();
+        } catch (exception) {
+            error.message = error.text();
+        }
         this.isSaving = false;
         this.onError(error);
     }
 
-    private onError (error) {
+    private onError(error) {
         this.alertService.error(error.message, null, null);
     }
 }
@@ -72,13 +82,13 @@ export class PhonePopupComponent implements OnInit, OnDestroy {
     modalRef: NgbModalRef;
     routeSub: any;
 
-    constructor (
+    constructor(
         private route: ActivatedRoute,
         private phonePopupService: PhonePopupService
     ) {}
 
     ngOnInit() {
-        this.routeSub = this.route.params.subscribe(params => {
+        this.routeSub = this.route.params.subscribe((params) => {
             if ( params['id'] ) {
                 this.modalRef = this.phonePopupService
                     .open(PhoneDialogComponent, params['id']);
@@ -86,7 +96,6 @@ export class PhonePopupComponent implements OnInit, OnDestroy {
                 this.modalRef = this.phonePopupService
                     .open(PhoneDialogComponent);
             }
-
         });
     }
 

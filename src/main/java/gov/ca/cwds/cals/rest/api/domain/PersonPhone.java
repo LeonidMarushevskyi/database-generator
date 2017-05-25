@@ -88,21 +88,21 @@ public class PersonPhone implements Serializable {
             return false;
         }
         PersonPhone personPhone = (PersonPhone) o;
-        if (personPhone.id == null || id == null) {
+        if (personPhone.getId() == null || getId() == null) {
             return false;
         }
-        return Objects.equals(id, personPhone.id);
+        return Objects.equals(getId(), personPhone.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hashCode(getId());
     }
 
     @Override
     public String toString() {
         return "PersonPhone{" +
-            "id=" + id +
-            '}';
+            "id=" + getId() +
+            "}";
     }
 }

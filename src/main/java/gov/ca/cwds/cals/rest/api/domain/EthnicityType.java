@@ -29,7 +29,7 @@ public class EthnicityType implements Serializable {
     private String code;
 
     @Size(max = 20)
-    @Column(name = "type", length = 20)
+    @Column(name = "jhi_type", length = 20)
     private String type;
 
     public Long getId() {
@@ -75,23 +75,23 @@ public class EthnicityType implements Serializable {
             return false;
         }
         EthnicityType ethnicityType = (EthnicityType) o;
-        if (ethnicityType.id == null || id == null) {
+        if (ethnicityType.getId() == null || getId() == null) {
             return false;
         }
-        return Objects.equals(id, ethnicityType.id);
+        return Objects.equals(getId(), ethnicityType.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hashCode(getId());
     }
 
     @Override
     public String toString() {
         return "EthnicityType{" +
-            "id=" + id +
-            ", code='" + code + "'" +
-            ", type='" + type + "'" +
-            '}';
+            "id=" + getId() +
+            ", code='" + getCode() + "'" +
+            ", type='" + getType() + "'" +
+            "}";
     }
 }

@@ -1,5 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs/Rx';
+import { EventManager  } from 'ng-jhipster';
+
 import { RaceType } from './race-type.model';
 import { RaceTypeService } from './race-type.service';
 
@@ -10,22 +13,25 @@ import { RaceTypeService } from './race-type.service';
 export class RaceTypeDetailComponent implements OnInit, OnDestroy {
 
     raceType: RaceType;
-    private subscription: any;
+    private subscription: Subscription;
+    private eventSubscriber: Subscription;
 
     constructor(
+        private eventManager: EventManager,
         private raceTypeService: RaceTypeService,
         private route: ActivatedRoute
     ) {
     }
 
     ngOnInit() {
-        this.subscription = this.route.params.subscribe(params => {
+        this.subscription = this.route.params.subscribe((params) => {
             this.load(params['id']);
         });
+        this.registerChangeInRaceTypes();
     }
 
-    load (id) {
-        this.raceTypeService.find(id).subscribe(raceType => {
+    load(id) {
+        this.raceTypeService.find(id).subscribe((raceType) => {
             this.raceType = raceType;
         });
     }
@@ -35,6 +41,13 @@ export class RaceTypeDetailComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.subscription.unsubscribe();
+        this.eventManager.destroy(this.eventSubscriber);
     }
 
+    registerChangeInRaceTypes() {
+        this.eventSubscriber = this.eventManager.subscribe(
+            'raceTypeListModification',
+            (response) => this.load(this.raceType.id)
+        );
+    }
 }

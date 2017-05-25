@@ -249,5 +249,14 @@ public class EthnicityTypeResourceIntTest {
     @Transactional
     public void equalsVerifier() throws Exception {
         TestUtil.equalsVerifier(EthnicityType.class);
+        EthnicityType ethnicityType1 = new EthnicityType();
+        ethnicityType1.setId(1L);
+        EthnicityType ethnicityType2 = new EthnicityType();
+        ethnicityType2.setId(ethnicityType1.getId());
+        assertThat(ethnicityType1).isEqualTo(ethnicityType2);
+        ethnicityType2.setId(2L);
+        assertThat(ethnicityType1).isNotEqualTo(ethnicityType2);
+        ethnicityType1.setId(null);
+        assertThat(ethnicityType1).isNotEqualTo(ethnicityType2);
     }
 }

@@ -1,5 +1,6 @@
 package gov.ca.cwds.cals.rest.api.service.dto;
 
+
 import java.time.LocalDate;
 import javax.validation.constraints.*;
 import java.io.Serializable;
@@ -37,6 +38,7 @@ public class PersonDTO implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
+
     public String getFirstName() {
         return firstName;
     }
@@ -44,6 +46,7 @@ public class PersonDTO implements Serializable {
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
+
     public String getLastName() {
         return lastName;
     }
@@ -51,6 +54,7 @@ public class PersonDTO implements Serializable {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
+
     public String getGender() {
         return gender;
     }
@@ -58,6 +62,7 @@ public class PersonDTO implements Serializable {
     public void setGender(String gender) {
         this.gender = gender;
     }
+
     public Integer getAge() {
         return age;
     }
@@ -65,6 +70,7 @@ public class PersonDTO implements Serializable {
     public void setAge(Integer age) {
         this.age = age;
     }
+
     public LocalDate getDateOfBirth() {
         return dateOfBirth;
     }
@@ -72,6 +78,7 @@ public class PersonDTO implements Serializable {
     public void setDateOfBirth(LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
+
     public String getSsn() {
         return ssn;
     }
@@ -98,27 +105,27 @@ public class PersonDTO implements Serializable {
         }
 
         PersonDTO personDTO = (PersonDTO) o;
-
-        if ( ! Objects.equals(id, personDTO.id)) { return false; }
-
-        return true;
+        if(personDTO.getId() == null || getId() == null) {
+            return false;
+        }
+        return Objects.equals(getId(), personDTO.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hashCode(getId());
     }
 
     @Override
     public String toString() {
         return "PersonDTO{" +
-            "id=" + id +
-            ", firstName='" + firstName + "'" +
-            ", lastName='" + lastName + "'" +
-            ", gender='" + gender + "'" +
-            ", age='" + age + "'" +
-            ", dateOfBirth='" + dateOfBirth + "'" +
-            ", ssn='" + ssn + "'" +
-            '}';
+            "id=" + getId() +
+            ", firstName='" + getFirstName() + "'" +
+            ", lastName='" + getLastName() + "'" +
+            ", gender='" + getGender() + "'" +
+            ", age='" + getAge() + "'" +
+            ", dateOfBirth='" + getDateOfBirth() + "'" +
+            ", ssn='" + getSsn() + "'" +
+            "}";
     }
 }

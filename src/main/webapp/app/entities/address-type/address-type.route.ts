@@ -11,51 +11,55 @@ import { AddressTypeDeletePopupComponent } from './address-type-delete-dialog.co
 
 import { Principal } from '../../shared';
 
-
 export const addressTypeRoute: Routes = [
-  {
-    path: 'address-type',
-    component: AddressTypeComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'AddressTypes'
+    {
+        path: 'address-type',
+        component: AddressTypeComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'AddressTypes'
+        },
+        canActivate: [UserRouteAccessService]
+    }, {
+        path: 'address-type/:id',
+        component: AddressTypeDetailComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'AddressTypes'
+        },
+        canActivate: [UserRouteAccessService]
     }
-  }, {
-    path: 'address-type/:id',
-    component: AddressTypeDetailComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'AddressTypes'
-    }
-  }
 ];
 
 export const addressTypePopupRoute: Routes = [
-  {
-    path: 'address-type-new',
-    component: AddressTypePopupComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'AddressTypes'
+    {
+        path: 'address-type-new',
+        component: AddressTypePopupComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'AddressTypes'
+        },
+        canActivate: [UserRouteAccessService],
+        outlet: 'popup'
     },
-    outlet: 'popup'
-  },
-  {
-    path: 'address-type/:id/edit',
-    component: AddressTypePopupComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'AddressTypes'
+    {
+        path: 'address-type/:id/edit',
+        component: AddressTypePopupComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'AddressTypes'
+        },
+        canActivate: [UserRouteAccessService],
+        outlet: 'popup'
     },
-    outlet: 'popup'
-  },
-  {
-    path: 'address-type/:id/delete',
-    component: AddressTypeDeletePopupComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'AddressTypes'
-    },
-    outlet: 'popup'
-  }
+    {
+        path: 'address-type/:id/delete',
+        component: AddressTypeDeletePopupComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'AddressTypes'
+        },
+        canActivate: [UserRouteAccessService],
+        outlet: 'popup'
+    }
 ];

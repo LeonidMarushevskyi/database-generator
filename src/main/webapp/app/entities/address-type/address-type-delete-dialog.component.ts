@@ -23,12 +23,12 @@ export class AddressTypeDeleteDialogComponent {
     ) {
     }
 
-    clear () {
+    clear() {
         this.activeModal.dismiss('cancel');
     }
 
-    confirmDelete (id: number) {
-        this.addressTypeService.delete(id).subscribe(response => {
+    confirmDelete(id: number) {
+        this.addressTypeService.delete(id).subscribe((response) => {
             this.eventManager.broadcast({
                 name: 'addressTypeListModification',
                 content: 'Deleted an addressType'
@@ -47,13 +47,13 @@ export class AddressTypeDeletePopupComponent implements OnInit, OnDestroy {
     modalRef: NgbModalRef;
     routeSub: any;
 
-    constructor (
+    constructor(
         private route: ActivatedRoute,
         private addressTypePopupService: AddressTypePopupService
     ) {}
 
     ngOnInit() {
-        this.routeSub = this.route.params.subscribe(params => {
+        this.routeSub = this.route.params.subscribe((params) => {
             this.modalRef = this.addressTypePopupService
                 .open(AddressTypeDeleteDialogComponent, params['id']);
         });

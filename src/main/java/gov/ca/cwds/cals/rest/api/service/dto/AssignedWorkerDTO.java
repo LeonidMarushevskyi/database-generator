@@ -27,6 +27,7 @@ public class AssignedWorkerDTO implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
+
     public String getCode() {
         return code;
     }
@@ -53,22 +54,22 @@ public class AssignedWorkerDTO implements Serializable {
         }
 
         AssignedWorkerDTO assignedWorkerDTO = (AssignedWorkerDTO) o;
-
-        if ( ! Objects.equals(id, assignedWorkerDTO.id)) { return false; }
-
-        return true;
+        if(assignedWorkerDTO.getId() == null || getId() == null) {
+            return false;
+        }
+        return Objects.equals(getId(), assignedWorkerDTO.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hashCode(getId());
     }
 
     @Override
     public String toString() {
         return "AssignedWorkerDTO{" +
-            "id=" + id +
-            ", code='" + code + "'" +
-            '}';
+            "id=" + getId() +
+            ", code='" + getCode() + "'" +
+            "}";
     }
 }

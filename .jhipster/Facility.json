@@ -20,6 +20,18 @@
             "otherEntityRelationshipName": "facility"
         },
         {
+            "relationshipType": "one-to-many",
+            "relationshipName": "complaint",
+            "otherEntityName": "complaint",
+            "otherEntityRelationshipName": "facility"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "inspection",
+            "otherEntityName": "inspection",
+            "otherEntityRelationshipName": "facility"
+        },
+        {
             "relationshipType": "many-to-one",
             "relationshipName": "assignedWorker",
             "otherEntityName": "assignedWorker",

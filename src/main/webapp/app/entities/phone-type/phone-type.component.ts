@@ -1,12 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Response } from '@angular/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Rx';
 import { EventManager, ParseLinks, PaginationUtil, AlertService } from 'ng-jhipster';
 
 import { PhoneType } from './phone-type.model';
 import { PhoneTypeService } from './phone-type.service';
-import { ITEMS_PER_PAGE, Principal } from '../../shared';
+import { ITEMS_PER_PAGE, Principal, ResponseWrapper } from '../../shared';
 import { PaginationConfig } from '../../blocks/config/uib-pagination.config';
 
 @Component({
@@ -28,10 +27,10 @@ phoneTypes: PhoneType[];
 
     loadAll() {
         this.phoneTypeService.query().subscribe(
-            (res: Response) => {
-                this.phoneTypes = res.json();
+            (res: ResponseWrapper) => {
+                this.phoneTypes = res.json;
             },
-            (res: Response) => this.onError(res.json())
+            (res: ResponseWrapper) => this.onError(res.json)
         );
     }
     ngOnInit() {
@@ -46,18 +45,14 @@ phoneTypes: PhoneType[];
         this.eventManager.destroy(this.eventSubscriber);
     }
 
-    trackId (index: number, item: PhoneType) {
+    trackId(index: number, item: PhoneType) {
         return item.id;
     }
-
-
-
     registerChangeInPhoneTypes() {
         this.eventSubscriber = this.eventManager.subscribe('phoneTypeListModification', (response) => this.loadAll());
     }
 
-
-    private onError (error) {
+    private onError(error) {
         this.alertService.error(error.message, null, null);
     }
 }

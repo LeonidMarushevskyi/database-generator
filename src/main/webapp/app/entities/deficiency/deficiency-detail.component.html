@@ -1,0 +1,51 @@
+
+<div *ngIf="deficiency">
+    <h2><span>Deficiency</span> {{deficiency.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span>Deficiency Type</span></dt>
+        <dd>
+            <span>{{deficiency.deficiencyType}}</span>
+        </dd>
+        <dt><span>Deficiency Type Description</span></dt>
+        <dd>
+            <span>{{deficiency.deficiencyTypeDescription}}</span>
+        </dd>
+        <dt><span>Poc Date</span></dt>
+        <dd>
+            <span>{{deficiency.pocDate | date:'medium'}}</span>
+        </dd>
+        <dt><span>Fac Section Violated</span></dt>
+        <dd>
+            <span>{{deficiency.facSectionViolated}}</span>
+        </dd>
+        <dt><span>Deficiency</span></dt>
+        <dd>
+            <span>{{deficiency.deficiency}}</span>
+        </dd>
+        <dt><span>Correction Plan</span></dt>
+        <dd>
+            <span>{{deficiency.correctionPlan}}</span>
+        </dd>
+        <dt><span>Inspection</span></dt>
+        <dd>
+            <div *ngIf="deficiency.inspectionId">
+                <a [routerLink]="['/inspection', deficiency.inspectionId]">{{deficiency.inspectionId}}</a>
+            </div>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            (click)="previousState()"
+            class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span> Back</span>
+    </button>
+
+    <button type="button"
+            [routerLink]="['/', { outlets: { popup: 'deficiency/'+ deficiency.id + '/edit'} }]"
+            replaceUrl="true"
+            class="btn btn-primary">
+        <span class="fa fa-pencil"></span>&nbsp;<span> Edit</span>
+    </button>
+</div>

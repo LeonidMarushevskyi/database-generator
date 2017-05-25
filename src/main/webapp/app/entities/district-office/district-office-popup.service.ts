@@ -6,21 +6,21 @@ import { DistrictOfficeService } from './district-office.service';
 @Injectable()
 export class DistrictOfficePopupService {
     private isOpen = false;
-    constructor (
+    constructor(
         private modalService: NgbModal,
         private router: Router,
         private districtOfficeService: DistrictOfficeService
 
     ) {}
 
-    open (component: Component, id?: number | any): NgbModalRef {
+    open(component: Component, id?: number | any): NgbModalRef {
         if (this.isOpen) {
             return;
         }
         this.isOpen = true;
 
         if (id) {
-            this.districtOfficeService.find(id).subscribe(districtOffice => {
+            this.districtOfficeService.find(id).subscribe((districtOffice) => {
                 this.districtOfficeModalRef(component, districtOffice);
             });
         } else {
@@ -29,9 +29,9 @@ export class DistrictOfficePopupService {
     }
 
     districtOfficeModalRef(component: Component, districtOffice: DistrictOffice): NgbModalRef {
-        let modalRef = this.modalService.open(component, { size: 'lg', backdrop: 'static'});
+        const modalRef = this.modalService.open(component, { size: 'lg', backdrop: 'static'});
         modalRef.componentInstance.districtOffice = districtOffice;
-        modalRef.result.then(result => {
+        modalRef.result.then((result) => {
             this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true });
             this.isOpen = false;
         }, (reason) => {

@@ -1,5 +1,6 @@
 package gov.ca.cwds.cals.rest.api.service.dto;
 
+
 import java.time.LocalDate;
 import javax.validation.constraints.*;
 import java.io.Serializable;
@@ -32,6 +33,7 @@ public class FacilityChildDTO implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
+
     public LocalDate getDateOfPlacement() {
         return dateOfPlacement;
     }
@@ -39,6 +41,7 @@ public class FacilityChildDTO implements Serializable {
     public void setDateOfPlacement(LocalDate dateOfPlacement) {
         this.dateOfPlacement = dateOfPlacement;
     }
+
     public String getAssignedWorker() {
         return assignedWorker;
     }
@@ -46,6 +49,7 @@ public class FacilityChildDTO implements Serializable {
     public void setAssignedWorker(String assignedWorker) {
         this.assignedWorker = assignedWorker;
     }
+
     public String getCountyOfOrigin() {
         return countyOfOrigin;
     }
@@ -80,24 +84,24 @@ public class FacilityChildDTO implements Serializable {
         }
 
         FacilityChildDTO facilityChildDTO = (FacilityChildDTO) o;
-
-        if ( ! Objects.equals(id, facilityChildDTO.id)) { return false; }
-
-        return true;
+        if(facilityChildDTO.getId() == null || getId() == null) {
+            return false;
+        }
+        return Objects.equals(getId(), facilityChildDTO.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hashCode(getId());
     }
 
     @Override
     public String toString() {
         return "FacilityChildDTO{" +
-            "id=" + id +
-            ", dateOfPlacement='" + dateOfPlacement + "'" +
-            ", assignedWorker='" + assignedWorker + "'" +
-            ", countyOfOrigin='" + countyOfOrigin + "'" +
-            '}';
+            "id=" + getId() +
+            ", dateOfPlacement='" + getDateOfPlacement() + "'" +
+            ", assignedWorker='" + getAssignedWorker() + "'" +
+            ", countyOfOrigin='" + getCountyOfOrigin() + "'" +
+            "}";
     }
 }

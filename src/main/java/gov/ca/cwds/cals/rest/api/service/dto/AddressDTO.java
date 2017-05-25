@@ -45,6 +45,7 @@ public class AddressDTO implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
+
     public String getStreetAddress() {
         return streetAddress;
     }
@@ -52,6 +53,7 @@ public class AddressDTO implements Serializable {
     public void setStreetAddress(String streetAddress) {
         this.streetAddress = streetAddress;
     }
+
     public String getCity() {
         return city;
     }
@@ -59,6 +61,7 @@ public class AddressDTO implements Serializable {
     public void setCity(String city) {
         this.city = city;
     }
+
     public String getState() {
         return state;
     }
@@ -66,6 +69,7 @@ public class AddressDTO implements Serializable {
     public void setState(String state) {
         this.state = state;
     }
+
     public String getZipCode() {
         return zipCode;
     }
@@ -73,6 +77,7 @@ public class AddressDTO implements Serializable {
     public void setZipCode(String zipCode) {
         this.zipCode = zipCode;
     }
+
     public String getZipSuffixCode() {
         return zipSuffixCode;
     }
@@ -80,6 +85,7 @@ public class AddressDTO implements Serializable {
     public void setZipSuffixCode(String zipSuffixCode) {
         this.zipSuffixCode = zipSuffixCode;
     }
+
     public BigDecimal getLongitude() {
         return longitude;
     }
@@ -87,6 +93,7 @@ public class AddressDTO implements Serializable {
     public void setLongitude(BigDecimal longitude) {
         this.longitude = longitude;
     }
+
     public BigDecimal getLattitude() {
         return lattitude;
     }
@@ -94,7 +101,8 @@ public class AddressDTO implements Serializable {
     public void setLattitude(BigDecimal lattitude) {
         this.lattitude = lattitude;
     }
-    public Boolean getDeliverable() {
+
+    public Boolean isDeliverable() {
         return deliverable;
     }
 
@@ -112,29 +120,29 @@ public class AddressDTO implements Serializable {
         }
 
         AddressDTO addressDTO = (AddressDTO) o;
-
-        if ( ! Objects.equals(id, addressDTO.id)) { return false; }
-
-        return true;
+        if(addressDTO.getId() == null || getId() == null) {
+            return false;
+        }
+        return Objects.equals(getId(), addressDTO.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hashCode(getId());
     }
 
     @Override
     public String toString() {
         return "AddressDTO{" +
-            "id=" + id +
-            ", streetAddress='" + streetAddress + "'" +
-            ", city='" + city + "'" +
-            ", state='" + state + "'" +
-            ", zipCode='" + zipCode + "'" +
-            ", zipSuffixCode='" + zipSuffixCode + "'" +
-            ", longitude='" + longitude + "'" +
-            ", lattitude='" + lattitude + "'" +
-            ", deliverable='" + deliverable + "'" +
-            '}';
+            "id=" + getId() +
+            ", streetAddress='" + getStreetAddress() + "'" +
+            ", city='" + getCity() + "'" +
+            ", state='" + getState() + "'" +
+            ", zipCode='" + getZipCode() + "'" +
+            ", zipSuffixCode='" + getZipSuffixCode() + "'" +
+            ", longitude='" + getLongitude() + "'" +
+            ", lattitude='" + getLattitude() + "'" +
+            ", deliverable='" + isDeliverable() + "'" +
+            "}";
     }
 }

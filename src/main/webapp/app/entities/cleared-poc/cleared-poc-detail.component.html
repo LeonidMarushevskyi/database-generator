@@ -1,0 +1,47 @@
+
+<div *ngIf="clearedPOC">
+    <h2><span>Cleared POC</span> {{clearedPOC.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span>Pocduedate</span></dt>
+        <dd>
+            <span>{{clearedPOC.pocduedate | date:'medium'}}</span>
+        </dd>
+        <dt><span>Pocsectionviolated</span></dt>
+        <dd>
+            <span>{{clearedPOC.pocsectionviolated}}</span>
+        </dd>
+        <dt><span>Poccorrectionplan</span></dt>
+        <dd>
+            <span>{{clearedPOC.poccorrectionplan}}</span>
+        </dd>
+        <dt><span>Pocdatecleared</span></dt>
+        <dd>
+            <span>{{clearedPOC.pocdatecleared | date:'medium'}}</span>
+        </dd>
+        <dt><span>Poccomments</span></dt>
+        <dd>
+            <span>{{clearedPOC.poccomments}}</span>
+        </dd>
+        <dt><span>Inspection</span></dt>
+        <dd>
+            <div *ngIf="clearedPOC.inspectionId">
+                <a [routerLink]="['/inspection', clearedPOC.inspectionId]">{{clearedPOC.inspectionId}}</a>
+            </div>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            (click)="previousState()"
+            class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span> Back</span>
+    </button>
+
+    <button type="button"
+            [routerLink]="['/', { outlets: { popup: 'cleared-poc/'+ clearedPOC.id + '/edit'} }]"
+            replaceUrl="true"
+            class="btn btn-primary">
+        <span class="fa fa-pencil"></span>&nbsp;<span> Edit</span>
+    </button>
+</div>

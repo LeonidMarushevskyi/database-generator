@@ -4,21 +4,14 @@ import gov.ca.cwds.cals.rest.api.domain.*;
 import gov.ca.cwds.cals.rest.api.service.dto.CountyDTO;
 
 import org.mapstruct.*;
-import java.util.List;
 
 /**
  * Mapper for the entity County and its DTO CountyDTO.
  */
 @Mapper(componentModel = "spring", uses = {})
-public interface CountyMapper {
-
-    CountyDTO countyToCountyDTO(County county);
-
-    List<CountyDTO> countiesToCountyDTOs(List<County> counties);
-
-    County countyDTOToCounty(CountyDTO countyDTO);
-
-    List<County> countyDTOsToCounties(List<CountyDTO> countyDTOs);
+public interface CountyMapper extends EntityMapper <CountyDTO, County> {
+    
+    
     /**
      * generating the fromId for all mappers if the databaseType is sql, as the class has relationship to it might need it, instead of
      * creating a new attribute to know if the entity has any relationship from some other entity
@@ -27,7 +20,7 @@ public interface CountyMapper {
      * @return the entity instance
      */
      
-    default County countyFromId(Long id) {
+    default County fromId(Long id) {
         if (id == null) {
             return null;
         }
@@ -35,6 +28,4 @@ public interface CountyMapper {
         county.setId(id);
         return county;
     }
-    
-
 }

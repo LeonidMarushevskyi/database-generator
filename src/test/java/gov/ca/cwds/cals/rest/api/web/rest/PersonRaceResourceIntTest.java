@@ -93,7 +93,7 @@ public class PersonRaceResourceIntTest {
         int databaseSizeBeforeCreate = personRaceRepository.findAll().size();
 
         // Create the PersonRace
-        PersonRaceDTO personRaceDTO = personRaceMapper.personRaceToPersonRaceDTO(personRace);
+        PersonRaceDTO personRaceDTO = personRaceMapper.toDto(personRace);
         restPersonRaceMockMvc.perform(post("/api/person-races")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(personRaceDTO)))
@@ -112,7 +112,7 @@ public class PersonRaceResourceIntTest {
 
         // Create the PersonRace with an existing ID
         personRace.setId(1L);
-        PersonRaceDTO personRaceDTO = personRaceMapper.personRaceToPersonRaceDTO(personRace);
+        PersonRaceDTO personRaceDTO = personRaceMapper.toDto(personRace);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restPersonRaceMockMvc.perform(post("/api/person-races")
@@ -168,7 +168,7 @@ public class PersonRaceResourceIntTest {
 
         // Update the personRace
         PersonRace updatedPersonRace = personRaceRepository.findOne(personRace.getId());
-        PersonRaceDTO personRaceDTO = personRaceMapper.personRaceToPersonRaceDTO(updatedPersonRace);
+        PersonRaceDTO personRaceDTO = personRaceMapper.toDto(updatedPersonRace);
 
         restPersonRaceMockMvc.perform(put("/api/person-races")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -187,7 +187,7 @@ public class PersonRaceResourceIntTest {
         int databaseSizeBeforeUpdate = personRaceRepository.findAll().size();
 
         // Create the PersonRace
-        PersonRaceDTO personRaceDTO = personRaceMapper.personRaceToPersonRaceDTO(personRace);
+        PersonRaceDTO personRaceDTO = personRaceMapper.toDto(personRace);
 
         // If the entity doesn't have an ID, it will be created instead of just being updated
         restPersonRaceMockMvc.perform(put("/api/person-races")
@@ -221,5 +221,37 @@ public class PersonRaceResourceIntTest {
     @Transactional
     public void equalsVerifier() throws Exception {
         TestUtil.equalsVerifier(PersonRace.class);
+        PersonRace personRace1 = new PersonRace();
+        personRace1.setId(1L);
+        PersonRace personRace2 = new PersonRace();
+        personRace2.setId(personRace1.getId());
+        assertThat(personRace1).isEqualTo(personRace2);
+        personRace2.setId(2L);
+        assertThat(personRace1).isNotEqualTo(personRace2);
+        personRace1.setId(null);
+        assertThat(personRace1).isNotEqualTo(personRace2);
+    }
+
+    @Test
+    @Transactional
+    public void dtoEqualsVerifier() throws Exception {
+        TestUtil.equalsVerifier(PersonRaceDTO.class);
+        PersonRaceDTO personRaceDTO1 = new PersonRaceDTO();
+        personRaceDTO1.setId(1L);
+        PersonRaceDTO personRaceDTO2 = new PersonRaceDTO();
+        assertThat(personRaceDTO1).isNotEqualTo(personRaceDTO2);
+        personRaceDTO2.setId(personRaceDTO1.getId());
+        assertThat(personRaceDTO1).isEqualTo(personRaceDTO2);
+        personRaceDTO2.setId(2L);
+        assertThat(personRaceDTO1).isNotEqualTo(personRaceDTO2);
+        personRaceDTO1.setId(null);
+        assertThat(personRaceDTO1).isNotEqualTo(personRaceDTO2);
+    }
+
+    @Test
+    @Transactional
+    public void testEntityFromId() {
+        assertThat(personRaceMapper.fromId(42L).getId()).isEqualTo(42);
+        assertThat(personRaceMapper.fromId(null)).isNull();
     }
 }

@@ -16,10 +16,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.LinkedList;
+
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * REST controller for managing Phone.
@@ -55,9 +54,9 @@ public class PhoneResource {
         if (phoneDTO.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new phone cannot already have an ID")).body(null);
         }
-        Phone phone = phoneMapper.phoneDTOToPhone(phoneDTO);
+        Phone phone = phoneMapper.toEntity(phoneDTO);
         phone = phoneRepository.save(phone);
-        PhoneDTO result = phoneMapper.phoneToPhoneDTO(phone);
+        PhoneDTO result = phoneMapper.toDto(phone);
         return ResponseEntity.created(new URI("/api/phones/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -79,9 +78,9 @@ public class PhoneResource {
         if (phoneDTO.getId() == null) {
             return createPhone(phoneDTO);
         }
-        Phone phone = phoneMapper.phoneDTOToPhone(phoneDTO);
+        Phone phone = phoneMapper.toEntity(phoneDTO);
         phone = phoneRepository.save(phone);
-        PhoneDTO result = phoneMapper.phoneToPhoneDTO(phone);
+        PhoneDTO result = phoneMapper.toDto(phone);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, phoneDTO.getId().toString()))
             .body(result);
@@ -97,7 +96,7 @@ public class PhoneResource {
     public List<PhoneDTO> getAllPhones() {
         log.debug("REST request to get all Phones");
         List<Phone> phones = phoneRepository.findAll();
-        return phoneMapper.phonesToPhoneDTOs(phones);
+        return phoneMapper.toDto(phones);
     }
 
     /**
@@ -111,7 +110,7 @@ public class PhoneResource {
     public ResponseEntity<PhoneDTO> getPhone(@PathVariable Long id) {
         log.debug("REST request to get Phone : {}", id);
         Phone phone = phoneRepository.findOne(id);
-        PhoneDTO phoneDTO = phoneMapper.phoneToPhoneDTO(phone);
+        PhoneDTO phoneDTO = phoneMapper.toDto(phone);
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(phoneDTO));
     }
 

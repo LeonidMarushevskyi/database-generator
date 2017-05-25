@@ -88,21 +88,21 @@ public class FacilityAddress implements Serializable {
             return false;
         }
         FacilityAddress facilityAddress = (FacilityAddress) o;
-        if (facilityAddress.id == null || id == null) {
+        if (facilityAddress.getId() == null || getId() == null) {
             return false;
         }
-        return Objects.equals(id, facilityAddress.id);
+        return Objects.equals(getId(), facilityAddress.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hashCode(getId());
     }
 
     @Override
     public String toString() {
         return "FacilityAddress{" +
-            "id=" + id +
-            '}';
+            "id=" + getId() +
+            "}";
     }
 }

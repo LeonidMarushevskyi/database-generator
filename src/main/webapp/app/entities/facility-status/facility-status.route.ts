@@ -11,51 +11,55 @@ import { FacilityStatusDeletePopupComponent } from './facility-status-delete-dia
 
 import { Principal } from '../../shared';
 
-
 export const facilityStatusRoute: Routes = [
-  {
-    path: 'facility-status',
-    component: FacilityStatusComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'FacilityStatuses'
+    {
+        path: 'facility-status',
+        component: FacilityStatusComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'FacilityStatuses'
+        },
+        canActivate: [UserRouteAccessService]
+    }, {
+        path: 'facility-status/:id',
+        component: FacilityStatusDetailComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'FacilityStatuses'
+        },
+        canActivate: [UserRouteAccessService]
     }
-  }, {
-    path: 'facility-status/:id',
-    component: FacilityStatusDetailComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'FacilityStatuses'
-    }
-  }
 ];
 
 export const facilityStatusPopupRoute: Routes = [
-  {
-    path: 'facility-status-new',
-    component: FacilityStatusPopupComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'FacilityStatuses'
+    {
+        path: 'facility-status-new',
+        component: FacilityStatusPopupComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'FacilityStatuses'
+        },
+        canActivate: [UserRouteAccessService],
+        outlet: 'popup'
     },
-    outlet: 'popup'
-  },
-  {
-    path: 'facility-status/:id/edit',
-    component: FacilityStatusPopupComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'FacilityStatuses'
+    {
+        path: 'facility-status/:id/edit',
+        component: FacilityStatusPopupComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'FacilityStatuses'
+        },
+        canActivate: [UserRouteAccessService],
+        outlet: 'popup'
     },
-    outlet: 'popup'
-  },
-  {
-    path: 'facility-status/:id/delete',
-    component: FacilityStatusDeletePopupComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'FacilityStatuses'
-    },
-    outlet: 'popup'
-  }
+    {
+        path: 'facility-status/:id/delete',
+        component: FacilityStatusDeletePopupComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'FacilityStatuses'
+        },
+        canActivate: [UserRouteAccessService],
+        outlet: 'popup'
+    }
 ];

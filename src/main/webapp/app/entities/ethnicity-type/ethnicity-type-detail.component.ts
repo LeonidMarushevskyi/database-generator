@@ -1,5 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs/Rx';
+import { EventManager  } from 'ng-jhipster';
+
 import { EthnicityType } from './ethnicity-type.model';
 import { EthnicityTypeService } from './ethnicity-type.service';
 
@@ -10,22 +13,25 @@ import { EthnicityTypeService } from './ethnicity-type.service';
 export class EthnicityTypeDetailComponent implements OnInit, OnDestroy {
 
     ethnicityType: EthnicityType;
-    private subscription: any;
+    private subscription: Subscription;
+    private eventSubscriber: Subscription;
 
     constructor(
+        private eventManager: EventManager,
         private ethnicityTypeService: EthnicityTypeService,
         private route: ActivatedRoute
     ) {
     }
 
     ngOnInit() {
-        this.subscription = this.route.params.subscribe(params => {
+        this.subscription = this.route.params.subscribe((params) => {
             this.load(params['id']);
         });
+        this.registerChangeInEthnicityTypes();
     }
 
-    load (id) {
-        this.ethnicityTypeService.find(id).subscribe(ethnicityType => {
+    load(id) {
+        this.ethnicityTypeService.find(id).subscribe((ethnicityType) => {
             this.ethnicityType = ethnicityType;
         });
     }
@@ -35,6 +41,13 @@ export class EthnicityTypeDetailComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.subscription.unsubscribe();
+        this.eventManager.destroy(this.eventSubscriber);
     }
 
+    registerChangeInEthnicityTypes() {
+        this.eventSubscriber = this.eventManager.subscribe(
+            'ethnicityTypeListModification',
+            (response) => this.load(this.ethnicityType.id)
+        );
+    }
 }

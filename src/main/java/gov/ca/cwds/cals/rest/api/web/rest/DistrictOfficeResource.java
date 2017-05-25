@@ -16,10 +16,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.LinkedList;
+
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * REST controller for managing DistrictOffice.
@@ -55,9 +54,9 @@ public class DistrictOfficeResource {
         if (districtOfficeDTO.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new districtOffice cannot already have an ID")).body(null);
         }
-        DistrictOffice districtOffice = districtOfficeMapper.districtOfficeDTOToDistrictOffice(districtOfficeDTO);
+        DistrictOffice districtOffice = districtOfficeMapper.toEntity(districtOfficeDTO);
         districtOffice = districtOfficeRepository.save(districtOffice);
-        DistrictOfficeDTO result = districtOfficeMapper.districtOfficeToDistrictOfficeDTO(districtOffice);
+        DistrictOfficeDTO result = districtOfficeMapper.toDto(districtOffice);
         return ResponseEntity.created(new URI("/api/district-offices/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -79,9 +78,9 @@ public class DistrictOfficeResource {
         if (districtOfficeDTO.getId() == null) {
             return createDistrictOffice(districtOfficeDTO);
         }
-        DistrictOffice districtOffice = districtOfficeMapper.districtOfficeDTOToDistrictOffice(districtOfficeDTO);
+        DistrictOffice districtOffice = districtOfficeMapper.toEntity(districtOfficeDTO);
         districtOffice = districtOfficeRepository.save(districtOffice);
-        DistrictOfficeDTO result = districtOfficeMapper.districtOfficeToDistrictOfficeDTO(districtOffice);
+        DistrictOfficeDTO result = districtOfficeMapper.toDto(districtOffice);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, districtOfficeDTO.getId().toString()))
             .body(result);
@@ -97,7 +96,7 @@ public class DistrictOfficeResource {
     public List<DistrictOfficeDTO> getAllDistrictOffices() {
         log.debug("REST request to get all DistrictOffices");
         List<DistrictOffice> districtOffices = districtOfficeRepository.findAll();
-        return districtOfficeMapper.districtOfficesToDistrictOfficeDTOs(districtOffices);
+        return districtOfficeMapper.toDto(districtOffices);
     }
 
     /**
@@ -111,7 +110,7 @@ public class DistrictOfficeResource {
     public ResponseEntity<DistrictOfficeDTO> getDistrictOffice(@PathVariable Long id) {
         log.debug("REST request to get DistrictOffice : {}", id);
         DistrictOffice districtOffice = districtOfficeRepository.findOne(id);
-        DistrictOfficeDTO districtOfficeDTO = districtOfficeMapper.districtOfficeToDistrictOfficeDTO(districtOffice);
+        DistrictOfficeDTO districtOfficeDTO = districtOfficeMapper.toDto(districtOffice);
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(districtOfficeDTO));
     }
 

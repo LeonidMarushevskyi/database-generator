@@ -15,6 +15,8 @@ export class Facility {
         public addressId?: number,
         public phoneId?: number,
         public childId?: number,
+        public complaintId?: number,
+        public inspectionId?: number,
         public assignedWorkerId?: number,
         public districtOfficeId?: number,
         public typeId?: number,

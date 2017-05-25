@@ -16,10 +16,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.LinkedList;
+
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * REST controller for managing FacilityType.
@@ -55,9 +54,9 @@ public class FacilityTypeResource {
         if (facilityTypeDTO.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new facilityType cannot already have an ID")).body(null);
         }
-        FacilityType facilityType = facilityTypeMapper.facilityTypeDTOToFacilityType(facilityTypeDTO);
+        FacilityType facilityType = facilityTypeMapper.toEntity(facilityTypeDTO);
         facilityType = facilityTypeRepository.save(facilityType);
-        FacilityTypeDTO result = facilityTypeMapper.facilityTypeToFacilityTypeDTO(facilityType);
+        FacilityTypeDTO result = facilityTypeMapper.toDto(facilityType);
         return ResponseEntity.created(new URI("/api/facility-types/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -79,9 +78,9 @@ public class FacilityTypeResource {
         if (facilityTypeDTO.getId() == null) {
             return createFacilityType(facilityTypeDTO);
         }
-        FacilityType facilityType = facilityTypeMapper.facilityTypeDTOToFacilityType(facilityTypeDTO);
+        FacilityType facilityType = facilityTypeMapper.toEntity(facilityTypeDTO);
         facilityType = facilityTypeRepository.save(facilityType);
-        FacilityTypeDTO result = facilityTypeMapper.facilityTypeToFacilityTypeDTO(facilityType);
+        FacilityTypeDTO result = facilityTypeMapper.toDto(facilityType);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, facilityTypeDTO.getId().toString()))
             .body(result);
@@ -97,7 +96,7 @@ public class FacilityTypeResource {
     public List<FacilityTypeDTO> getAllFacilityTypes() {
         log.debug("REST request to get all FacilityTypes");
         List<FacilityType> facilityTypes = facilityTypeRepository.findAll();
-        return facilityTypeMapper.facilityTypesToFacilityTypeDTOs(facilityTypes);
+        return facilityTypeMapper.toDto(facilityTypes);
     }
 
     /**
@@ -111,7 +110,7 @@ public class FacilityTypeResource {
     public ResponseEntity<FacilityTypeDTO> getFacilityType(@PathVariable Long id) {
         log.debug("REST request to get FacilityType : {}", id);
         FacilityType facilityType = facilityTypeRepository.findOne(id);
-        FacilityTypeDTO facilityTypeDTO = facilityTypeMapper.facilityTypeToFacilityTypeDTO(facilityType);
+        FacilityTypeDTO facilityTypeDTO = facilityTypeMapper.toDto(facilityType);
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(facilityTypeDTO));
     }
 

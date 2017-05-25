@@ -11,51 +11,55 @@ import { PersonEthnicityDeletePopupComponent } from './person-ethnicity-delete-d
 
 import { Principal } from '../../shared';
 
-
 export const personEthnicityRoute: Routes = [
-  {
-    path: 'person-ethnicity',
-    component: PersonEthnicityComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'PersonEthnicities'
+    {
+        path: 'person-ethnicity',
+        component: PersonEthnicityComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'PersonEthnicities'
+        },
+        canActivate: [UserRouteAccessService]
+    }, {
+        path: 'person-ethnicity/:id',
+        component: PersonEthnicityDetailComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'PersonEthnicities'
+        },
+        canActivate: [UserRouteAccessService]
     }
-  }, {
-    path: 'person-ethnicity/:id',
-    component: PersonEthnicityDetailComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'PersonEthnicities'
-    }
-  }
 ];
 
 export const personEthnicityPopupRoute: Routes = [
-  {
-    path: 'person-ethnicity-new',
-    component: PersonEthnicityPopupComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'PersonEthnicities'
+    {
+        path: 'person-ethnicity-new',
+        component: PersonEthnicityPopupComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'PersonEthnicities'
+        },
+        canActivate: [UserRouteAccessService],
+        outlet: 'popup'
     },
-    outlet: 'popup'
-  },
-  {
-    path: 'person-ethnicity/:id/edit',
-    component: PersonEthnicityPopupComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'PersonEthnicities'
+    {
+        path: 'person-ethnicity/:id/edit',
+        component: PersonEthnicityPopupComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'PersonEthnicities'
+        },
+        canActivate: [UserRouteAccessService],
+        outlet: 'popup'
     },
-    outlet: 'popup'
-  },
-  {
-    path: 'person-ethnicity/:id/delete',
-    component: PersonEthnicityDeletePopupComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'PersonEthnicities'
-    },
-    outlet: 'popup'
-  }
+    {
+        path: 'person-ethnicity/:id/delete',
+        component: PersonEthnicityDeletePopupComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'PersonEthnicities'
+        },
+        canActivate: [UserRouteAccessService],
+        outlet: 'popup'
+    }
 ];

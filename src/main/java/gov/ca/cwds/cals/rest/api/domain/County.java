@@ -74,23 +74,23 @@ public class County implements Serializable {
             return false;
         }
         County county = (County) o;
-        if (county.id == null || id == null) {
+        if (county.getId() == null || getId() == null) {
             return false;
         }
-        return Objects.equals(id, county.id);
+        return Objects.equals(getId(), county.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hashCode(getId());
     }
 
     @Override
     public String toString() {
         return "County{" +
-            "id=" + id +
-            ", code='" + code + "'" +
-            ", description='" + description + "'" +
-            '}';
+            "id=" + getId() +
+            ", code='" + getCode() + "'" +
+            ", description='" + getDescription() + "'" +
+            "}";
     }
 }

@@ -25,7 +25,7 @@ public class Phone implements Serializable {
 
     @NotNull
     @Size(max = 16)
-    @Column(name = "number", length = 16, nullable = false)
+    @Column(name = "jhi_number", length = 16, nullable = false)
     private String number;
 
     public Long getId() {
@@ -58,22 +58,22 @@ public class Phone implements Serializable {
             return false;
         }
         Phone phone = (Phone) o;
-        if (phone.id == null || id == null) {
+        if (phone.getId() == null || getId() == null) {
             return false;
         }
-        return Objects.equals(id, phone.id);
+        return Objects.equals(getId(), phone.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hashCode(getId());
     }
 
     @Override
     public String toString() {
         return "Phone{" +
-            "id=" + id +
-            ", number='" + number + "'" +
-            '}';
+            "id=" + getId() +
+            ", number='" + getNumber() + "'" +
+            "}";
     }
 }

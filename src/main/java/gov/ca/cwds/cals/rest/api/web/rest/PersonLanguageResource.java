@@ -15,10 +15,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.LinkedList;
+
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * REST controller for managing PersonLanguage.
@@ -54,9 +53,9 @@ public class PersonLanguageResource {
         if (personLanguageDTO.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new personLanguage cannot already have an ID")).body(null);
         }
-        PersonLanguage personLanguage = personLanguageMapper.personLanguageDTOToPersonLanguage(personLanguageDTO);
+        PersonLanguage personLanguage = personLanguageMapper.toEntity(personLanguageDTO);
         personLanguage = personLanguageRepository.save(personLanguage);
-        PersonLanguageDTO result = personLanguageMapper.personLanguageToPersonLanguageDTO(personLanguage);
+        PersonLanguageDTO result = personLanguageMapper.toDto(personLanguage);
         return ResponseEntity.created(new URI("/api/person-languages/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -78,9 +77,9 @@ public class PersonLanguageResource {
         if (personLanguageDTO.getId() == null) {
             return createPersonLanguage(personLanguageDTO);
         }
-        PersonLanguage personLanguage = personLanguageMapper.personLanguageDTOToPersonLanguage(personLanguageDTO);
+        PersonLanguage personLanguage = personLanguageMapper.toEntity(personLanguageDTO);
         personLanguage = personLanguageRepository.save(personLanguage);
-        PersonLanguageDTO result = personLanguageMapper.personLanguageToPersonLanguageDTO(personLanguage);
+        PersonLanguageDTO result = personLanguageMapper.toDto(personLanguage);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, personLanguageDTO.getId().toString()))
             .body(result);
@@ -96,7 +95,7 @@ public class PersonLanguageResource {
     public List<PersonLanguageDTO> getAllPersonLanguages() {
         log.debug("REST request to get all PersonLanguages");
         List<PersonLanguage> personLanguages = personLanguageRepository.findAll();
-        return personLanguageMapper.personLanguagesToPersonLanguageDTOs(personLanguages);
+        return personLanguageMapper.toDto(personLanguages);
     }
 
     /**
@@ -110,7 +109,7 @@ public class PersonLanguageResource {
     public ResponseEntity<PersonLanguageDTO> getPersonLanguage(@PathVariable Long id) {
         log.debug("REST request to get PersonLanguage : {}", id);
         PersonLanguage personLanguage = personLanguageRepository.findOne(id);
-        PersonLanguageDTO personLanguageDTO = personLanguageMapper.personLanguageToPersonLanguageDTO(personLanguage);
+        PersonLanguageDTO personLanguageDTO = personLanguageMapper.toDto(personLanguage);
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(personLanguageDTO));
     }
 

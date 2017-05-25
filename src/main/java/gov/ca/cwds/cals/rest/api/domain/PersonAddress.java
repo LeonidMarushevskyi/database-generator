@@ -88,21 +88,21 @@ public class PersonAddress implements Serializable {
             return false;
         }
         PersonAddress personAddress = (PersonAddress) o;
-        if (personAddress.id == null || id == null) {
+        if (personAddress.getId() == null || getId() == null) {
             return false;
         }
-        return Objects.equals(id, personAddress.id);
+        return Objects.equals(getId(), personAddress.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hashCode(getId());
     }
 
     @Override
     public String toString() {
         return "PersonAddress{" +
-            "id=" + id +
-            '}';
+            "id=" + getId() +
+            "}";
     }
 }

@@ -88,21 +88,21 @@ public class FacilityPhone implements Serializable {
             return false;
         }
         FacilityPhone facilityPhone = (FacilityPhone) o;
-        if (facilityPhone.id == null || id == null) {
+        if (facilityPhone.getId() == null || getId() == null) {
             return false;
         }
-        return Objects.equals(id, facilityPhone.id);
+        return Objects.equals(getId(), facilityPhone.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hashCode(getId());
     }
 
     @Override
     public String toString() {
         return "FacilityPhone{" +
-            "id=" + id +
-            '}';
+            "id=" + getId() +
+            "}";
     }
 }

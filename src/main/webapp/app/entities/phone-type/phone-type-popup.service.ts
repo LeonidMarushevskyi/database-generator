@@ -6,21 +6,21 @@ import { PhoneTypeService } from './phone-type.service';
 @Injectable()
 export class PhoneTypePopupService {
     private isOpen = false;
-    constructor (
+    constructor(
         private modalService: NgbModal,
         private router: Router,
         private phoneTypeService: PhoneTypeService
 
     ) {}
 
-    open (component: Component, id?: number | any): NgbModalRef {
+    open(component: Component, id?: number | any): NgbModalRef {
         if (this.isOpen) {
             return;
         }
         this.isOpen = true;
 
         if (id) {
-            this.phoneTypeService.find(id).subscribe(phoneType => {
+            this.phoneTypeService.find(id).subscribe((phoneType) => {
                 this.phoneTypeModalRef(component, phoneType);
             });
         } else {
@@ -29,9 +29,9 @@ export class PhoneTypePopupService {
     }
 
     phoneTypeModalRef(component: Component, phoneType: PhoneType): NgbModalRef {
-        let modalRef = this.modalService.open(component, { size: 'lg', backdrop: 'static'});
+        const modalRef = this.modalService.open(component, { size: 'lg', backdrop: 'static'});
         modalRef.componentInstance.phoneType = phoneType;
-        modalRef.result.then(result => {
+        modalRef.result.then((result) => {
             this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true });
             this.isOpen = false;
         }, (reason) => {

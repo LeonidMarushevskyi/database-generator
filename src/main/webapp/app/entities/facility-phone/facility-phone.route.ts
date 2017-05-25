@@ -11,51 +11,55 @@ import { FacilityPhoneDeletePopupComponent } from './facility-phone-delete-dialo
 
 import { Principal } from '../../shared';
 
-
 export const facilityPhoneRoute: Routes = [
-  {
-    path: 'facility-phone',
-    component: FacilityPhoneComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'FacilityPhones'
+    {
+        path: 'facility-phone',
+        component: FacilityPhoneComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'FacilityPhones'
+        },
+        canActivate: [UserRouteAccessService]
+    }, {
+        path: 'facility-phone/:id',
+        component: FacilityPhoneDetailComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'FacilityPhones'
+        },
+        canActivate: [UserRouteAccessService]
     }
-  }, {
-    path: 'facility-phone/:id',
-    component: FacilityPhoneDetailComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'FacilityPhones'
-    }
-  }
 ];
 
 export const facilityPhonePopupRoute: Routes = [
-  {
-    path: 'facility-phone-new',
-    component: FacilityPhonePopupComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'FacilityPhones'
+    {
+        path: 'facility-phone-new',
+        component: FacilityPhonePopupComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'FacilityPhones'
+        },
+        canActivate: [UserRouteAccessService],
+        outlet: 'popup'
     },
-    outlet: 'popup'
-  },
-  {
-    path: 'facility-phone/:id/edit',
-    component: FacilityPhonePopupComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'FacilityPhones'
+    {
+        path: 'facility-phone/:id/edit',
+        component: FacilityPhonePopupComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'FacilityPhones'
+        },
+        canActivate: [UserRouteAccessService],
+        outlet: 'popup'
     },
-    outlet: 'popup'
-  },
-  {
-    path: 'facility-phone/:id/delete',
-    component: FacilityPhoneDeletePopupComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'FacilityPhones'
-    },
-    outlet: 'popup'
-  }
+    {
+        path: 'facility-phone/:id/delete',
+        component: FacilityPhoneDeletePopupComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'FacilityPhones'
+        },
+        canActivate: [UserRouteAccessService],
+        outlet: 'popup'
+    }
 ];

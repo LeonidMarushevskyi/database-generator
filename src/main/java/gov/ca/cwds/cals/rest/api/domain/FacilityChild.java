@@ -123,24 +123,24 @@ public class FacilityChild implements Serializable {
             return false;
         }
         FacilityChild facilityChild = (FacilityChild) o;
-        if (facilityChild.id == null || id == null) {
+        if (facilityChild.getId() == null || getId() == null) {
             return false;
         }
-        return Objects.equals(id, facilityChild.id);
+        return Objects.equals(getId(), facilityChild.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hashCode(getId());
     }
 
     @Override
     public String toString() {
         return "FacilityChild{" +
-            "id=" + id +
-            ", dateOfPlacement='" + dateOfPlacement + "'" +
-            ", assignedWorker='" + assignedWorker + "'" +
-            ", countyOfOrigin='" + countyOfOrigin + "'" +
-            '}';
+            "id=" + getId() +
+            ", dateOfPlacement='" + getDateOfPlacement() + "'" +
+            ", assignedWorker='" + getAssignedWorker() + "'" +
+            ", countyOfOrigin='" + getCountyOfOrigin() + "'" +
+            "}";
     }
 }

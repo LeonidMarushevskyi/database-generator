@@ -6,21 +6,21 @@ import { PersonEthnicityService } from './person-ethnicity.service';
 @Injectable()
 export class PersonEthnicityPopupService {
     private isOpen = false;
-    constructor (
+    constructor(
         private modalService: NgbModal,
         private router: Router,
         private personEthnicityService: PersonEthnicityService
 
     ) {}
 
-    open (component: Component, id?: number | any): NgbModalRef {
+    open(component: Component, id?: number | any): NgbModalRef {
         if (this.isOpen) {
             return;
         }
         this.isOpen = true;
 
         if (id) {
-            this.personEthnicityService.find(id).subscribe(personEthnicity => {
+            this.personEthnicityService.find(id).subscribe((personEthnicity) => {
                 this.personEthnicityModalRef(component, personEthnicity);
             });
         } else {
@@ -29,9 +29,9 @@ export class PersonEthnicityPopupService {
     }
 
     personEthnicityModalRef(component: Component, personEthnicity: PersonEthnicity): NgbModalRef {
-        let modalRef = this.modalService.open(component, { size: 'lg', backdrop: 'static'});
+        const modalRef = this.modalService.open(component, { size: 'lg', backdrop: 'static'});
         modalRef.componentInstance.personEthnicity = personEthnicity;
-        modalRef.result.then(result => {
+        modalRef.result.then((result) => {
             this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true });
             this.isOpen = false;
         }, (reason) => {

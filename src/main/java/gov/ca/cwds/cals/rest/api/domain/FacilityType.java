@@ -74,23 +74,23 @@ public class FacilityType implements Serializable {
             return false;
         }
         FacilityType facilityType = (FacilityType) o;
-        if (facilityType.id == null || id == null) {
+        if (facilityType.getId() == null || getId() == null) {
             return false;
         }
-        return Objects.equals(id, facilityType.id);
+        return Objects.equals(getId(), facilityType.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hashCode(getId());
     }
 
     @Override
     public String toString() {
         return "FacilityType{" +
-            "id=" + id +
-            ", code='" + code + "'" +
-            ", description='" + description + "'" +
-            '}';
+            "id=" + getId() +
+            ", code='" + getCode() + "'" +
+            ", description='" + getDescription() + "'" +
+            "}";
     }
 }

@@ -3,7 +3,7 @@
     "promptValues": {
       "packageName": "gov.ca.cwds.cals.rest.api"
     },
-    "jhipsterVersion": "4.1.1",
+    "jhipsterVersion": "4.5.1",
     "baseName": "generator",
     "packageName": "gov.ca.cwds.cals.rest.api",
     "packageFolder": "gov/ca/cwds/cals/rest/api",

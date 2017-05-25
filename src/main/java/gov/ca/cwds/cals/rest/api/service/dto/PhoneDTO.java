@@ -23,6 +23,7 @@ public class PhoneDTO implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
+
     public String getNumber() {
         return number;
     }
@@ -41,22 +42,22 @@ public class PhoneDTO implements Serializable {
         }
 
         PhoneDTO phoneDTO = (PhoneDTO) o;
-
-        if ( ! Objects.equals(id, phoneDTO.id)) { return false; }
-
-        return true;
+        if(phoneDTO.getId() == null || getId() == null) {
+            return false;
+        }
+        return Objects.equals(getId(), phoneDTO.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hashCode(getId());
     }
 
     @Override
     public String toString() {
         return "PhoneDTO{" +
-            "id=" + id +
-            ", number='" + number + "'" +
-            '}';
+            "id=" + getId() +
+            ", number='" + getNumber() + "'" +
+            "}";
     }
 }

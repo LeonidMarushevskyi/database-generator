@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Response } from '@angular/http';
 
+import { Observable } from 'rxjs/Rx';
 import { NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { EventManager, AlertService } from 'ng-jhipster';
 
@@ -11,6 +12,7 @@ import { FacilityAddressService } from './facility-address.service';
 import { Facility, FacilityService } from '../facility';
 import { Address, AddressService } from '../address';
 import { AddressType, AddressTypeService } from '../address-type';
+import { ResponseWrapper } from '../../shared';
 
 @Component({
     selector: 'jhi-facility-address-dialog',
@@ -27,6 +29,7 @@ export class FacilityAddressDialogComponent implements OnInit {
     addresses: Address[];
 
     addresstypes: AddressType[];
+
     constructor(
         public activeModal: NgbActiveModal,
         private alertService: AlertService,
@@ -41,49 +44,61 @@ export class FacilityAddressDialogComponent implements OnInit {
     ngOnInit() {
         this.isSaving = false;
         this.authorities = ['ROLE_USER', 'ROLE_ADMIN'];
-        this.facilityService.query().subscribe(
-            (res: Response) => { this.facilities = res.json(); }, (res: Response) => this.onError(res.json()));
-        this.addressService.query({filter: 'facilityaddress-is-null'}).subscribe((res: Response) => {
-            if (!this.facilityAddress.addressId) {
-                this.addresses = res.json();
-            } else {
-                this.addressService.find(this.facilityAddress.addressId).subscribe((subRes: Address) => {
-                    this.addresses = [subRes].concat(res.json());
-                }, (subRes: Response) => this.onError(subRes.json()));
-            }
-        }, (res: Response) => this.onError(res.json()));
-        this.addressTypeService.query().subscribe(
-            (res: Response) => { this.addresstypes = res.json(); }, (res: Response) => this.onError(res.json()));
+        this.facilityService.query()
+            .subscribe((res: ResponseWrapper) => { this.facilities = res.json; }, (res: ResponseWrapper) => this.onError(res.json));
+        this.addressService
+            .query({filter: 'facilityaddress-is-null'})
+            .subscribe((res: ResponseWrapper) => {
+                if (!this.facilityAddress.addressId) {
+                    this.addresses = res.json;
+                } else {
+                    this.addressService
+                        .find(this.facilityAddress.addressId)
+                        .subscribe((subRes: Address) => {
+                            this.addresses = [subRes].concat(res.json);
+                        }, (subRes: ResponseWrapper) => this.onError(subRes.json));
+                }
+            }, (res: ResponseWrapper) => this.onError(res.json));
+        this.addressTypeService.query()
+            .subscribe((res: ResponseWrapper) => { this.addresstypes = res.json; }, (res: ResponseWrapper) => this.onError(res.json));
     }
-    clear () {
+    clear() {
         this.activeModal.dismiss('cancel');
     }
 
-    save () {
+    save() {
         this.isSaving = true;
         if (this.facilityAddress.id !== undefined) {
-            this.facilityAddressService.update(this.facilityAddress)
-                .subscribe((res: FacilityAddress) =>
-                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
+            this.subscribeToSaveResponse(
+                this.facilityAddressService.update(this.facilityAddress));
         } else {
-            this.facilityAddressService.create(this.facilityAddress)
-                .subscribe((res: FacilityAddress) =>
-                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
+            this.subscribeToSaveResponse(
+                this.facilityAddressService.create(this.facilityAddress));
         }
     }
 
-    private onSaveSuccess (result: FacilityAddress) {
+    private subscribeToSaveResponse(result: Observable<FacilityAddress>) {
+        result.subscribe((res: FacilityAddress) =>
+            this.onSaveSuccess(res), (res: Response) => this.onSaveError(res));
+    }
+
+    private onSaveSuccess(result: FacilityAddress) {
         this.eventManager.broadcast({ name: 'facilityAddressListModification', content: 'OK'});
         this.isSaving = false;
         this.activeModal.dismiss(result);
     }
 
-    private onSaveError (error) {
+    private onSaveError(error) {
+        try {
+            error.json();
+        } catch (exception) {
+            error.message = error.text();
+        }
         this.isSaving = false;
         this.onError(error);
     }
 
-    private onError (error) {
+    private onError(error) {
         this.alertService.error(error.message, null, null);
     }
 
@@ -109,13 +124,13 @@ export class FacilityAddressPopupComponent implements OnInit, OnDestroy {
     modalRef: NgbModalRef;
     routeSub: any;
 
-    constructor (
+    constructor(
         private route: ActivatedRoute,
         private facilityAddressPopupService: FacilityAddressPopupService
     ) {}
 
     ngOnInit() {
-        this.routeSub = this.route.params.subscribe(params => {
+        this.routeSub = this.route.params.subscribe((params) => {
             if ( params['id'] ) {
                 this.modalRef = this.facilityAddressPopupService
                     .open(FacilityAddressDialogComponent, params['id']);
@@ -123,7 +138,6 @@ export class FacilityAddressPopupComponent implements OnInit, OnDestroy {
                 this.modalRef = this.facilityAddressPopupService
                     .open(FacilityAddressDialogComponent);
             }
-
         });
     }
 

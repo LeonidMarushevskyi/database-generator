@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Response } from '@angular/http';
 
+import { Observable } from 'rxjs/Rx';
 import { NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { EventManager, AlertService } from 'ng-jhipster';
 
@@ -18,6 +19,7 @@ export class FacilityTypeDialogComponent implements OnInit {
     facilityType: FacilityType;
     authorities: any[];
     isSaving: boolean;
+
     constructor(
         public activeModal: NgbActiveModal,
         private alertService: AlertService,
@@ -30,35 +32,43 @@ export class FacilityTypeDialogComponent implements OnInit {
         this.isSaving = false;
         this.authorities = ['ROLE_USER', 'ROLE_ADMIN'];
     }
-    clear () {
+    clear() {
         this.activeModal.dismiss('cancel');
     }
 
-    save () {
+    save() {
         this.isSaving = true;
         if (this.facilityType.id !== undefined) {
-            this.facilityTypeService.update(this.facilityType)
-                .subscribe((res: FacilityType) =>
-                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
+            this.subscribeToSaveResponse(
+                this.facilityTypeService.update(this.facilityType));
         } else {
-            this.facilityTypeService.create(this.facilityType)
-                .subscribe((res: FacilityType) =>
-                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
+            this.subscribeToSaveResponse(
+                this.facilityTypeService.create(this.facilityType));
         }
     }
 
-    private onSaveSuccess (result: FacilityType) {
+    private subscribeToSaveResponse(result: Observable<FacilityType>) {
+        result.subscribe((res: FacilityType) =>
+            this.onSaveSuccess(res), (res: Response) => this.onSaveError(res));
+    }
+
+    private onSaveSuccess(result: FacilityType) {
         this.eventManager.broadcast({ name: 'facilityTypeListModification', content: 'OK'});
         this.isSaving = false;
         this.activeModal.dismiss(result);
     }
 
-    private onSaveError (error) {
+    private onSaveError(error) {
+        try {
+            error.json();
+        } catch (exception) {
+            error.message = error.text();
+        }
         this.isSaving = false;
         this.onError(error);
     }
 
-    private onError (error) {
+    private onError(error) {
         this.alertService.error(error.message, null, null);
     }
 }
@@ -72,13 +82,13 @@ export class FacilityTypePopupComponent implements OnInit, OnDestroy {
     modalRef: NgbModalRef;
     routeSub: any;
 
-    constructor (
+    constructor(
         private route: ActivatedRoute,
         private facilityTypePopupService: FacilityTypePopupService
     ) {}
 
     ngOnInit() {
-        this.routeSub = this.route.params.subscribe(params => {
+        this.routeSub = this.route.params.subscribe((params) => {
             if ( params['id'] ) {
                 this.modalRef = this.facilityTypePopupService
                     .open(FacilityTypeDialogComponent, params['id']);
@@ -86,7 +96,6 @@ export class FacilityTypePopupComponent implements OnInit, OnDestroy {
                 this.modalRef = this.facilityTypePopupService
                     .open(FacilityTypeDialogComponent);
             }
-
         });
     }
 

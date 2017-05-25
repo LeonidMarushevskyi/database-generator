@@ -17,8 +17,8 @@
                 </a>
             </li>
             <!-- jhipster-needle-add-element-to-menu - JHipster will add new menu items here -->
-            <li *ngSwitchCase="true" ngbDropdown class="nav-item dropdown pointer">
-                <a class="nav-link dropdown-toggle" routerLinkActive="active" ngbDropdownToggle href="javascript:void(0);" id="entity-menu">
+            <li *ngSwitchCase="true" ngbDropdown class="nav-item dropdown pointer" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="entity-menu">
                     <span>
                         <i class="fa fa-th-list" aria-hidden="true"></i>
                         <span>
@@ -28,148 +28,172 @@
                     </span>
                 </a>
                 <ul class="dropdown-menu" ngbDropdownMenu>
-                    <li uiSrefActive="active">
-                        <a class="dropdown-item" routerLink="a" (click)="collapseNavbar()">
+                    <li>
+                        <a class="dropdown-item" routerLink="a" routerLinkActive="active" (click)="collapseNavbar()">
                             <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
-                            <span >A</span>
+                            <span>A</span>
                         </a>
                     </li>
-                    <li uiSrefActive="active">
-                        <a class="dropdown-item" routerLink="address" (click)="collapseNavbar()">
+                    <li>
+                        <a class="dropdown-item" routerLink="address-type" routerLinkActive="active" (click)="collapseNavbar()">
                             <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
-                            <span >Address</span>
+                            <span>Address Type</span>
                         </a>
                     </li>
-                    <li uiSrefActive="active">
-                        <a class="dropdown-item" routerLink="address-type" (click)="collapseNavbar()">
+                    <li>
+                        <a class="dropdown-item" routerLink="facility" routerLinkActive="active" (click)="collapseNavbar()">
                             <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
-                            <span >Address Type</span>
+                            <span>Facility</span>
                         </a>
                     </li>
-                    <li uiSrefActive="active">
-                        <a class="dropdown-item" routerLink="facility" (click)="collapseNavbar()">
+                    <li>
+                        <a class="dropdown-item" routerLink="address" routerLinkActive="active" (click)="collapseNavbar()">
                             <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
-                            <span >Facility</span>
+                            <span>Address</span>
                         </a>
                     </li>
-                    <li uiSrefActive="active">
-                        <a class="dropdown-item" routerLink="facility-address" (click)="collapseNavbar()">
+                    <li>
+                        <a class="dropdown-item" routerLink="facility-address" routerLinkActive="active" (click)="collapseNavbar()">
                             <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
-                            <span >Facility Address</span>
+                            <span>Facility Address</span>
                         </a>
                     </li>
-                    <li uiSrefActive="active">
-                        <a class="dropdown-item" routerLink="ethnicity-type" (click)="collapseNavbar()">
+                    <li>
+                        <a class="dropdown-item" routerLink="person-race" routerLinkActive="active" (click)="collapseNavbar()">
                             <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
-                            <span >Ethnicity Type</span>
+                            <span>Person Race</span>
                         </a>
                     </li>
-                    <li uiSrefActive="active">
-                        <a class="dropdown-item" routerLink="facility-child" (click)="collapseNavbar()">
+                    <li>
+                        <a class="dropdown-item" routerLink="ethnicity-type" routerLinkActive="active" (click)="collapseNavbar()">
                             <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
-                            <span >Facility Child</span>
+                            <span>Ethnicity Type</span>
                         </a>
                     </li>
-                    <li uiSrefActive="active">
-                        <a class="dropdown-item" routerLink="facility-phone" (click)="collapseNavbar()">
+                    <li>
+                        <a class="dropdown-item" routerLink="race-type" routerLinkActive="active" (click)="collapseNavbar()">
                             <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
-                            <span >Facility Phone</span>
+                            <span>Race Type</span>
                         </a>
                     </li>
-                    <li uiSrefActive="active">
-                        <a class="dropdown-item" routerLink="language-type" (click)="collapseNavbar()">
+                    <li>
+                        <a class="dropdown-item" routerLink="phone-type" routerLinkActive="active" (click)="collapseNavbar()">
                             <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
-                            <span >Language Type</span>
+                            <span>Phone Type</span>
                         </a>
                     </li>
-                    <li uiSrefActive="active">
-                        <a class="dropdown-item" routerLink="race-type" (click)="collapseNavbar()">
+                    <li>
+                        <a class="dropdown-item" routerLink="facility-child" routerLinkActive="active" (click)="collapseNavbar()">
                             <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
-                            <span >Race Type</span>
+                            <span>Facility Child</span>
                         </a>
                     </li>
-                    <li uiSrefActive="active">
-                        <a class="dropdown-item" routerLink="person-address" (click)="collapseNavbar()">
+                    <li>
+                        <a class="dropdown-item" routerLink="facility-phone" routerLinkActive="active" (click)="collapseNavbar()">
                             <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
-                            <span >Person Address</span>
+                            <span>Facility Phone</span>
                         </a>
                     </li>
-                    <li uiSrefActive="active">
-                        <a class="dropdown-item" routerLink="person-ethnicity" (click)="collapseNavbar()">
+                    <li>
+                        <a class="dropdown-item" routerLink="phone" routerLinkActive="active" (click)="collapseNavbar()">
                             <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
-                            <span >Person Ethnicity</span>
+                            <span>Phone</span>
                         </a>
                     </li>
-                    <li uiSrefActive="active">
-                        <a class="dropdown-item" routerLink="person-language" (click)="collapseNavbar()">
+                    <li>
+                        <a class="dropdown-item" routerLink="person-phone" routerLinkActive="active" (click)="collapseNavbar()">
                             <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
-                            <span >Person Language</span>
+                            <span>Person Phone</span>
                         </a>
                     </li>
-                    <li uiSrefActive="active">
-                        <a class="dropdown-item" routerLink="person-phone" (click)="collapseNavbar()">
+                    <li>
+                        <a class="dropdown-item" routerLink="language-type" routerLinkActive="active" (click)="collapseNavbar()">
                             <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
-                            <span >Person Phone</span>
+                            <span>Language Type</span>
                         </a>
                     </li>
-                    <li uiSrefActive="active">
-                        <a class="dropdown-item" routerLink="person-race" (click)="collapseNavbar()">
+                    <li>
+                        <a class="dropdown-item" routerLink="person" routerLinkActive="active" (click)="collapseNavbar()">
                             <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
-                            <span >Person Race</span>
+                            <span>Person</span>
                         </a>
                     </li>
-                    <li uiSrefActive="active">
-                        <a class="dropdown-item" routerLink="phone" (click)="collapseNavbar()">
+                    <li>
+                        <a class="dropdown-item" routerLink="person-address" routerLinkActive="active" (click)="collapseNavbar()">
                             <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
-                            <span >Phone</span>
+                            <span>Person Address</span>
                         </a>
                     </li>
-                    <li uiSrefActive="active">
-                        <a class="dropdown-item" routerLink="phone-type" (click)="collapseNavbar()">
+                    <li>
+                        <a class="dropdown-item" routerLink="person-ethnicity" routerLinkActive="active" (click)="collapseNavbar()">
                             <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
-                            <span >Phone Type</span>
+                            <span>Person Ethnicity</span>
                         </a>
                     </li>
-                    <li uiSrefActive="active">
-                        <a class="dropdown-item" routerLink="person" (click)="collapseNavbar()">
+                    <li>
+                        <a class="dropdown-item" routerLink="person-language" routerLinkActive="active" (click)="collapseNavbar()">
                             <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
-                            <span >Person</span>
+                            <span>Person Language</span>
                         </a>
                     </li>
-                    <li uiSrefActive="active">
-                        <a class="dropdown-item" routerLink="facility-status" (click)="collapseNavbar()">
+                    <li>
+                        <a class="dropdown-item" routerLink="facility-type" routerLinkActive="active" (click)="collapseNavbar()">
                             <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
-                            <span >Facility Status</span>
+                            <span>Facility Type</span>
                         </a>
                     </li>
-                    <li uiSrefActive="active">
-                        <a class="dropdown-item" routerLink="district-office" (click)="collapseNavbar()">
+                    <li>
+                        <a class="dropdown-item" routerLink="district-office" routerLinkActive="active" (click)="collapseNavbar()">
                             <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
-                            <span >District Office</span>
+                            <span>District Office</span>
                         </a>
                     </li>
-                    <li uiSrefActive="active">
-                        <a class="dropdown-item" routerLink="county" (click)="collapseNavbar()">
+                    <li>
+                        <a class="dropdown-item" routerLink="county" routerLinkActive="active" (click)="collapseNavbar()">
                             <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
-                            <span >County</span>
+                            <span>County</span>
                         </a>
                     </li>
-                    <li uiSrefActive="active">
-                        <a class="dropdown-item" routerLink="facility-type" (click)="collapseNavbar()">
+                    <li>
+                        <a class="dropdown-item" routerLink="facility-status" routerLinkActive="active" (click)="collapseNavbar()">
                             <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
-                            <span >Facility Type</span>
+                            <span>Facility Status</span>
                         </a>
                     </li>
-                    <li uiSrefActive="active">
-                        <a class="dropdown-item" routerLink="assigned-worker" (click)="collapseNavbar()">
+                    <li>
+                        <a class="dropdown-item" routerLink="assigned-worker" routerLinkActive="active" (click)="collapseNavbar()">
                             <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
-                            <span >Assigned Worker</span>
+                            <span>Assigned Worker</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" routerLink="complaint" routerLinkActive="active" (click)="collapseNavbar()">
+                            <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
+                            <span>Complaint</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" routerLink="inspection" routerLinkActive="active" (click)="collapseNavbar()">
+                            <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
+                            <span>Inspection</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" routerLink="deficiency" routerLinkActive="active" (click)="collapseNavbar()">
+                            <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
+                            <span>Deficiency</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" routerLink="cleared-poc" routerLinkActive="active" (click)="collapseNavbar()">
+                            <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
+                            <span>Cleared Poc</span>
                         </a>
                     </li>
                     <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
                 </ul>
             </li>
-            <li *jhiHasAnyAuthority="'ROLE_ADMIN'" ngbDropdown class="nav-item dropdown pointer">
+            <li *jhiHasAnyAuthority="'ROLE_ADMIN'" ngbDropdown class="nav-item dropdown pointer" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
                 <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="admin-menu">
                     <span>
                         <i class="fa fa-user-plus" aria-hidden="true"></i>
@@ -223,7 +247,7 @@
                     <!-- jhipster-needle-add-element-to-admin-menu - JHipster will add entities to the admin menu here -->
                 </ul>
             </li>
-            <li ngbDropdown class="nav-item dropdown pointer">
+            <li ngbDropdown class="nav-item dropdown pointer" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
                 <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="account-menu">
                   <span *ngIf="!getImageUrl()">
                     <i class="fa fa-user" aria-hidden="true"></i>

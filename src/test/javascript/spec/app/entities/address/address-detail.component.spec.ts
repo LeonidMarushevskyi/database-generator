@@ -1,11 +1,10 @@
 import { ComponentFixture, TestBed, async, inject } from '@angular/core/testing';
-import { MockBackend } from '@angular/http/testing';
-import { Http, BaseRequestOptions } from '@angular/http';
 import { OnInit } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Rx';
-import { DateUtils, DataUtils } from 'ng-jhipster';
+import { DateUtils, DataUtils, EventManager } from 'ng-jhipster';
+import { GeneratorTestModule } from '../../../test.module';
 import { MockActivatedRoute } from '../../../helpers/mock-route.service';
 import { AddressDetailComponent } from '../../../../../../main/webapp/app/entities/address/address-detail.component';
 import { AddressService } from '../../../../../../main/webapp/app/entities/address/address.service';
@@ -20,10 +19,9 @@ describe('Component Tests', () => {
 
         beforeEach(async(() => {
             TestBed.configureTestingModule({
+                imports: [GeneratorTestModule],
                 declarations: [AddressDetailComponent],
                 providers: [
-                    MockBackend,
-                    BaseRequestOptions,
                     DateUtils,
                     DataUtils,
                     DatePipe,
@@ -31,14 +29,8 @@ describe('Component Tests', () => {
                         provide: ActivatedRoute,
                         useValue: new MockActivatedRoute({id: 123})
                     },
-                    {
-                        provide: Http,
-                        useFactory: (backendInstance: MockBackend, defaultOptions: BaseRequestOptions) => {
-                            return new Http(backendInstance, defaultOptions);
-                        },
-                        deps: [MockBackend, BaseRequestOptions]
-                    },
-                    AddressService
+                    AddressService,
+                    EventManager
                 ]
             }).overrideComponent(AddressDetailComponent, {
                 set: {

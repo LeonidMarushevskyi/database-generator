@@ -23,12 +23,12 @@ export class PhoneDeleteDialogComponent {
     ) {
     }
 
-    clear () {
+    clear() {
         this.activeModal.dismiss('cancel');
     }
 
-    confirmDelete (id: number) {
-        this.phoneService.delete(id).subscribe(response => {
+    confirmDelete(id: number) {
+        this.phoneService.delete(id).subscribe((response) => {
             this.eventManager.broadcast({
                 name: 'phoneListModification',
                 content: 'Deleted an phone'
@@ -47,13 +47,13 @@ export class PhoneDeletePopupComponent implements OnInit, OnDestroy {
     modalRef: NgbModalRef;
     routeSub: any;
 
-    constructor (
+    constructor(
         private route: ActivatedRoute,
         private phonePopupService: PhonePopupService
     ) {}
 
     ngOnInit() {
-        this.routeSub = this.route.params.subscribe(params => {
+        this.routeSub = this.route.params.subscribe((params) => {
             this.modalRef = this.phonePopupService
                 .open(PhoneDeleteDialogComponent, params['id']);
         });

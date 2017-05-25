@@ -2,7 +2,6 @@ import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 import { GeneratorSharedModule } from '../../shared';
-
 import {
     PersonPhoneService,
     PersonPhonePopupService,
@@ -16,7 +15,7 @@ import {
     personPhonePopupRoute,
 } from './';
 
-let ENTITY_STATES = [
+const ENTITY_STATES = [
     ...personPhoneRoute,
     ...personPhonePopupRoute,
 ];

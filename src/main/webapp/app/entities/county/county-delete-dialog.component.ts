@@ -23,12 +23,12 @@ export class CountyDeleteDialogComponent {
     ) {
     }
 
-    clear () {
+    clear() {
         this.activeModal.dismiss('cancel');
     }
 
-    confirmDelete (id: number) {
-        this.countyService.delete(id).subscribe(response => {
+    confirmDelete(id: number) {
+        this.countyService.delete(id).subscribe((response) => {
             this.eventManager.broadcast({
                 name: 'countyListModification',
                 content: 'Deleted an county'
@@ -47,13 +47,13 @@ export class CountyDeletePopupComponent implements OnInit, OnDestroy {
     modalRef: NgbModalRef;
     routeSub: any;
 
-    constructor (
+    constructor(
         private route: ActivatedRoute,
         private countyPopupService: CountyPopupService
     ) {}
 
     ngOnInit() {
-        this.routeSub = this.route.params.subscribe(params => {
+        this.routeSub = this.route.params.subscribe((params) => {
             this.modalRef = this.countyPopupService
                 .open(CountyDeleteDialogComponent, params['id']);
         });

@@ -22,10 +22,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.LinkedList;
+
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * REST controller for managing FacilityChild.
@@ -61,9 +60,9 @@ public class FacilityChildResource {
         if (facilityChildDTO.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new facilityChild cannot already have an ID")).body(null);
         }
-        FacilityChild facilityChild = facilityChildMapper.facilityChildDTOToFacilityChild(facilityChildDTO);
+        FacilityChild facilityChild = facilityChildMapper.toEntity(facilityChildDTO);
         facilityChild = facilityChildRepository.save(facilityChild);
-        FacilityChildDTO result = facilityChildMapper.facilityChildToFacilityChildDTO(facilityChild);
+        FacilityChildDTO result = facilityChildMapper.toDto(facilityChild);
         return ResponseEntity.created(new URI("/api/facility-children/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -85,9 +84,9 @@ public class FacilityChildResource {
         if (facilityChildDTO.getId() == null) {
             return createFacilityChild(facilityChildDTO);
         }
-        FacilityChild facilityChild = facilityChildMapper.facilityChildDTOToFacilityChild(facilityChildDTO);
+        FacilityChild facilityChild = facilityChildMapper.toEntity(facilityChildDTO);
         facilityChild = facilityChildRepository.save(facilityChild);
-        FacilityChildDTO result = facilityChildMapper.facilityChildToFacilityChildDTO(facilityChild);
+        FacilityChildDTO result = facilityChildMapper.toDto(facilityChild);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, facilityChildDTO.getId().toString()))
             .body(result);
@@ -105,7 +104,7 @@ public class FacilityChildResource {
         log.debug("REST request to get a page of FacilityChildren");
         Page<FacilityChild> page = facilityChildRepository.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/facility-children");
-        return new ResponseEntity<>(facilityChildMapper.facilityChildrenToFacilityChildDTOs(page.getContent()), headers, HttpStatus.OK);
+        return new ResponseEntity<>(facilityChildMapper.toDto(page.getContent()), headers, HttpStatus.OK);
     }
 
     /**
@@ -119,7 +118,7 @@ public class FacilityChildResource {
     public ResponseEntity<FacilityChildDTO> getFacilityChild(@PathVariable Long id) {
         log.debug("REST request to get FacilityChild : {}", id);
         FacilityChild facilityChild = facilityChildRepository.findOne(id);
-        FacilityChildDTO facilityChildDTO = facilityChildMapper.facilityChildToFacilityChildDTO(facilityChild);
+        FacilityChildDTO facilityChildDTO = facilityChildMapper.toDto(facilityChild);
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(facilityChildDTO));
     }
 

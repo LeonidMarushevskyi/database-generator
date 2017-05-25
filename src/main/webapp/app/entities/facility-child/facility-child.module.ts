@@ -2,7 +2,6 @@ import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 import { GeneratorSharedModule } from '../../shared';
-
 import {
     FacilityChildService,
     FacilityChildPopupService,
@@ -17,7 +16,7 @@ import {
     FacilityChildResolvePagingParams,
 } from './';
 
-let ENTITY_STATES = [
+const ENTITY_STATES = [
     ...facilityChildRoute,
     ...facilityChildPopupRoute,
 ];

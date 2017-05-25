@@ -16,10 +16,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.LinkedList;
+
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * REST controller for managing PhoneType.
@@ -55,9 +54,9 @@ public class PhoneTypeResource {
         if (phoneTypeDTO.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new phoneType cannot already have an ID")).body(null);
         }
-        PhoneType phoneType = phoneTypeMapper.phoneTypeDTOToPhoneType(phoneTypeDTO);
+        PhoneType phoneType = phoneTypeMapper.toEntity(phoneTypeDTO);
         phoneType = phoneTypeRepository.save(phoneType);
-        PhoneTypeDTO result = phoneTypeMapper.phoneTypeToPhoneTypeDTO(phoneType);
+        PhoneTypeDTO result = phoneTypeMapper.toDto(phoneType);
         return ResponseEntity.created(new URI("/api/phone-types/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -79,9 +78,9 @@ public class PhoneTypeResource {
         if (phoneTypeDTO.getId() == null) {
             return createPhoneType(phoneTypeDTO);
         }
-        PhoneType phoneType = phoneTypeMapper.phoneTypeDTOToPhoneType(phoneTypeDTO);
+        PhoneType phoneType = phoneTypeMapper.toEntity(phoneTypeDTO);
         phoneType = phoneTypeRepository.save(phoneType);
-        PhoneTypeDTO result = phoneTypeMapper.phoneTypeToPhoneTypeDTO(phoneType);
+        PhoneTypeDTO result = phoneTypeMapper.toDto(phoneType);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, phoneTypeDTO.getId().toString()))
             .body(result);
@@ -97,7 +96,7 @@ public class PhoneTypeResource {
     public List<PhoneTypeDTO> getAllPhoneTypes() {
         log.debug("REST request to get all PhoneTypes");
         List<PhoneType> phoneTypes = phoneTypeRepository.findAll();
-        return phoneTypeMapper.phoneTypesToPhoneTypeDTOs(phoneTypes);
+        return phoneTypeMapper.toDto(phoneTypes);
     }
 
     /**
@@ -111,7 +110,7 @@ public class PhoneTypeResource {
     public ResponseEntity<PhoneTypeDTO> getPhoneType(@PathVariable Long id) {
         log.debug("REST request to get PhoneType : {}", id);
         PhoneType phoneType = phoneTypeRepository.findOne(id);
-        PhoneTypeDTO phoneTypeDTO = phoneTypeMapper.phoneTypeToPhoneTypeDTO(phoneType);
+        PhoneTypeDTO phoneTypeDTO = phoneTypeMapper.toDto(phoneType);
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(phoneTypeDTO));
     }
 

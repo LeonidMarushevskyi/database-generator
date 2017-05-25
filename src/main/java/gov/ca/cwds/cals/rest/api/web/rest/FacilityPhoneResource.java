@@ -15,10 +15,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.LinkedList;
+
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * REST controller for managing FacilityPhone.
@@ -54,9 +53,9 @@ public class FacilityPhoneResource {
         if (facilityPhoneDTO.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new facilityPhone cannot already have an ID")).body(null);
         }
-        FacilityPhone facilityPhone = facilityPhoneMapper.facilityPhoneDTOToFacilityPhone(facilityPhoneDTO);
+        FacilityPhone facilityPhone = facilityPhoneMapper.toEntity(facilityPhoneDTO);
         facilityPhone = facilityPhoneRepository.save(facilityPhone);
-        FacilityPhoneDTO result = facilityPhoneMapper.facilityPhoneToFacilityPhoneDTO(facilityPhone);
+        FacilityPhoneDTO result = facilityPhoneMapper.toDto(facilityPhone);
         return ResponseEntity.created(new URI("/api/facility-phones/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -78,9 +77,9 @@ public class FacilityPhoneResource {
         if (facilityPhoneDTO.getId() == null) {
             return createFacilityPhone(facilityPhoneDTO);
         }
-        FacilityPhone facilityPhone = facilityPhoneMapper.facilityPhoneDTOToFacilityPhone(facilityPhoneDTO);
+        FacilityPhone facilityPhone = facilityPhoneMapper.toEntity(facilityPhoneDTO);
         facilityPhone = facilityPhoneRepository.save(facilityPhone);
-        FacilityPhoneDTO result = facilityPhoneMapper.facilityPhoneToFacilityPhoneDTO(facilityPhone);
+        FacilityPhoneDTO result = facilityPhoneMapper.toDto(facilityPhone);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, facilityPhoneDTO.getId().toString()))
             .body(result);
@@ -96,7 +95,7 @@ public class FacilityPhoneResource {
     public List<FacilityPhoneDTO> getAllFacilityPhones() {
         log.debug("REST request to get all FacilityPhones");
         List<FacilityPhone> facilityPhones = facilityPhoneRepository.findAll();
-        return facilityPhoneMapper.facilityPhonesToFacilityPhoneDTOs(facilityPhones);
+        return facilityPhoneMapper.toDto(facilityPhones);
     }
 
     /**
@@ -110,7 +109,7 @@ public class FacilityPhoneResource {
     public ResponseEntity<FacilityPhoneDTO> getFacilityPhone(@PathVariable Long id) {
         log.debug("REST request to get FacilityPhone : {}", id);
         FacilityPhone facilityPhone = facilityPhoneRepository.findOne(id);
-        FacilityPhoneDTO facilityPhoneDTO = facilityPhoneMapper.facilityPhoneToFacilityPhoneDTO(facilityPhone);
+        FacilityPhoneDTO facilityPhoneDTO = facilityPhoneMapper.toDto(facilityPhone);
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(facilityPhoneDTO));
     }
 

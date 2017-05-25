@@ -11,51 +11,55 @@ import { AssignedWorkerDeletePopupComponent } from './assigned-worker-delete-dia
 
 import { Principal } from '../../shared';
 
-
 export const assignedWorkerRoute: Routes = [
-  {
-    path: 'assigned-worker',
-    component: AssignedWorkerComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'AssignedWorkers'
+    {
+        path: 'assigned-worker',
+        component: AssignedWorkerComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'AssignedWorkers'
+        },
+        canActivate: [UserRouteAccessService]
+    }, {
+        path: 'assigned-worker/:id',
+        component: AssignedWorkerDetailComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'AssignedWorkers'
+        },
+        canActivate: [UserRouteAccessService]
     }
-  }, {
-    path: 'assigned-worker/:id',
-    component: AssignedWorkerDetailComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'AssignedWorkers'
-    }
-  }
 ];
 
 export const assignedWorkerPopupRoute: Routes = [
-  {
-    path: 'assigned-worker-new',
-    component: AssignedWorkerPopupComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'AssignedWorkers'
+    {
+        path: 'assigned-worker-new',
+        component: AssignedWorkerPopupComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'AssignedWorkers'
+        },
+        canActivate: [UserRouteAccessService],
+        outlet: 'popup'
     },
-    outlet: 'popup'
-  },
-  {
-    path: 'assigned-worker/:id/edit',
-    component: AssignedWorkerPopupComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'AssignedWorkers'
+    {
+        path: 'assigned-worker/:id/edit',
+        component: AssignedWorkerPopupComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'AssignedWorkers'
+        },
+        canActivate: [UserRouteAccessService],
+        outlet: 'popup'
     },
-    outlet: 'popup'
-  },
-  {
-    path: 'assigned-worker/:id/delete',
-    component: AssignedWorkerDeletePopupComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'AssignedWorkers'
-    },
-    outlet: 'popup'
-  }
+    {
+        path: 'assigned-worker/:id/delete',
+        component: AssignedWorkerDeletePopupComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'AssignedWorkers'
+        },
+        canActivate: [UserRouteAccessService],
+        outlet: 'popup'
+    }
 ];

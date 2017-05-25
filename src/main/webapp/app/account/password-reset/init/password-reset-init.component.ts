@@ -17,7 +17,7 @@ export class PasswordResetInitComponent implements OnInit, AfterViewInit {
         private elementRef: ElementRef,
         private renderer: Renderer
     ) {
-        }
+    }
 
     ngOnInit() {
         this.resetAccount = {};
@@ -27,8 +27,7 @@ export class PasswordResetInitComponent implements OnInit, AfterViewInit {
         this.renderer.invokeElementMethod(this.elementRef.nativeElement.querySelector('#email'), 'focus', []);
     }
 
-    requestReset () {
-
+    requestReset() {
         this.error = null;
         this.errorEmailNotExists = null;
 
@@ -36,7 +35,7 @@ export class PasswordResetInitComponent implements OnInit, AfterViewInit {
             this.success = 'OK';
         }, (response) => {
             this.success = null;
-            if (response.status === 400 && response.data === 'e-mail address not registered') {
+            if (response.status === 400 && response.data === 'email address not registered') {
                 this.errorEmailNotExists = 'ERROR';
             } else {
                 this.error = 'ERROR';

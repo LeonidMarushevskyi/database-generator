@@ -6,21 +6,21 @@ import { EthnicityTypeService } from './ethnicity-type.service';
 @Injectable()
 export class EthnicityTypePopupService {
     private isOpen = false;
-    constructor (
+    constructor(
         private modalService: NgbModal,
         private router: Router,
         private ethnicityTypeService: EthnicityTypeService
 
     ) {}
 
-    open (component: Component, id?: number | any): NgbModalRef {
+    open(component: Component, id?: number | any): NgbModalRef {
         if (this.isOpen) {
             return;
         }
         this.isOpen = true;
 
         if (id) {
-            this.ethnicityTypeService.find(id).subscribe(ethnicityType => {
+            this.ethnicityTypeService.find(id).subscribe((ethnicityType) => {
                 this.ethnicityTypeModalRef(component, ethnicityType);
             });
         } else {
@@ -29,9 +29,9 @@ export class EthnicityTypePopupService {
     }
 
     ethnicityTypeModalRef(component: Component, ethnicityType: EthnicityType): NgbModalRef {
-        let modalRef = this.modalService.open(component, { size: 'lg', backdrop: 'static'});
+        const modalRef = this.modalService.open(component, { size: 'lg', backdrop: 'static'});
         modalRef.componentInstance.ethnicityType = ethnicityType;
-        modalRef.result.then(result => {
+        modalRef.result.then((result) => {
             this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true });
             this.isOpen = false;
         }, (reason) => {

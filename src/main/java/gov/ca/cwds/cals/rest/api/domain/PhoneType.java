@@ -29,7 +29,7 @@ public class PhoneType implements Serializable {
     private String code;
 
     @Size(max = 20)
-    @Column(name = "type", length = 20)
+    @Column(name = "jhi_type", length = 20)
     private String type;
 
     public Long getId() {
@@ -75,23 +75,23 @@ public class PhoneType implements Serializable {
             return false;
         }
         PhoneType phoneType = (PhoneType) o;
-        if (phoneType.id == null || id == null) {
+        if (phoneType.getId() == null || getId() == null) {
             return false;
         }
-        return Objects.equals(id, phoneType.id);
+        return Objects.equals(getId(), phoneType.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hashCode(getId());
     }
 
     @Override
     public String toString() {
         return "PhoneType{" +
-            "id=" + id +
-            ", code='" + code + "'" +
-            ", type='" + type + "'" +
-            '}';
+            "id=" + getId() +
+            ", code='" + getCode() + "'" +
+            ", type='" + getType() + "'" +
+            "}";
     }
 }

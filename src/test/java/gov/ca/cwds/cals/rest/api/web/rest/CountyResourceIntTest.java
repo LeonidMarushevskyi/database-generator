@@ -101,7 +101,7 @@ public class CountyResourceIntTest {
         int databaseSizeBeforeCreate = countyRepository.findAll().size();
 
         // Create the County
-        CountyDTO countyDTO = countyMapper.countyToCountyDTO(county);
+        CountyDTO countyDTO = countyMapper.toDto(county);
         restCountyMockMvc.perform(post("/api/counties")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(countyDTO)))
@@ -122,7 +122,7 @@ public class CountyResourceIntTest {
 
         // Create the County with an existing ID
         county.setId(1L);
-        CountyDTO countyDTO = countyMapper.countyToCountyDTO(county);
+        CountyDTO countyDTO = countyMapper.toDto(county);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restCountyMockMvc.perform(post("/api/counties")
@@ -143,7 +143,7 @@ public class CountyResourceIntTest {
         county.setCode(null);
 
         // Create the County, which fails.
-        CountyDTO countyDTO = countyMapper.countyToCountyDTO(county);
+        CountyDTO countyDTO = countyMapper.toDto(county);
 
         restCountyMockMvc.perform(post("/api/counties")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -204,7 +204,7 @@ public class CountyResourceIntTest {
         updatedCounty
             .code(UPDATED_CODE)
             .description(UPDATED_DESCRIPTION);
-        CountyDTO countyDTO = countyMapper.countyToCountyDTO(updatedCounty);
+        CountyDTO countyDTO = countyMapper.toDto(updatedCounty);
 
         restCountyMockMvc.perform(put("/api/counties")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -225,7 +225,7 @@ public class CountyResourceIntTest {
         int databaseSizeBeforeUpdate = countyRepository.findAll().size();
 
         // Create the County
-        CountyDTO countyDTO = countyMapper.countyToCountyDTO(county);
+        CountyDTO countyDTO = countyMapper.toDto(county);
 
         // If the entity doesn't have an ID, it will be created instead of just being updated
         restCountyMockMvc.perform(put("/api/counties")
@@ -259,5 +259,37 @@ public class CountyResourceIntTest {
     @Transactional
     public void equalsVerifier() throws Exception {
         TestUtil.equalsVerifier(County.class);
+        County county1 = new County();
+        county1.setId(1L);
+        County county2 = new County();
+        county2.setId(county1.getId());
+        assertThat(county1).isEqualTo(county2);
+        county2.setId(2L);
+        assertThat(county1).isNotEqualTo(county2);
+        county1.setId(null);
+        assertThat(county1).isNotEqualTo(county2);
+    }
+
+    @Test
+    @Transactional
+    public void dtoEqualsVerifier() throws Exception {
+        TestUtil.equalsVerifier(CountyDTO.class);
+        CountyDTO countyDTO1 = new CountyDTO();
+        countyDTO1.setId(1L);
+        CountyDTO countyDTO2 = new CountyDTO();
+        assertThat(countyDTO1).isNotEqualTo(countyDTO2);
+        countyDTO2.setId(countyDTO1.getId());
+        assertThat(countyDTO1).isEqualTo(countyDTO2);
+        countyDTO2.setId(2L);
+        assertThat(countyDTO1).isNotEqualTo(countyDTO2);
+        countyDTO1.setId(null);
+        assertThat(countyDTO1).isNotEqualTo(countyDTO2);
+    }
+
+    @Test
+    @Transactional
+    public void testEntityFromId() {
+        assertThat(countyMapper.fromId(42L).getId()).isEqualTo(42);
+        assertThat(countyMapper.fromId(null)).isNull();
     }
 }

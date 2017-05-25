@@ -15,10 +15,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.LinkedList;
+
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * REST controller for managing PersonRace.
@@ -54,9 +53,9 @@ public class PersonRaceResource {
         if (personRaceDTO.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new personRace cannot already have an ID")).body(null);
         }
-        PersonRace personRace = personRaceMapper.personRaceDTOToPersonRace(personRaceDTO);
+        PersonRace personRace = personRaceMapper.toEntity(personRaceDTO);
         personRace = personRaceRepository.save(personRace);
-        PersonRaceDTO result = personRaceMapper.personRaceToPersonRaceDTO(personRace);
+        PersonRaceDTO result = personRaceMapper.toDto(personRace);
         return ResponseEntity.created(new URI("/api/person-races/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -78,9 +77,9 @@ public class PersonRaceResource {
         if (personRaceDTO.getId() == null) {
             return createPersonRace(personRaceDTO);
         }
-        PersonRace personRace = personRaceMapper.personRaceDTOToPersonRace(personRaceDTO);
+        PersonRace personRace = personRaceMapper.toEntity(personRaceDTO);
         personRace = personRaceRepository.save(personRace);
-        PersonRaceDTO result = personRaceMapper.personRaceToPersonRaceDTO(personRace);
+        PersonRaceDTO result = personRaceMapper.toDto(personRace);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, personRaceDTO.getId().toString()))
             .body(result);
@@ -96,7 +95,7 @@ public class PersonRaceResource {
     public List<PersonRaceDTO> getAllPersonRaces() {
         log.debug("REST request to get all PersonRaces");
         List<PersonRace> personRaces = personRaceRepository.findAll();
-        return personRaceMapper.personRacesToPersonRaceDTOs(personRaces);
+        return personRaceMapper.toDto(personRaces);
     }
 
     /**
@@ -110,7 +109,7 @@ public class PersonRaceResource {
     public ResponseEntity<PersonRaceDTO> getPersonRace(@PathVariable Long id) {
         log.debug("REST request to get PersonRace : {}", id);
         PersonRace personRace = personRaceRepository.findOne(id);
-        PersonRaceDTO personRaceDTO = personRaceMapper.personRaceToPersonRaceDTO(personRace);
+        PersonRaceDTO personRaceDTO = personRaceMapper.toDto(personRace);
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(personRaceDTO));
     }
 

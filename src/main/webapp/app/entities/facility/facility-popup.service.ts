@@ -6,21 +6,21 @@ import { FacilityService } from './facility.service';
 @Injectable()
 export class FacilityPopupService {
     private isOpen = false;
-    constructor (
+    constructor(
         private modalService: NgbModal,
         private router: Router,
         private facilityService: FacilityService
 
     ) {}
 
-    open (component: Component, id?: number | any): NgbModalRef {
+    open(component: Component, id?: number | any): NgbModalRef {
         if (this.isOpen) {
             return;
         }
         this.isOpen = true;
 
         if (id) {
-            this.facilityService.find(id).subscribe(facility => {
+            this.facilityService.find(id).subscribe((facility) => {
                 if (facility.licenseEffectiveDate) {
                     facility.licenseEffectiveDate = {
                         year: facility.licenseEffectiveDate.getFullYear(),
@@ -50,9 +50,9 @@ export class FacilityPopupService {
     }
 
     facilityModalRef(component: Component, facility: Facility): NgbModalRef {
-        let modalRef = this.modalService.open(component, { size: 'lg', backdrop: 'static'});
+        const modalRef = this.modalService.open(component, { size: 'lg', backdrop: 'static'});
         modalRef.componentInstance.facility = facility;
-        modalRef.result.then(result => {
+        modalRef.result.then((result) => {
             this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true });
             this.isOpen = false;
         }, (reason) => {

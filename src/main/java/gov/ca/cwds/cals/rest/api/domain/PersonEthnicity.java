@@ -71,21 +71,21 @@ public class PersonEthnicity implements Serializable {
             return false;
         }
         PersonEthnicity personEthnicity = (PersonEthnicity) o;
-        if (personEthnicity.id == null || id == null) {
+        if (personEthnicity.getId() == null || getId() == null) {
             return false;
         }
-        return Objects.equals(id, personEthnicity.id);
+        return Objects.equals(getId(), personEthnicity.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hashCode(getId());
     }
 
     @Override
     public String toString() {
         return "PersonEthnicity{" +
-            "id=" + id +
-            '}';
+            "id=" + getId() +
+            "}";
     }
 }

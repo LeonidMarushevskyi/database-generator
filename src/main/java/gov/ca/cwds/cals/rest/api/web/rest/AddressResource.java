@@ -16,10 +16,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.LinkedList;
+
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * REST controller for managing Address.
@@ -55,9 +54,9 @@ public class AddressResource {
         if (addressDTO.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new address cannot already have an ID")).body(null);
         }
-        Address address = addressMapper.addressDTOToAddress(addressDTO);
+        Address address = addressMapper.toEntity(addressDTO);
         address = addressRepository.save(address);
-        AddressDTO result = addressMapper.addressToAddressDTO(address);
+        AddressDTO result = addressMapper.toDto(address);
         return ResponseEntity.created(new URI("/api/addresses/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -79,9 +78,9 @@ public class AddressResource {
         if (addressDTO.getId() == null) {
             return createAddress(addressDTO);
         }
-        Address address = addressMapper.addressDTOToAddress(addressDTO);
+        Address address = addressMapper.toEntity(addressDTO);
         address = addressRepository.save(address);
-        AddressDTO result = addressMapper.addressToAddressDTO(address);
+        AddressDTO result = addressMapper.toDto(address);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, addressDTO.getId().toString()))
             .body(result);
@@ -97,7 +96,7 @@ public class AddressResource {
     public List<AddressDTO> getAllAddresses() {
         log.debug("REST request to get all Addresses");
         List<Address> addresses = addressRepository.findAll();
-        return addressMapper.addressesToAddressDTOs(addresses);
+        return addressMapper.toDto(addresses);
     }
 
     /**
@@ -111,7 +110,7 @@ public class AddressResource {
     public ResponseEntity<AddressDTO> getAddress(@PathVariable Long id) {
         log.debug("REST request to get Address : {}", id);
         Address address = addressRepository.findOne(id);
-        AddressDTO addressDTO = addressMapper.addressToAddressDTO(address);
+        AddressDTO addressDTO = addressMapper.toDto(address);
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(addressDTO));
     }
 

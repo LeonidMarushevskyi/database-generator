@@ -101,7 +101,7 @@ public class FacilityStatusResourceIntTest {
         int databaseSizeBeforeCreate = facilityStatusRepository.findAll().size();
 
         // Create the FacilityStatus
-        FacilityStatusDTO facilityStatusDTO = facilityStatusMapper.facilityStatusToFacilityStatusDTO(facilityStatus);
+        FacilityStatusDTO facilityStatusDTO = facilityStatusMapper.toDto(facilityStatus);
         restFacilityStatusMockMvc.perform(post("/api/facility-statuses")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(facilityStatusDTO)))
@@ -122,7 +122,7 @@ public class FacilityStatusResourceIntTest {
 
         // Create the FacilityStatus with an existing ID
         facilityStatus.setId(1L);
-        FacilityStatusDTO facilityStatusDTO = facilityStatusMapper.facilityStatusToFacilityStatusDTO(facilityStatus);
+        FacilityStatusDTO facilityStatusDTO = facilityStatusMapper.toDto(facilityStatus);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restFacilityStatusMockMvc.perform(post("/api/facility-statuses")
@@ -143,7 +143,7 @@ public class FacilityStatusResourceIntTest {
         facilityStatus.setCode(null);
 
         // Create the FacilityStatus, which fails.
-        FacilityStatusDTO facilityStatusDTO = facilityStatusMapper.facilityStatusToFacilityStatusDTO(facilityStatus);
+        FacilityStatusDTO facilityStatusDTO = facilityStatusMapper.toDto(facilityStatus);
 
         restFacilityStatusMockMvc.perform(post("/api/facility-statuses")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -204,7 +204,7 @@ public class FacilityStatusResourceIntTest {
         updatedFacilityStatus
             .code(UPDATED_CODE)
             .description(UPDATED_DESCRIPTION);
-        FacilityStatusDTO facilityStatusDTO = facilityStatusMapper.facilityStatusToFacilityStatusDTO(updatedFacilityStatus);
+        FacilityStatusDTO facilityStatusDTO = facilityStatusMapper.toDto(updatedFacilityStatus);
 
         restFacilityStatusMockMvc.perform(put("/api/facility-statuses")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -225,7 +225,7 @@ public class FacilityStatusResourceIntTest {
         int databaseSizeBeforeUpdate = facilityStatusRepository.findAll().size();
 
         // Create the FacilityStatus
-        FacilityStatusDTO facilityStatusDTO = facilityStatusMapper.facilityStatusToFacilityStatusDTO(facilityStatus);
+        FacilityStatusDTO facilityStatusDTO = facilityStatusMapper.toDto(facilityStatus);
 
         // If the entity doesn't have an ID, it will be created instead of just being updated
         restFacilityStatusMockMvc.perform(put("/api/facility-statuses")
@@ -259,5 +259,37 @@ public class FacilityStatusResourceIntTest {
     @Transactional
     public void equalsVerifier() throws Exception {
         TestUtil.equalsVerifier(FacilityStatus.class);
+        FacilityStatus facilityStatus1 = new FacilityStatus();
+        facilityStatus1.setId(1L);
+        FacilityStatus facilityStatus2 = new FacilityStatus();
+        facilityStatus2.setId(facilityStatus1.getId());
+        assertThat(facilityStatus1).isEqualTo(facilityStatus2);
+        facilityStatus2.setId(2L);
+        assertThat(facilityStatus1).isNotEqualTo(facilityStatus2);
+        facilityStatus1.setId(null);
+        assertThat(facilityStatus1).isNotEqualTo(facilityStatus2);
+    }
+
+    @Test
+    @Transactional
+    public void dtoEqualsVerifier() throws Exception {
+        TestUtil.equalsVerifier(FacilityStatusDTO.class);
+        FacilityStatusDTO facilityStatusDTO1 = new FacilityStatusDTO();
+        facilityStatusDTO1.setId(1L);
+        FacilityStatusDTO facilityStatusDTO2 = new FacilityStatusDTO();
+        assertThat(facilityStatusDTO1).isNotEqualTo(facilityStatusDTO2);
+        facilityStatusDTO2.setId(facilityStatusDTO1.getId());
+        assertThat(facilityStatusDTO1).isEqualTo(facilityStatusDTO2);
+        facilityStatusDTO2.setId(2L);
+        assertThat(facilityStatusDTO1).isNotEqualTo(facilityStatusDTO2);
+        facilityStatusDTO1.setId(null);
+        assertThat(facilityStatusDTO1).isNotEqualTo(facilityStatusDTO2);
+    }
+
+    @Test
+    @Transactional
+    public void testEntityFromId() {
+        assertThat(facilityStatusMapper.fromId(42L).getId()).isEqualTo(42);
+        assertThat(facilityStatusMapper.fromId(null)).isNull();
     }
 }

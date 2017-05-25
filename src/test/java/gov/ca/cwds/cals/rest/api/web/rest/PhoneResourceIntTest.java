@@ -97,7 +97,7 @@ public class PhoneResourceIntTest {
         int databaseSizeBeforeCreate = phoneRepository.findAll().size();
 
         // Create the Phone
-        PhoneDTO phoneDTO = phoneMapper.phoneToPhoneDTO(phone);
+        PhoneDTO phoneDTO = phoneMapper.toDto(phone);
         restPhoneMockMvc.perform(post("/api/phones")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(phoneDTO)))
@@ -117,7 +117,7 @@ public class PhoneResourceIntTest {
 
         // Create the Phone with an existing ID
         phone.setId(1L);
-        PhoneDTO phoneDTO = phoneMapper.phoneToPhoneDTO(phone);
+        PhoneDTO phoneDTO = phoneMapper.toDto(phone);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restPhoneMockMvc.perform(post("/api/phones")
@@ -138,7 +138,7 @@ public class PhoneResourceIntTest {
         phone.setNumber(null);
 
         // Create the Phone, which fails.
-        PhoneDTO phoneDTO = phoneMapper.phoneToPhoneDTO(phone);
+        PhoneDTO phoneDTO = phoneMapper.toDto(phone);
 
         restPhoneMockMvc.perform(post("/api/phones")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -196,7 +196,7 @@ public class PhoneResourceIntTest {
         Phone updatedPhone = phoneRepository.findOne(phone.getId());
         updatedPhone
             .number(UPDATED_NUMBER);
-        PhoneDTO phoneDTO = phoneMapper.phoneToPhoneDTO(updatedPhone);
+        PhoneDTO phoneDTO = phoneMapper.toDto(updatedPhone);
 
         restPhoneMockMvc.perform(put("/api/phones")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -216,7 +216,7 @@ public class PhoneResourceIntTest {
         int databaseSizeBeforeUpdate = phoneRepository.findAll().size();
 
         // Create the Phone
-        PhoneDTO phoneDTO = phoneMapper.phoneToPhoneDTO(phone);
+        PhoneDTO phoneDTO = phoneMapper.toDto(phone);
 
         // If the entity doesn't have an ID, it will be created instead of just being updated
         restPhoneMockMvc.perform(put("/api/phones")
@@ -250,5 +250,37 @@ public class PhoneResourceIntTest {
     @Transactional
     public void equalsVerifier() throws Exception {
         TestUtil.equalsVerifier(Phone.class);
+        Phone phone1 = new Phone();
+        phone1.setId(1L);
+        Phone phone2 = new Phone();
+        phone2.setId(phone1.getId());
+        assertThat(phone1).isEqualTo(phone2);
+        phone2.setId(2L);
+        assertThat(phone1).isNotEqualTo(phone2);
+        phone1.setId(null);
+        assertThat(phone1).isNotEqualTo(phone2);
+    }
+
+    @Test
+    @Transactional
+    public void dtoEqualsVerifier() throws Exception {
+        TestUtil.equalsVerifier(PhoneDTO.class);
+        PhoneDTO phoneDTO1 = new PhoneDTO();
+        phoneDTO1.setId(1L);
+        PhoneDTO phoneDTO2 = new PhoneDTO();
+        assertThat(phoneDTO1).isNotEqualTo(phoneDTO2);
+        phoneDTO2.setId(phoneDTO1.getId());
+        assertThat(phoneDTO1).isEqualTo(phoneDTO2);
+        phoneDTO2.setId(2L);
+        assertThat(phoneDTO1).isNotEqualTo(phoneDTO2);
+        phoneDTO1.setId(null);
+        assertThat(phoneDTO1).isNotEqualTo(phoneDTO2);
+    }
+
+    @Test
+    @Transactional
+    public void testEntityFromId() {
+        assertThat(phoneMapper.fromId(42L).getId()).isEqualTo(42);
+        assertThat(phoneMapper.fromId(null)).isNull();
     }
 }

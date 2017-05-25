@@ -1,5 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs/Rx';
+import { EventManager  } from 'ng-jhipster';
+
 import { FacilityPhone } from './facility-phone.model';
 import { FacilityPhoneService } from './facility-phone.service';
 
@@ -10,22 +13,25 @@ import { FacilityPhoneService } from './facility-phone.service';
 export class FacilityPhoneDetailComponent implements OnInit, OnDestroy {
 
     facilityPhone: FacilityPhone;
-    private subscription: any;
+    private subscription: Subscription;
+    private eventSubscriber: Subscription;
 
     constructor(
+        private eventManager: EventManager,
         private facilityPhoneService: FacilityPhoneService,
         private route: ActivatedRoute
     ) {
     }
 
     ngOnInit() {
-        this.subscription = this.route.params.subscribe(params => {
+        this.subscription = this.route.params.subscribe((params) => {
             this.load(params['id']);
         });
+        this.registerChangeInFacilityPhones();
     }
 
-    load (id) {
-        this.facilityPhoneService.find(id).subscribe(facilityPhone => {
+    load(id) {
+        this.facilityPhoneService.find(id).subscribe((facilityPhone) => {
             this.facilityPhone = facilityPhone;
         });
     }
@@ -35,6 +41,13 @@ export class FacilityPhoneDetailComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.subscription.unsubscribe();
+        this.eventManager.destroy(this.eventSubscriber);
     }
 
+    registerChangeInFacilityPhones() {
+        this.eventSubscriber = this.eventManager.subscribe(
+            'facilityPhoneListModification',
+            (response) => this.load(this.facilityPhone.id)
+        );
+    }
 }

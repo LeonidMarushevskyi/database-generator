@@ -51,21 +51,21 @@ public class PersonLanguageDTO implements Serializable {
         }
 
         PersonLanguageDTO personLanguageDTO = (PersonLanguageDTO) o;
-
-        if ( ! Objects.equals(id, personLanguageDTO.id)) { return false; }
-
-        return true;
+        if(personLanguageDTO.getId() == null || getId() == null) {
+            return false;
+        }
+        return Objects.equals(getId(), personLanguageDTO.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hashCode(getId());
     }
 
     @Override
     public String toString() {
         return "PersonLanguageDTO{" +
-            "id=" + id +
-            '}';
+            "id=" + getId() +
+            "}";
     }
 }

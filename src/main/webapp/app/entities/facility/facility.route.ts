@@ -14,66 +14,71 @@ import { Principal } from '../../shared';
 @Injectable()
 export class FacilityResolvePagingParams implements Resolve<any> {
 
-  constructor(private paginationUtil: PaginationUtil) {}
+    constructor(private paginationUtil: PaginationUtil) {}
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-      let page = route.queryParams['page'] ? route.queryParams['page'] : '1';
-      let sort = route.queryParams['sort'] ? route.queryParams['sort'] : 'id,asc';
-      return {
-          page: this.paginationUtil.parsePage(page),
-          predicate: this.paginationUtil.parsePredicate(sort),
-          ascending: this.paginationUtil.parseAscending(sort)
-    };
-  }
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+        const page = route.queryParams['page'] ? route.queryParams['page'] : '1';
+        const sort = route.queryParams['sort'] ? route.queryParams['sort'] : 'id,asc';
+        return {
+            page: this.paginationUtil.parsePage(page),
+            predicate: this.paginationUtil.parsePredicate(sort),
+            ascending: this.paginationUtil.parseAscending(sort)
+      };
+    }
 }
 
 export const facilityRoute: Routes = [
-  {
-    path: 'facility',
-    component: FacilityComponent,
-    resolve: {
-      'pagingParams': FacilityResolvePagingParams
-    },
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'Facilities'
+    {
+        path: 'facility',
+        component: FacilityComponent,
+        resolve: {
+            'pagingParams': FacilityResolvePagingParams
+        },
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'Facilities'
+        },
+        canActivate: [UserRouteAccessService]
+    }, {
+        path: 'facility/:id',
+        component: FacilityDetailComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'Facilities'
+        },
+        canActivate: [UserRouteAccessService]
     }
-  }, {
-    path: 'facility/:id',
-    component: FacilityDetailComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'Facilities'
-    }
-  }
 ];
 
 export const facilityPopupRoute: Routes = [
-  {
-    path: 'facility-new',
-    component: FacilityPopupComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'Facilities'
+    {
+        path: 'facility-new',
+        component: FacilityPopupComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'Facilities'
+        },
+        canActivate: [UserRouteAccessService],
+        outlet: 'popup'
     },
-    outlet: 'popup'
-  },
-  {
-    path: 'facility/:id/edit',
-    component: FacilityPopupComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'Facilities'
+    {
+        path: 'facility/:id/edit',
+        component: FacilityPopupComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'Facilities'
+        },
+        canActivate: [UserRouteAccessService],
+        outlet: 'popup'
     },
-    outlet: 'popup'
-  },
-  {
-    path: 'facility/:id/delete',
-    component: FacilityDeletePopupComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'Facilities'
-    },
-    outlet: 'popup'
-  }
+    {
+        path: 'facility/:id/delete',
+        component: FacilityDeletePopupComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'Facilities'
+        },
+        canActivate: [UserRouteAccessService],
+        outlet: 'popup'
+    }
 ];

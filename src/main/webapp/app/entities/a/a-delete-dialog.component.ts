@@ -23,12 +23,12 @@ export class ADeleteDialogComponent {
     ) {
     }
 
-    clear () {
+    clear() {
         this.activeModal.dismiss('cancel');
     }
 
-    confirmDelete (id: number) {
-        this.aService.delete(id).subscribe(response => {
+    confirmDelete(id: number) {
+        this.aService.delete(id).subscribe((response) => {
             this.eventManager.broadcast({
                 name: 'aListModification',
                 content: 'Deleted an a'
@@ -47,13 +47,13 @@ export class ADeletePopupComponent implements OnInit, OnDestroy {
     modalRef: NgbModalRef;
     routeSub: any;
 
-    constructor (
+    constructor(
         private route: ActivatedRoute,
         private aPopupService: APopupService
     ) {}
 
     ngOnInit() {
-        this.routeSub = this.route.params.subscribe(params => {
+        this.routeSub = this.route.params.subscribe((params) => {
             this.modalRef = this.aPopupService
                 .open(ADeleteDialogComponent, params['id']);
         });

@@ -16,10 +16,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.LinkedList;
+
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * REST controller for managing AssignedWorker.
@@ -55,9 +54,9 @@ public class AssignedWorkerResource {
         if (assignedWorkerDTO.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new assignedWorker cannot already have an ID")).body(null);
         }
-        AssignedWorker assignedWorker = assignedWorkerMapper.assignedWorkerDTOToAssignedWorker(assignedWorkerDTO);
+        AssignedWorker assignedWorker = assignedWorkerMapper.toEntity(assignedWorkerDTO);
         assignedWorker = assignedWorkerRepository.save(assignedWorker);
-        AssignedWorkerDTO result = assignedWorkerMapper.assignedWorkerToAssignedWorkerDTO(assignedWorker);
+        AssignedWorkerDTO result = assignedWorkerMapper.toDto(assignedWorker);
         return ResponseEntity.created(new URI("/api/assigned-workers/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -79,9 +78,9 @@ public class AssignedWorkerResource {
         if (assignedWorkerDTO.getId() == null) {
             return createAssignedWorker(assignedWorkerDTO);
         }
-        AssignedWorker assignedWorker = assignedWorkerMapper.assignedWorkerDTOToAssignedWorker(assignedWorkerDTO);
+        AssignedWorker assignedWorker = assignedWorkerMapper.toEntity(assignedWorkerDTO);
         assignedWorker = assignedWorkerRepository.save(assignedWorker);
-        AssignedWorkerDTO result = assignedWorkerMapper.assignedWorkerToAssignedWorkerDTO(assignedWorker);
+        AssignedWorkerDTO result = assignedWorkerMapper.toDto(assignedWorker);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, assignedWorkerDTO.getId().toString()))
             .body(result);
@@ -97,7 +96,7 @@ public class AssignedWorkerResource {
     public List<AssignedWorkerDTO> getAllAssignedWorkers() {
         log.debug("REST request to get all AssignedWorkers");
         List<AssignedWorker> assignedWorkers = assignedWorkerRepository.findAll();
-        return assignedWorkerMapper.assignedWorkersToAssignedWorkerDTOs(assignedWorkers);
+        return assignedWorkerMapper.toDto(assignedWorkers);
     }
 
     /**
@@ -111,7 +110,7 @@ public class AssignedWorkerResource {
     public ResponseEntity<AssignedWorkerDTO> getAssignedWorker(@PathVariable Long id) {
         log.debug("REST request to get AssignedWorker : {}", id);
         AssignedWorker assignedWorker = assignedWorkerRepository.findOne(id);
-        AssignedWorkerDTO assignedWorkerDTO = assignedWorkerMapper.assignedWorkerToAssignedWorkerDTO(assignedWorker);
+        AssignedWorkerDTO assignedWorkerDTO = assignedWorkerMapper.toDto(assignedWorker);
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(assignedWorkerDTO));
     }
 

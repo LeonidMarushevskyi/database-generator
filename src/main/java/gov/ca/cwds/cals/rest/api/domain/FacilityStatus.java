@@ -74,23 +74,23 @@ public class FacilityStatus implements Serializable {
             return false;
         }
         FacilityStatus facilityStatus = (FacilityStatus) o;
-        if (facilityStatus.id == null || id == null) {
+        if (facilityStatus.getId() == null || getId() == null) {
             return false;
         }
-        return Objects.equals(id, facilityStatus.id);
+        return Objects.equals(getId(), facilityStatus.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hashCode(getId());
     }
 
     @Override
     public String toString() {
         return "FacilityStatus{" +
-            "id=" + id +
-            ", code='" + code + "'" +
-            ", description='" + description + "'" +
-            '}';
+            "id=" + getId() +
+            ", code='" + getCode() + "'" +
+            ", description='" + getDescription() + "'" +
+            "}";
     }
 }

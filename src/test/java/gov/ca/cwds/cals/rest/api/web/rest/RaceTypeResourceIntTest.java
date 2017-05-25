@@ -249,5 +249,14 @@ public class RaceTypeResourceIntTest {
     @Transactional
     public void equalsVerifier() throws Exception {
         TestUtil.equalsVerifier(RaceType.class);
+        RaceType raceType1 = new RaceType();
+        raceType1.setId(1L);
+        RaceType raceType2 = new RaceType();
+        raceType2.setId(raceType1.getId());
+        assertThat(raceType1).isEqualTo(raceType2);
+        raceType2.setId(2L);
+        assertThat(raceType1).isNotEqualTo(raceType2);
+        raceType1.setId(null);
+        assertThat(raceType1).isNotEqualTo(raceType2);
     }
 }

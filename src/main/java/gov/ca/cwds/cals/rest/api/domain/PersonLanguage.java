@@ -71,21 +71,21 @@ public class PersonLanguage implements Serializable {
             return false;
         }
         PersonLanguage personLanguage = (PersonLanguage) o;
-        if (personLanguage.id == null || id == null) {
+        if (personLanguage.getId() == null || getId() == null) {
             return false;
         }
-        return Objects.equals(id, personLanguage.id);
+        return Objects.equals(getId(), personLanguage.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hashCode(getId());
     }
 
     @Override
     public String toString() {
         return "PersonLanguage{" +
-            "id=" + id +
-            '}';
+            "id=" + getId() +
+            "}";
     }
 }

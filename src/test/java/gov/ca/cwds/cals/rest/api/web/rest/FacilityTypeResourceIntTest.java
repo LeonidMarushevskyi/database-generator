@@ -101,7 +101,7 @@ public class FacilityTypeResourceIntTest {
         int databaseSizeBeforeCreate = facilityTypeRepository.findAll().size();
 
         // Create the FacilityType
-        FacilityTypeDTO facilityTypeDTO = facilityTypeMapper.facilityTypeToFacilityTypeDTO(facilityType);
+        FacilityTypeDTO facilityTypeDTO = facilityTypeMapper.toDto(facilityType);
         restFacilityTypeMockMvc.perform(post("/api/facility-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(facilityTypeDTO)))
@@ -122,7 +122,7 @@ public class FacilityTypeResourceIntTest {
 
         // Create the FacilityType with an existing ID
         facilityType.setId(1L);
-        FacilityTypeDTO facilityTypeDTO = facilityTypeMapper.facilityTypeToFacilityTypeDTO(facilityType);
+        FacilityTypeDTO facilityTypeDTO = facilityTypeMapper.toDto(facilityType);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restFacilityTypeMockMvc.perform(post("/api/facility-types")
@@ -143,7 +143,7 @@ public class FacilityTypeResourceIntTest {
         facilityType.setCode(null);
 
         // Create the FacilityType, which fails.
-        FacilityTypeDTO facilityTypeDTO = facilityTypeMapper.facilityTypeToFacilityTypeDTO(facilityType);
+        FacilityTypeDTO facilityTypeDTO = facilityTypeMapper.toDto(facilityType);
 
         restFacilityTypeMockMvc.perform(post("/api/facility-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -204,7 +204,7 @@ public class FacilityTypeResourceIntTest {
         updatedFacilityType
             .code(UPDATED_CODE)
             .description(UPDATED_DESCRIPTION);
-        FacilityTypeDTO facilityTypeDTO = facilityTypeMapper.facilityTypeToFacilityTypeDTO(updatedFacilityType);
+        FacilityTypeDTO facilityTypeDTO = facilityTypeMapper.toDto(updatedFacilityType);
 
         restFacilityTypeMockMvc.perform(put("/api/facility-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -225,7 +225,7 @@ public class FacilityTypeResourceIntTest {
         int databaseSizeBeforeUpdate = facilityTypeRepository.findAll().size();
 
         // Create the FacilityType
-        FacilityTypeDTO facilityTypeDTO = facilityTypeMapper.facilityTypeToFacilityTypeDTO(facilityType);
+        FacilityTypeDTO facilityTypeDTO = facilityTypeMapper.toDto(facilityType);
 
         // If the entity doesn't have an ID, it will be created instead of just being updated
         restFacilityTypeMockMvc.perform(put("/api/facility-types")
@@ -259,5 +259,37 @@ public class FacilityTypeResourceIntTest {
     @Transactional
     public void equalsVerifier() throws Exception {
         TestUtil.equalsVerifier(FacilityType.class);
+        FacilityType facilityType1 = new FacilityType();
+        facilityType1.setId(1L);
+        FacilityType facilityType2 = new FacilityType();
+        facilityType2.setId(facilityType1.getId());
+        assertThat(facilityType1).isEqualTo(facilityType2);
+        facilityType2.setId(2L);
+        assertThat(facilityType1).isNotEqualTo(facilityType2);
+        facilityType1.setId(null);
+        assertThat(facilityType1).isNotEqualTo(facilityType2);
+    }
+
+    @Test
+    @Transactional
+    public void dtoEqualsVerifier() throws Exception {
+        TestUtil.equalsVerifier(FacilityTypeDTO.class);
+        FacilityTypeDTO facilityTypeDTO1 = new FacilityTypeDTO();
+        facilityTypeDTO1.setId(1L);
+        FacilityTypeDTO facilityTypeDTO2 = new FacilityTypeDTO();
+        assertThat(facilityTypeDTO1).isNotEqualTo(facilityTypeDTO2);
+        facilityTypeDTO2.setId(facilityTypeDTO1.getId());
+        assertThat(facilityTypeDTO1).isEqualTo(facilityTypeDTO2);
+        facilityTypeDTO2.setId(2L);
+        assertThat(facilityTypeDTO1).isNotEqualTo(facilityTypeDTO2);
+        facilityTypeDTO1.setId(null);
+        assertThat(facilityTypeDTO1).isNotEqualTo(facilityTypeDTO2);
+    }
+
+    @Test
+    @Transactional
+    public void testEntityFromId() {
+        assertThat(facilityTypeMapper.fromId(42L).getId()).isEqualTo(42);
+        assertThat(facilityTypeMapper.fromId(null)).isNull();
     }
 }

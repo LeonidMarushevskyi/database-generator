@@ -71,21 +71,21 @@ public class PersonRace implements Serializable {
             return false;
         }
         PersonRace personRace = (PersonRace) o;
-        if (personRace.id == null || id == null) {
+        if (personRace.getId() == null || getId() == null) {
             return false;
         }
-        return Objects.equals(id, personRace.id);
+        return Objects.equals(getId(), personRace.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hashCode(getId());
     }
 
     @Override
     public String toString() {
         return "PersonRace{" +
-            "id=" + id +
-            '}';
+            "id=" + getId() +
+            "}";
     }
 }

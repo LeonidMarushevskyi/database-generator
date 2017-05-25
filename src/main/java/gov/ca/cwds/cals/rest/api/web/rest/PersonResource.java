@@ -16,10 +16,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.LinkedList;
+
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * REST controller for managing Person.
@@ -55,9 +54,9 @@ public class PersonResource {
         if (personDTO.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new person cannot already have an ID")).body(null);
         }
-        Person person = personMapper.personDTOToPerson(personDTO);
+        Person person = personMapper.toEntity(personDTO);
         person = personRepository.save(person);
-        PersonDTO result = personMapper.personToPersonDTO(person);
+        PersonDTO result = personMapper.toDto(person);
         return ResponseEntity.created(new URI("/api/people/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -79,9 +78,9 @@ public class PersonResource {
         if (personDTO.getId() == null) {
             return createPerson(personDTO);
         }
-        Person person = personMapper.personDTOToPerson(personDTO);
+        Person person = personMapper.toEntity(personDTO);
         person = personRepository.save(person);
-        PersonDTO result = personMapper.personToPersonDTO(person);
+        PersonDTO result = personMapper.toDto(person);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, personDTO.getId().toString()))
             .body(result);
@@ -97,7 +96,7 @@ public class PersonResource {
     public List<PersonDTO> getAllPeople() {
         log.debug("REST request to get all People");
         List<Person> people = personRepository.findAll();
-        return personMapper.peopleToPersonDTOs(people);
+        return personMapper.toDto(people);
     }
 
     /**
@@ -111,7 +110,7 @@ public class PersonResource {
     public ResponseEntity<PersonDTO> getPerson(@PathVariable Long id) {
         log.debug("REST request to get Person : {}", id);
         Person person = personRepository.findOne(id);
-        PersonDTO personDTO = personMapper.personToPersonDTO(person);
+        PersonDTO personDTO = personMapper.toDto(person);
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(personDTO));
     }
 

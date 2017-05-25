@@ -26,6 +26,7 @@ public class PhoneTypeDTO implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
+
     public String getCode() {
         return code;
     }
@@ -33,6 +34,7 @@ public class PhoneTypeDTO implements Serializable {
     public void setCode(String code) {
         this.code = code;
     }
+
     public String getType() {
         return type;
     }
@@ -51,23 +53,23 @@ public class PhoneTypeDTO implements Serializable {
         }
 
         PhoneTypeDTO phoneTypeDTO = (PhoneTypeDTO) o;
-
-        if ( ! Objects.equals(id, phoneTypeDTO.id)) { return false; }
-
-        return true;
+        if(phoneTypeDTO.getId() == null || getId() == null) {
+            return false;
+        }
+        return Objects.equals(getId(), phoneTypeDTO.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hashCode(getId());
     }
 
     @Override
     public String toString() {
         return "PhoneTypeDTO{" +
-            "id=" + id +
-            ", code='" + code + "'" +
-            ", type='" + type + "'" +
-            '}';
+            "id=" + getId() +
+            ", code='" + getCode() + "'" +
+            ", type='" + getType() + "'" +
+            "}";
     }
 }

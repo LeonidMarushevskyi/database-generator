@@ -1,5 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs/Rx';
+import { EventManager  } from 'ng-jhipster';
+
 import { AddressType } from './address-type.model';
 import { AddressTypeService } from './address-type.service';
 
@@ -10,22 +13,25 @@ import { AddressTypeService } from './address-type.service';
 export class AddressTypeDetailComponent implements OnInit, OnDestroy {
 
     addressType: AddressType;
-    private subscription: any;
+    private subscription: Subscription;
+    private eventSubscriber: Subscription;
 
     constructor(
+        private eventManager: EventManager,
         private addressTypeService: AddressTypeService,
         private route: ActivatedRoute
     ) {
     }
 
     ngOnInit() {
-        this.subscription = this.route.params.subscribe(params => {
+        this.subscription = this.route.params.subscribe((params) => {
             this.load(params['id']);
         });
+        this.registerChangeInAddressTypes();
     }
 
-    load (id) {
-        this.addressTypeService.find(id).subscribe(addressType => {
+    load(id) {
+        this.addressTypeService.find(id).subscribe((addressType) => {
             this.addressType = addressType;
         });
     }
@@ -35,6 +41,13 @@ export class AddressTypeDetailComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.subscription.unsubscribe();
+        this.eventManager.destroy(this.eventSubscriber);
     }
 
+    registerChangeInAddressTypes() {
+        this.eventSubscriber = this.eventManager.subscribe(
+            'addressTypeListModification',
+            (response) => this.load(this.addressType.id)
+        );
+    }
 }

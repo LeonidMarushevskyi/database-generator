@@ -1,5 +1,6 @@
 package gov.ca.cwds.cals.rest.api.service.dto;
 
+
 import java.time.LocalDate;
 import javax.validation.constraints.*;
 import java.io.Serializable;
@@ -62,6 +63,7 @@ public class FacilityDTO implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
+
     public String getName() {
         return name;
     }
@@ -69,6 +71,7 @@ public class FacilityDTO implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
+
     public String getLicenseeName() {
         return licenseeName;
     }
@@ -76,6 +79,7 @@ public class FacilityDTO implements Serializable {
     public void setLicenseeName(String licenseeName) {
         this.licenseeName = licenseeName;
     }
+
     public String getLicenseeType() {
         return licenseeType;
     }
@@ -83,6 +87,7 @@ public class FacilityDTO implements Serializable {
     public void setLicenseeType(String licenseeType) {
         this.licenseeType = licenseeType;
     }
+
     public Long getLicenseNumber() {
         return licenseNumber;
     }
@@ -90,6 +95,7 @@ public class FacilityDTO implements Serializable {
     public void setLicenseNumber(Long licenseNumber) {
         this.licenseNumber = licenseNumber;
     }
+
     public String getLicenseStatus() {
         return licenseStatus;
     }
@@ -97,6 +103,7 @@ public class FacilityDTO implements Serializable {
     public void setLicenseStatus(String licenseStatus) {
         this.licenseStatus = licenseStatus;
     }
+
     public Integer getCapacity() {
         return capacity;
     }
@@ -104,6 +111,7 @@ public class FacilityDTO implements Serializable {
     public void setCapacity(Integer capacity) {
         this.capacity = capacity;
     }
+
     public LocalDate getLicenseEffectiveDate() {
         return licenseEffectiveDate;
     }
@@ -111,6 +119,7 @@ public class FacilityDTO implements Serializable {
     public void setLicenseEffectiveDate(LocalDate licenseEffectiveDate) {
         this.licenseEffectiveDate = licenseEffectiveDate;
     }
+
     public LocalDate getOriginalApplicationRecievedDate() {
         return originalApplicationRecievedDate;
     }
@@ -118,6 +127,7 @@ public class FacilityDTO implements Serializable {
     public void setOriginalApplicationRecievedDate(LocalDate originalApplicationRecievedDate) {
         this.originalApplicationRecievedDate = originalApplicationRecievedDate;
     }
+
     public LocalDate getLastVisitDate() {
         return lastVisitDate;
     }
@@ -125,6 +135,7 @@ public class FacilityDTO implements Serializable {
     public void setLastVisitDate(LocalDate lastVisitDate) {
         this.lastVisitDate = lastVisitDate;
     }
+
     public String getEmailAddress() {
         return emailAddress;
     }
@@ -132,6 +143,7 @@ public class FacilityDTO implements Serializable {
     public void setEmailAddress(String emailAddress) {
         this.emailAddress = emailAddress;
     }
+
     public String getLastVisitReason() {
         return lastVisitReason;
     }
@@ -190,32 +202,32 @@ public class FacilityDTO implements Serializable {
         }
 
         FacilityDTO facilityDTO = (FacilityDTO) o;
-
-        if ( ! Objects.equals(id, facilityDTO.id)) { return false; }
-
-        return true;
+        if(facilityDTO.getId() == null || getId() == null) {
+            return false;
+        }
+        return Objects.equals(getId(), facilityDTO.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hashCode(getId());
     }
 
     @Override
     public String toString() {
         return "FacilityDTO{" +
-            "id=" + id +
-            ", name='" + name + "'" +
-            ", licenseeName='" + licenseeName + "'" +
-            ", licenseeType='" + licenseeType + "'" +
-            ", licenseNumber='" + licenseNumber + "'" +
-            ", licenseStatus='" + licenseStatus + "'" +
-            ", capacity='" + capacity + "'" +
-            ", licenseEffectiveDate='" + licenseEffectiveDate + "'" +
-            ", originalApplicationRecievedDate='" + originalApplicationRecievedDate + "'" +
-            ", lastVisitDate='" + lastVisitDate + "'" +
-            ", emailAddress='" + emailAddress + "'" +
-            ", lastVisitReason='" + lastVisitReason + "'" +
-            '}';
+            "id=" + getId() +
+            ", name='" + getName() + "'" +
+            ", licenseeName='" + getLicenseeName() + "'" +
+            ", licenseeType='" + getLicenseeType() + "'" +
+            ", licenseNumber='" + getLicenseNumber() + "'" +
+            ", licenseStatus='" + getLicenseStatus() + "'" +
+            ", capacity='" + getCapacity() + "'" +
+            ", licenseEffectiveDate='" + getLicenseEffectiveDate() + "'" +
+            ", originalApplicationRecievedDate='" + getOriginalApplicationRecievedDate() + "'" +
+            ", lastVisitDate='" + getLastVisitDate() + "'" +
+            ", emailAddress='" + getEmailAddress() + "'" +
+            ", lastVisitReason='" + getLastVisitReason() + "'" +
+            "}";
     }
 }

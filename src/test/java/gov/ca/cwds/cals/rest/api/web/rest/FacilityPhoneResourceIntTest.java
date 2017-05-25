@@ -93,7 +93,7 @@ public class FacilityPhoneResourceIntTest {
         int databaseSizeBeforeCreate = facilityPhoneRepository.findAll().size();
 
         // Create the FacilityPhone
-        FacilityPhoneDTO facilityPhoneDTO = facilityPhoneMapper.facilityPhoneToFacilityPhoneDTO(facilityPhone);
+        FacilityPhoneDTO facilityPhoneDTO = facilityPhoneMapper.toDto(facilityPhone);
         restFacilityPhoneMockMvc.perform(post("/api/facility-phones")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(facilityPhoneDTO)))
@@ -112,7 +112,7 @@ public class FacilityPhoneResourceIntTest {
 
         // Create the FacilityPhone with an existing ID
         facilityPhone.setId(1L);
-        FacilityPhoneDTO facilityPhoneDTO = facilityPhoneMapper.facilityPhoneToFacilityPhoneDTO(facilityPhone);
+        FacilityPhoneDTO facilityPhoneDTO = facilityPhoneMapper.toDto(facilityPhone);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restFacilityPhoneMockMvc.perform(post("/api/facility-phones")
@@ -168,7 +168,7 @@ public class FacilityPhoneResourceIntTest {
 
         // Update the facilityPhone
         FacilityPhone updatedFacilityPhone = facilityPhoneRepository.findOne(facilityPhone.getId());
-        FacilityPhoneDTO facilityPhoneDTO = facilityPhoneMapper.facilityPhoneToFacilityPhoneDTO(updatedFacilityPhone);
+        FacilityPhoneDTO facilityPhoneDTO = facilityPhoneMapper.toDto(updatedFacilityPhone);
 
         restFacilityPhoneMockMvc.perform(put("/api/facility-phones")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -187,7 +187,7 @@ public class FacilityPhoneResourceIntTest {
         int databaseSizeBeforeUpdate = facilityPhoneRepository.findAll().size();
 
         // Create the FacilityPhone
-        FacilityPhoneDTO facilityPhoneDTO = facilityPhoneMapper.facilityPhoneToFacilityPhoneDTO(facilityPhone);
+        FacilityPhoneDTO facilityPhoneDTO = facilityPhoneMapper.toDto(facilityPhone);
 
         // If the entity doesn't have an ID, it will be created instead of just being updated
         restFacilityPhoneMockMvc.perform(put("/api/facility-phones")
@@ -221,5 +221,37 @@ public class FacilityPhoneResourceIntTest {
     @Transactional
     public void equalsVerifier() throws Exception {
         TestUtil.equalsVerifier(FacilityPhone.class);
+        FacilityPhone facilityPhone1 = new FacilityPhone();
+        facilityPhone1.setId(1L);
+        FacilityPhone facilityPhone2 = new FacilityPhone();
+        facilityPhone2.setId(facilityPhone1.getId());
+        assertThat(facilityPhone1).isEqualTo(facilityPhone2);
+        facilityPhone2.setId(2L);
+        assertThat(facilityPhone1).isNotEqualTo(facilityPhone2);
+        facilityPhone1.setId(null);
+        assertThat(facilityPhone1).isNotEqualTo(facilityPhone2);
+    }
+
+    @Test
+    @Transactional
+    public void dtoEqualsVerifier() throws Exception {
+        TestUtil.equalsVerifier(FacilityPhoneDTO.class);
+        FacilityPhoneDTO facilityPhoneDTO1 = new FacilityPhoneDTO();
+        facilityPhoneDTO1.setId(1L);
+        FacilityPhoneDTO facilityPhoneDTO2 = new FacilityPhoneDTO();
+        assertThat(facilityPhoneDTO1).isNotEqualTo(facilityPhoneDTO2);
+        facilityPhoneDTO2.setId(facilityPhoneDTO1.getId());
+        assertThat(facilityPhoneDTO1).isEqualTo(facilityPhoneDTO2);
+        facilityPhoneDTO2.setId(2L);
+        assertThat(facilityPhoneDTO1).isNotEqualTo(facilityPhoneDTO2);
+        facilityPhoneDTO1.setId(null);
+        assertThat(facilityPhoneDTO1).isNotEqualTo(facilityPhoneDTO2);
+    }
+
+    @Test
+    @Transactional
+    public void testEntityFromId() {
+        assertThat(facilityPhoneMapper.fromId(42L).getId()).isEqualTo(42);
+        assertThat(facilityPhoneMapper.fromId(null)).isNull();
     }
 }

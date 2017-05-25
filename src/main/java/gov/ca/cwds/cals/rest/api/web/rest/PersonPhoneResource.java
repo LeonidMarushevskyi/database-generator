@@ -15,10 +15,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.LinkedList;
+
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * REST controller for managing PersonPhone.
@@ -54,9 +53,9 @@ public class PersonPhoneResource {
         if (personPhoneDTO.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new personPhone cannot already have an ID")).body(null);
         }
-        PersonPhone personPhone = personPhoneMapper.personPhoneDTOToPersonPhone(personPhoneDTO);
+        PersonPhone personPhone = personPhoneMapper.toEntity(personPhoneDTO);
         personPhone = personPhoneRepository.save(personPhone);
-        PersonPhoneDTO result = personPhoneMapper.personPhoneToPersonPhoneDTO(personPhone);
+        PersonPhoneDTO result = personPhoneMapper.toDto(personPhone);
         return ResponseEntity.created(new URI("/api/person-phones/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -78,9 +77,9 @@ public class PersonPhoneResource {
         if (personPhoneDTO.getId() == null) {
             return createPersonPhone(personPhoneDTO);
         }
-        PersonPhone personPhone = personPhoneMapper.personPhoneDTOToPersonPhone(personPhoneDTO);
+        PersonPhone personPhone = personPhoneMapper.toEntity(personPhoneDTO);
         personPhone = personPhoneRepository.save(personPhone);
-        PersonPhoneDTO result = personPhoneMapper.personPhoneToPersonPhoneDTO(personPhone);
+        PersonPhoneDTO result = personPhoneMapper.toDto(personPhone);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, personPhoneDTO.getId().toString()))
             .body(result);
@@ -96,7 +95,7 @@ public class PersonPhoneResource {
     public List<PersonPhoneDTO> getAllPersonPhones() {
         log.debug("REST request to get all PersonPhones");
         List<PersonPhone> personPhones = personPhoneRepository.findAll();
-        return personPhoneMapper.personPhonesToPersonPhoneDTOs(personPhones);
+        return personPhoneMapper.toDto(personPhones);
     }
 
     /**
@@ -110,7 +109,7 @@ public class PersonPhoneResource {
     public ResponseEntity<PersonPhoneDTO> getPersonPhone(@PathVariable Long id) {
         log.debug("REST request to get PersonPhone : {}", id);
         PersonPhone personPhone = personPhoneRepository.findOne(id);
-        PersonPhoneDTO personPhoneDTO = personPhoneMapper.personPhoneToPersonPhoneDTO(personPhone);
+        PersonPhoneDTO personPhoneDTO = personPhoneMapper.toDto(personPhone);
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(personPhoneDTO));
     }
 

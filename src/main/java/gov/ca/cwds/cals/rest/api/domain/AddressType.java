@@ -29,7 +29,7 @@ public class AddressType implements Serializable {
     private String code;
 
     @Size(max = 20)
-    @Column(name = "type", length = 20)
+    @Column(name = "jhi_type", length = 20)
     private String type;
 
     public Long getId() {
@@ -75,23 +75,23 @@ public class AddressType implements Serializable {
             return false;
         }
         AddressType addressType = (AddressType) o;
-        if (addressType.id == null || id == null) {
+        if (addressType.getId() == null || getId() == null) {
             return false;
         }
-        return Objects.equals(id, addressType.id);
+        return Objects.equals(getId(), addressType.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hashCode(getId());
     }
 
     @Override
     public String toString() {
         return "AddressType{" +
-            "id=" + id +
-            ", code='" + code + "'" +
-            ", type='" + type + "'" +
-            '}';
+            "id=" + getId() +
+            ", code='" + getCode() + "'" +
+            ", type='" + getType() + "'" +
+            "}";
     }
 }

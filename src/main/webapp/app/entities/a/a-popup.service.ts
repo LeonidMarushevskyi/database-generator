@@ -6,21 +6,21 @@ import { AService } from './a.service';
 @Injectable()
 export class APopupService {
     private isOpen = false;
-    constructor (
+    constructor(
         private modalService: NgbModal,
         private router: Router,
         private aService: AService
 
     ) {}
 
-    open (component: Component, id?: number | any): NgbModalRef {
+    open(component: Component, id?: number | any): NgbModalRef {
         if (this.isOpen) {
             return;
         }
         this.isOpen = true;
 
         if (id) {
-            this.aService.find(id).subscribe(a => {
+            this.aService.find(id).subscribe((a) => {
                 this.aModalRef(component, a);
             });
         } else {
@@ -29,9 +29,9 @@ export class APopupService {
     }
 
     aModalRef(component: Component, a: A): NgbModalRef {
-        let modalRef = this.modalService.open(component, { size: 'lg', backdrop: 'static'});
+        const modalRef = this.modalService.open(component, { size: 'lg', backdrop: 'static'});
         modalRef.componentInstance.a = a;
-        modalRef.result.then(result => {
+        modalRef.result.then((result) => {
             this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true });
             this.isOpen = false;
         }, (reason) => {

@@ -11,51 +11,55 @@ import { FacilityTypeDeletePopupComponent } from './facility-type-delete-dialog.
 
 import { Principal } from '../../shared';
 
-
 export const facilityTypeRoute: Routes = [
-  {
-    path: 'facility-type',
-    component: FacilityTypeComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'FacilityTypes'
+    {
+        path: 'facility-type',
+        component: FacilityTypeComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'FacilityTypes'
+        },
+        canActivate: [UserRouteAccessService]
+    }, {
+        path: 'facility-type/:id',
+        component: FacilityTypeDetailComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'FacilityTypes'
+        },
+        canActivate: [UserRouteAccessService]
     }
-  }, {
-    path: 'facility-type/:id',
-    component: FacilityTypeDetailComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'FacilityTypes'
-    }
-  }
 ];
 
 export const facilityTypePopupRoute: Routes = [
-  {
-    path: 'facility-type-new',
-    component: FacilityTypePopupComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'FacilityTypes'
+    {
+        path: 'facility-type-new',
+        component: FacilityTypePopupComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'FacilityTypes'
+        },
+        canActivate: [UserRouteAccessService],
+        outlet: 'popup'
     },
-    outlet: 'popup'
-  },
-  {
-    path: 'facility-type/:id/edit',
-    component: FacilityTypePopupComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'FacilityTypes'
+    {
+        path: 'facility-type/:id/edit',
+        component: FacilityTypePopupComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'FacilityTypes'
+        },
+        canActivate: [UserRouteAccessService],
+        outlet: 'popup'
     },
-    outlet: 'popup'
-  },
-  {
-    path: 'facility-type/:id/delete',
-    component: FacilityTypeDeletePopupComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'FacilityTypes'
-    },
-    outlet: 'popup'
-  }
+    {
+        path: 'facility-type/:id/delete',
+        component: FacilityTypeDeletePopupComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'FacilityTypes'
+        },
+        canActivate: [UserRouteAccessService],
+        outlet: 'popup'
+    }
 ];

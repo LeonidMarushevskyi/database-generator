@@ -101,7 +101,7 @@ public class DistrictOfficeResourceIntTest {
         int databaseSizeBeforeCreate = districtOfficeRepository.findAll().size();
 
         // Create the DistrictOffice
-        DistrictOfficeDTO districtOfficeDTO = districtOfficeMapper.districtOfficeToDistrictOfficeDTO(districtOffice);
+        DistrictOfficeDTO districtOfficeDTO = districtOfficeMapper.toDto(districtOffice);
         restDistrictOfficeMockMvc.perform(post("/api/district-offices")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(districtOfficeDTO)))
@@ -122,7 +122,7 @@ public class DistrictOfficeResourceIntTest {
 
         // Create the DistrictOffice with an existing ID
         districtOffice.setId(1L);
-        DistrictOfficeDTO districtOfficeDTO = districtOfficeMapper.districtOfficeToDistrictOfficeDTO(districtOffice);
+        DistrictOfficeDTO districtOfficeDTO = districtOfficeMapper.toDto(districtOffice);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restDistrictOfficeMockMvc.perform(post("/api/district-offices")
@@ -143,7 +143,7 @@ public class DistrictOfficeResourceIntTest {
         districtOffice.setFacilityNumber(null);
 
         // Create the DistrictOffice, which fails.
-        DistrictOfficeDTO districtOfficeDTO = districtOfficeMapper.districtOfficeToDistrictOfficeDTO(districtOffice);
+        DistrictOfficeDTO districtOfficeDTO = districtOfficeMapper.toDto(districtOffice);
 
         restDistrictOfficeMockMvc.perform(post("/api/district-offices")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -162,7 +162,7 @@ public class DistrictOfficeResourceIntTest {
         districtOffice.setName(null);
 
         // Create the DistrictOffice, which fails.
-        DistrictOfficeDTO districtOfficeDTO = districtOfficeMapper.districtOfficeToDistrictOfficeDTO(districtOffice);
+        DistrictOfficeDTO districtOfficeDTO = districtOfficeMapper.toDto(districtOffice);
 
         restDistrictOfficeMockMvc.perform(post("/api/district-offices")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -223,7 +223,7 @@ public class DistrictOfficeResourceIntTest {
         updatedDistrictOffice
             .facilityNumber(UPDATED_FACILITY_NUMBER)
             .name(UPDATED_NAME);
-        DistrictOfficeDTO districtOfficeDTO = districtOfficeMapper.districtOfficeToDistrictOfficeDTO(updatedDistrictOffice);
+        DistrictOfficeDTO districtOfficeDTO = districtOfficeMapper.toDto(updatedDistrictOffice);
 
         restDistrictOfficeMockMvc.perform(put("/api/district-offices")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -244,7 +244,7 @@ public class DistrictOfficeResourceIntTest {
         int databaseSizeBeforeUpdate = districtOfficeRepository.findAll().size();
 
         // Create the DistrictOffice
-        DistrictOfficeDTO districtOfficeDTO = districtOfficeMapper.districtOfficeToDistrictOfficeDTO(districtOffice);
+        DistrictOfficeDTO districtOfficeDTO = districtOfficeMapper.toDto(districtOffice);
 
         // If the entity doesn't have an ID, it will be created instead of just being updated
         restDistrictOfficeMockMvc.perform(put("/api/district-offices")
@@ -278,5 +278,37 @@ public class DistrictOfficeResourceIntTest {
     @Transactional
     public void equalsVerifier() throws Exception {
         TestUtil.equalsVerifier(DistrictOffice.class);
+        DistrictOffice districtOffice1 = new DistrictOffice();
+        districtOffice1.setId(1L);
+        DistrictOffice districtOffice2 = new DistrictOffice();
+        districtOffice2.setId(districtOffice1.getId());
+        assertThat(districtOffice1).isEqualTo(districtOffice2);
+        districtOffice2.setId(2L);
+        assertThat(districtOffice1).isNotEqualTo(districtOffice2);
+        districtOffice1.setId(null);
+        assertThat(districtOffice1).isNotEqualTo(districtOffice2);
+    }
+
+    @Test
+    @Transactional
+    public void dtoEqualsVerifier() throws Exception {
+        TestUtil.equalsVerifier(DistrictOfficeDTO.class);
+        DistrictOfficeDTO districtOfficeDTO1 = new DistrictOfficeDTO();
+        districtOfficeDTO1.setId(1L);
+        DistrictOfficeDTO districtOfficeDTO2 = new DistrictOfficeDTO();
+        assertThat(districtOfficeDTO1).isNotEqualTo(districtOfficeDTO2);
+        districtOfficeDTO2.setId(districtOfficeDTO1.getId());
+        assertThat(districtOfficeDTO1).isEqualTo(districtOfficeDTO2);
+        districtOfficeDTO2.setId(2L);
+        assertThat(districtOfficeDTO1).isNotEqualTo(districtOfficeDTO2);
+        districtOfficeDTO1.setId(null);
+        assertThat(districtOfficeDTO1).isNotEqualTo(districtOfficeDTO2);
+    }
+
+    @Test
+    @Transactional
+    public void testEntityFromId() {
+        assertThat(districtOfficeMapper.fromId(42L).getId()).isEqualTo(42);
+        assertThat(districtOfficeMapper.fromId(null)).isNull();
     }
 }

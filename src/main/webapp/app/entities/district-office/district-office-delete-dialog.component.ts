@@ -23,12 +23,12 @@ export class DistrictOfficeDeleteDialogComponent {
     ) {
     }
 
-    clear () {
+    clear() {
         this.activeModal.dismiss('cancel');
     }
 
-    confirmDelete (id: number) {
-        this.districtOfficeService.delete(id).subscribe(response => {
+    confirmDelete(id: number) {
+        this.districtOfficeService.delete(id).subscribe((response) => {
             this.eventManager.broadcast({
                 name: 'districtOfficeListModification',
                 content: 'Deleted an districtOffice'
@@ -47,13 +47,13 @@ export class DistrictOfficeDeletePopupComponent implements OnInit, OnDestroy {
     modalRef: NgbModalRef;
     routeSub: any;
 
-    constructor (
+    constructor(
         private route: ActivatedRoute,
         private districtOfficePopupService: DistrictOfficePopupService
     ) {}
 
     ngOnInit() {
-        this.routeSub = this.route.params.subscribe(params => {
+        this.routeSub = this.route.params.subscribe((params) => {
             this.modalRef = this.districtOfficePopupService
                 .open(DistrictOfficeDeleteDialogComponent, params['id']);
         });

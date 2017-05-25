@@ -93,7 +93,7 @@ public class PersonAddressResourceIntTest {
         int databaseSizeBeforeCreate = personAddressRepository.findAll().size();
 
         // Create the PersonAddress
-        PersonAddressDTO personAddressDTO = personAddressMapper.personAddressToPersonAddressDTO(personAddress);
+        PersonAddressDTO personAddressDTO = personAddressMapper.toDto(personAddress);
         restPersonAddressMockMvc.perform(post("/api/person-addresses")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(personAddressDTO)))
@@ -112,7 +112,7 @@ public class PersonAddressResourceIntTest {
 
         // Create the PersonAddress with an existing ID
         personAddress.setId(1L);
-        PersonAddressDTO personAddressDTO = personAddressMapper.personAddressToPersonAddressDTO(personAddress);
+        PersonAddressDTO personAddressDTO = personAddressMapper.toDto(personAddress);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restPersonAddressMockMvc.perform(post("/api/person-addresses")
@@ -168,7 +168,7 @@ public class PersonAddressResourceIntTest {
 
         // Update the personAddress
         PersonAddress updatedPersonAddress = personAddressRepository.findOne(personAddress.getId());
-        PersonAddressDTO personAddressDTO = personAddressMapper.personAddressToPersonAddressDTO(updatedPersonAddress);
+        PersonAddressDTO personAddressDTO = personAddressMapper.toDto(updatedPersonAddress);
 
         restPersonAddressMockMvc.perform(put("/api/person-addresses")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -187,7 +187,7 @@ public class PersonAddressResourceIntTest {
         int databaseSizeBeforeUpdate = personAddressRepository.findAll().size();
 
         // Create the PersonAddress
-        PersonAddressDTO personAddressDTO = personAddressMapper.personAddressToPersonAddressDTO(personAddress);
+        PersonAddressDTO personAddressDTO = personAddressMapper.toDto(personAddress);
 
         // If the entity doesn't have an ID, it will be created instead of just being updated
         restPersonAddressMockMvc.perform(put("/api/person-addresses")
@@ -221,5 +221,37 @@ public class PersonAddressResourceIntTest {
     @Transactional
     public void equalsVerifier() throws Exception {
         TestUtil.equalsVerifier(PersonAddress.class);
+        PersonAddress personAddress1 = new PersonAddress();
+        personAddress1.setId(1L);
+        PersonAddress personAddress2 = new PersonAddress();
+        personAddress2.setId(personAddress1.getId());
+        assertThat(personAddress1).isEqualTo(personAddress2);
+        personAddress2.setId(2L);
+        assertThat(personAddress1).isNotEqualTo(personAddress2);
+        personAddress1.setId(null);
+        assertThat(personAddress1).isNotEqualTo(personAddress2);
+    }
+
+    @Test
+    @Transactional
+    public void dtoEqualsVerifier() throws Exception {
+        TestUtil.equalsVerifier(PersonAddressDTO.class);
+        PersonAddressDTO personAddressDTO1 = new PersonAddressDTO();
+        personAddressDTO1.setId(1L);
+        PersonAddressDTO personAddressDTO2 = new PersonAddressDTO();
+        assertThat(personAddressDTO1).isNotEqualTo(personAddressDTO2);
+        personAddressDTO2.setId(personAddressDTO1.getId());
+        assertThat(personAddressDTO1).isEqualTo(personAddressDTO2);
+        personAddressDTO2.setId(2L);
+        assertThat(personAddressDTO1).isNotEqualTo(personAddressDTO2);
+        personAddressDTO1.setId(null);
+        assertThat(personAddressDTO1).isNotEqualTo(personAddressDTO2);
+    }
+
+    @Test
+    @Transactional
+    public void testEntityFromId() {
+        assertThat(personAddressMapper.fromId(42L).getId()).isEqualTo(42);
+        assertThat(personAddressMapper.fromId(null)).isNull();
     }
 }

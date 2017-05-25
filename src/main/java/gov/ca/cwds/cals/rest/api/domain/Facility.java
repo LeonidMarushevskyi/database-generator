@@ -86,6 +86,16 @@ public class Facility implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<FacilityChild> children = new HashSet<>();
 
+    @OneToMany(mappedBy = "facility")
+    @JsonIgnore
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<Complaint> complaints = new HashSet<>();
+
+    @OneToMany(mappedBy = "facility")
+    @JsonIgnore
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<Inspection> inspections = new HashSet<>();
+
     @ManyToOne
     private AssignedWorker assignedWorker;
 
@@ -327,6 +337,56 @@ public class Facility implements Serializable {
         this.children = facilityChildren;
     }
 
+    public Set<Complaint> getComplaints() {
+        return complaints;
+    }
+
+    public Facility complaints(Set<Complaint> complaints) {
+        this.complaints = complaints;
+        return this;
+    }
+
+    public Facility addComplaint(Complaint complaint) {
+        this.complaints.add(complaint);
+        complaint.setFacility(this);
+        return this;
+    }
+
+    public Facility removeComplaint(Complaint complaint) {
+        this.complaints.remove(complaint);
+        complaint.setFacility(null);
+        return this;
+    }
+
+    public void setComplaints(Set<Complaint> complaints) {
+        this.complaints = complaints;
+    }
+
+    public Set<Inspection> getInspections() {
+        return inspections;
+    }
+
+    public Facility inspections(Set<Inspection> inspections) {
+        this.inspections = inspections;
+        return this;
+    }
+
+    public Facility addInspection(Inspection inspection) {
+        this.inspections.add(inspection);
+        inspection.setFacility(this);
+        return this;
+    }
+
+    public Facility removeInspection(Inspection inspection) {
+        this.inspections.remove(inspection);
+        inspection.setFacility(null);
+        return this;
+    }
+
+    public void setInspections(Set<Inspection> inspections) {
+        this.inspections = inspections;
+    }
+
     public AssignedWorker getAssignedWorker() {
         return assignedWorker;
     }
@@ -401,32 +461,32 @@ public class Facility implements Serializable {
             return false;
         }
         Facility facility = (Facility) o;
-        if (facility.id == null || id == null) {
+        if (facility.getId() == null || getId() == null) {
             return false;
         }
-        return Objects.equals(id, facility.id);
+        return Objects.equals(getId(), facility.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hashCode(getId());
     }
 
     @Override
     public String toString() {
         return "Facility{" +
-            "id=" + id +
-            ", name='" + name + "'" +
-            ", licenseeName='" + licenseeName + "'" +
-            ", licenseeType='" + licenseeType + "'" +
-            ", licenseNumber='" + licenseNumber + "'" +
-            ", licenseStatus='" + licenseStatus + "'" +
-            ", capacity='" + capacity + "'" +
-            ", licenseEffectiveDate='" + licenseEffectiveDate + "'" +
-            ", originalApplicationRecievedDate='" + originalApplicationRecievedDate + "'" +
-            ", lastVisitDate='" + lastVisitDate + "'" +
-            ", emailAddress='" + emailAddress + "'" +
-            ", lastVisitReason='" + lastVisitReason + "'" +
-            '}';
+            "id=" + getId() +
+            ", name='" + getName() + "'" +
+            ", licenseeName='" + getLicenseeName() + "'" +
+            ", licenseeType='" + getLicenseeType() + "'" +
+            ", licenseNumber='" + getLicenseNumber() + "'" +
+            ", licenseStatus='" + getLicenseStatus() + "'" +
+            ", capacity='" + getCapacity() + "'" +
+            ", licenseEffectiveDate='" + getLicenseEffectiveDate() + "'" +
+            ", originalApplicationRecievedDate='" + getOriginalApplicationRecievedDate() + "'" +
+            ", lastVisitDate='" + getLastVisitDate() + "'" +
+            ", emailAddress='" + getEmailAddress() + "'" +
+            ", lastVisitReason='" + getLastVisitReason() + "'" +
+            "}";
     }
 }

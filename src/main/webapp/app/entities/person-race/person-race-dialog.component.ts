@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Response } from '@angular/http';
 
+import { Observable } from 'rxjs/Rx';
 import { NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { EventManager, AlertService } from 'ng-jhipster';
 
@@ -10,6 +11,7 @@ import { PersonRacePopupService } from './person-race-popup.service';
 import { PersonRaceService } from './person-race.service';
 import { Person, PersonService } from '../person';
 import { RaceType, RaceTypeService } from '../race-type';
+import { ResponseWrapper } from '../../shared';
 
 @Component({
     selector: 'jhi-person-race-dialog',
@@ -24,6 +26,7 @@ export class PersonRaceDialogComponent implements OnInit {
     people: Person[];
 
     racetypes: RaceType[];
+
     constructor(
         public activeModal: NgbActiveModal,
         private alertService: AlertService,
@@ -37,40 +40,48 @@ export class PersonRaceDialogComponent implements OnInit {
     ngOnInit() {
         this.isSaving = false;
         this.authorities = ['ROLE_USER', 'ROLE_ADMIN'];
-        this.personService.query().subscribe(
-            (res: Response) => { this.people = res.json(); }, (res: Response) => this.onError(res.json()));
-        this.raceTypeService.query().subscribe(
-            (res: Response) => { this.racetypes = res.json(); }, (res: Response) => this.onError(res.json()));
+        this.personService.query()
+            .subscribe((res: ResponseWrapper) => { this.people = res.json; }, (res: ResponseWrapper) => this.onError(res.json));
+        this.raceTypeService.query()
+            .subscribe((res: ResponseWrapper) => { this.racetypes = res.json; }, (res: ResponseWrapper) => this.onError(res.json));
     }
-    clear () {
+    clear() {
         this.activeModal.dismiss('cancel');
     }
 
-    save () {
+    save() {
         this.isSaving = true;
         if (this.personRace.id !== undefined) {
-            this.personRaceService.update(this.personRace)
-                .subscribe((res: PersonRace) =>
-                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
+            this.subscribeToSaveResponse(
+                this.personRaceService.update(this.personRace));
         } else {
-            this.personRaceService.create(this.personRace)
-                .subscribe((res: PersonRace) =>
-                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
+            this.subscribeToSaveResponse(
+                this.personRaceService.create(this.personRace));
         }
     }
 
-    private onSaveSuccess (result: PersonRace) {
+    private subscribeToSaveResponse(result: Observable<PersonRace>) {
+        result.subscribe((res: PersonRace) =>
+            this.onSaveSuccess(res), (res: Response) => this.onSaveError(res));
+    }
+
+    private onSaveSuccess(result: PersonRace) {
         this.eventManager.broadcast({ name: 'personRaceListModification', content: 'OK'});
         this.isSaving = false;
         this.activeModal.dismiss(result);
     }
 
-    private onSaveError (error) {
+    private onSaveError(error) {
+        try {
+            error.json();
+        } catch (exception) {
+            error.message = error.text();
+        }
         this.isSaving = false;
         this.onError(error);
     }
 
-    private onError (error) {
+    private onError(error) {
         this.alertService.error(error.message, null, null);
     }
 
@@ -92,13 +103,13 @@ export class PersonRacePopupComponent implements OnInit, OnDestroy {
     modalRef: NgbModalRef;
     routeSub: any;
 
-    constructor (
+    constructor(
         private route: ActivatedRoute,
         private personRacePopupService: PersonRacePopupService
     ) {}
 
     ngOnInit() {
-        this.routeSub = this.route.params.subscribe(params => {
+        this.routeSub = this.route.params.subscribe((params) => {
             if ( params['id'] ) {
                 this.modalRef = this.personRacePopupService
                     .open(PersonRaceDialogComponent, params['id']);
@@ -106,7 +117,6 @@ export class PersonRacePopupComponent implements OnInit, OnDestroy {
                 this.modalRef = this.personRacePopupService
                     .open(PersonRaceDialogComponent);
             }
-
         });
     }
 

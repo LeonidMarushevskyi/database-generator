@@ -101,7 +101,7 @@ public class AddressTypeResourceIntTest {
         int databaseSizeBeforeCreate = addressTypeRepository.findAll().size();
 
         // Create the AddressType
-        AddressTypeDTO addressTypeDTO = addressTypeMapper.addressTypeToAddressTypeDTO(addressType);
+        AddressTypeDTO addressTypeDTO = addressTypeMapper.toDto(addressType);
         restAddressTypeMockMvc.perform(post("/api/address-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(addressTypeDTO)))
@@ -122,7 +122,7 @@ public class AddressTypeResourceIntTest {
 
         // Create the AddressType with an existing ID
         addressType.setId(1L);
-        AddressTypeDTO addressTypeDTO = addressTypeMapper.addressTypeToAddressTypeDTO(addressType);
+        AddressTypeDTO addressTypeDTO = addressTypeMapper.toDto(addressType);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restAddressTypeMockMvc.perform(post("/api/address-types")
@@ -143,7 +143,7 @@ public class AddressTypeResourceIntTest {
         addressType.setCode(null);
 
         // Create the AddressType, which fails.
-        AddressTypeDTO addressTypeDTO = addressTypeMapper.addressTypeToAddressTypeDTO(addressType);
+        AddressTypeDTO addressTypeDTO = addressTypeMapper.toDto(addressType);
 
         restAddressTypeMockMvc.perform(post("/api/address-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -204,7 +204,7 @@ public class AddressTypeResourceIntTest {
         updatedAddressType
             .code(UPDATED_CODE)
             .type(UPDATED_TYPE);
-        AddressTypeDTO addressTypeDTO = addressTypeMapper.addressTypeToAddressTypeDTO(updatedAddressType);
+        AddressTypeDTO addressTypeDTO = addressTypeMapper.toDto(updatedAddressType);
 
         restAddressTypeMockMvc.perform(put("/api/address-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -225,7 +225,7 @@ public class AddressTypeResourceIntTest {
         int databaseSizeBeforeUpdate = addressTypeRepository.findAll().size();
 
         // Create the AddressType
-        AddressTypeDTO addressTypeDTO = addressTypeMapper.addressTypeToAddressTypeDTO(addressType);
+        AddressTypeDTO addressTypeDTO = addressTypeMapper.toDto(addressType);
 
         // If the entity doesn't have an ID, it will be created instead of just being updated
         restAddressTypeMockMvc.perform(put("/api/address-types")
@@ -259,5 +259,37 @@ public class AddressTypeResourceIntTest {
     @Transactional
     public void equalsVerifier() throws Exception {
         TestUtil.equalsVerifier(AddressType.class);
+        AddressType addressType1 = new AddressType();
+        addressType1.setId(1L);
+        AddressType addressType2 = new AddressType();
+        addressType2.setId(addressType1.getId());
+        assertThat(addressType1).isEqualTo(addressType2);
+        addressType2.setId(2L);
+        assertThat(addressType1).isNotEqualTo(addressType2);
+        addressType1.setId(null);
+        assertThat(addressType1).isNotEqualTo(addressType2);
+    }
+
+    @Test
+    @Transactional
+    public void dtoEqualsVerifier() throws Exception {
+        TestUtil.equalsVerifier(AddressTypeDTO.class);
+        AddressTypeDTO addressTypeDTO1 = new AddressTypeDTO();
+        addressTypeDTO1.setId(1L);
+        AddressTypeDTO addressTypeDTO2 = new AddressTypeDTO();
+        assertThat(addressTypeDTO1).isNotEqualTo(addressTypeDTO2);
+        addressTypeDTO2.setId(addressTypeDTO1.getId());
+        assertThat(addressTypeDTO1).isEqualTo(addressTypeDTO2);
+        addressTypeDTO2.setId(2L);
+        assertThat(addressTypeDTO1).isNotEqualTo(addressTypeDTO2);
+        addressTypeDTO1.setId(null);
+        assertThat(addressTypeDTO1).isNotEqualTo(addressTypeDTO2);
+    }
+
+    @Test
+    @Transactional
+    public void testEntityFromId() {
+        assertThat(addressTypeMapper.fromId(42L).getId()).isEqualTo(42);
+        assertThat(addressTypeMapper.fromId(null)).isNull();
     }
 }

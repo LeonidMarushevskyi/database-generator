@@ -1,0 +1,38 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipName": "facility",
+            "otherEntityName": "facility",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "complaintDate",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "controlNumber",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "priorityLevel",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "status",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "approvalDate",
+            "fieldType": "LocalDate"
+        }
+    ],
+    "changelogDate": "20170525060346",
+    "entityTableName": "complaint",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "no"
+}
