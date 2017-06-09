@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <!--
+        Added the constraints for entity CriminalRecord.
+    -->
+    <changeSet id="20170608220659-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="state_id"
+                                 baseTableName="criminal_record"
+                                 constraintName="fk_criminal_record_state_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="state_type"/>
+
+        <addForeignKeyConstraint baseColumnNames="person_id"
+                                 baseTableName="criminal_record"
+                                 constraintName="fk_criminal_record_person_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="household_adult"/>
+
+    </changeSet>
+</databaseChangeLog>

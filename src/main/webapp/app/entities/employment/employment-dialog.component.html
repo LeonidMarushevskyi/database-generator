@@ -1,0 +1,159 @@
+<form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+
+    <div class="modal-header">
+        <h4 class="modal-title" id="myEmploymentLabel">Create or edit a Employment</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                (click)="clear()">&times;</button>
+    </div>
+    <div class="modal-body">
+        <jhi-alert-error></jhi-alert-error>
+        <div class="form-group" [hidden]="!employment.id">
+            <label for="id">ID</label>
+            <input type="text" class="form-control" id="id" name="id"
+                   [(ngModel)]="employment.id" readonly />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_occupation">Occupation</label>
+            <input type="text" class="form-control" name="occupation" id="field_occupation"
+                [(ngModel)]="employment.occupation"
+            required />
+            <div [hidden]="!(editForm.controls.occupation?.dirty && editForm.controls.occupation?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.occupation?.errors?.required">
+                   This field is required.
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_annualIncome">Annual Income</label>
+            <input type="number" class="form-control" name="annualIncome" id="field_annualIncome"
+                [(ngModel)]="employment.annualIncome"
+            required />
+            <div [hidden]="!(editForm.controls.annualIncome?.dirty && editForm.controls.annualIncome?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.annualIncome?.errors?.required">
+                   This field is required.
+                </small>
+                <small class="form-text text-danger"
+                    [hidden]="!editForm.controls.annualIncome?.errors?.number">
+                    This field should be a number.
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_startDate">Start Date</label>
+            <div class="input-group">
+                <input id="field_startDate" type="text" class="form-control" name="startDate" ngbDatepicker  #startDateDp="ngbDatepicker" [(ngModel)]="employment.startDate"
+                required/>
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-default" (click)="startDateDp.toggle()"><i class="fa fa-calendar"></i></button>
+                </span>
+            </div>
+            <div [hidden]="!(editForm.controls.startDate?.dirty && editForm.controls.startDate?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.startDate?.errors?.required">
+                   This field is required.
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_endDate">End Date</label>
+            <div class="input-group">
+                <input id="field_endDate" type="text" class="form-control" name="endDate" ngbDatepicker  #endDateDp="ngbDatepicker" [(ngModel)]="employment.endDate"
+                />
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-default" (click)="endDateDp.toggle()"><i class="fa fa-calendar"></i></button>
+                </span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_createUserId">Create User Id</label>
+            <input type="text" class="form-control" name="createUserId" id="field_createUserId"
+                [(ngModel)]="employment.createUserId"
+            required maxlength="50" />
+            <div [hidden]="!(editForm.controls.createUserId?.dirty && editForm.controls.createUserId?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.createUserId?.errors?.required">
+                   This field is required.
+                </small>
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.createUserId?.errors?.maxlength">
+                   This field cannot be longer than 50 characters.
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_createDateTime">Create Date Time</label>
+            <div class="d-flex">
+                <input id="field_createDateTime" type="datetime-local" class="form-control" name="createDateTime" [(ngModel)]="employment.createDateTime"
+                required  />
+            </div>
+            <div [hidden]="!(editForm.controls.createDateTime?.dirty && editForm.controls.createDateTime?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.createDateTime?.errors?.required">
+                   This field is required.
+                </small>
+                <small class="form-text text-danger"
+                    [hidden]="!editForm.controls.createDateTime?.errors?.ZonedDateTimelocal">
+                    This field should be a date and time.
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_updateUserId">Update User Id</label>
+            <input type="text" class="form-control" name="updateUserId" id="field_updateUserId"
+                [(ngModel)]="employment.updateUserId"
+            required maxlength="50" />
+            <div [hidden]="!(editForm.controls.updateUserId?.dirty && editForm.controls.updateUserId?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.updateUserId?.errors?.required">
+                   This field is required.
+                </small>
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.updateUserId?.errors?.maxlength">
+                   This field cannot be longer than 50 characters.
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_updateDateTime">Update Date Time</label>
+            <div class="d-flex">
+                <input id="field_updateDateTime" type="datetime-local" class="form-control" name="updateDateTime" [(ngModel)]="employment.updateDateTime"
+                required  />
+            </div>
+            <div [hidden]="!(editForm.controls.updateDateTime?.dirty && editForm.controls.updateDateTime?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.updateDateTime?.errors?.required">
+                   This field is required.
+                </small>
+                <small class="form-text text-danger"
+                    [hidden]="!editForm.controls.updateDateTime?.errors?.ZonedDateTimelocal">
+                    This field should be a date and time.
+                </small>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="field_employer">Employer</label>
+            <select class="form-control" id="field_employer" name="employer" [(ngModel)]="employment.employer" >
+                <option [ngValue]="null"></option>
+                <option [ngValue]="employerOption.id === employment.employer?.id ? employment.employer : employerOption" *ngFor="let employerOption of employers; trackBy: trackEmployerById">{{employerOption.id}}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="field_person">Person</label>
+            <select class="form-control" id="field_person" name="person" [(ngModel)]="employment.person" >
+                <option [ngValue]="null"></option>
+                <option [ngValue]="personOption.id === employment.person?.id ? employment.person : personOption" *ngFor="let personOption of people; trackBy: trackPersonById">{{personOption.id}}</option>
+            </select>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" (click)="clear()">
+            <span class="fa fa-ban"></span>&nbsp;<span>Cancel</span>
+        </button>
+        <button type="submit" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+            <span class="fa fa-save"></span>&nbsp;<span>Save</span>
+        </button>
+    </div>
+</form>

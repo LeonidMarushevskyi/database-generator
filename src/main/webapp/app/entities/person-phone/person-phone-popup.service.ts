@@ -1,12 +1,14 @@
 import { Injectable, Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { DatePipe } from '@angular/common';
 import { PersonPhone } from './person-phone.model';
 import { PersonPhoneService } from './person-phone.service';
 @Injectable()
 export class PersonPhonePopupService {
     private isOpen = false;
     constructor(
+        private datePipe: DatePipe,
         private modalService: NgbModal,
         private router: Router,
         private personPhoneService: PersonPhoneService
@@ -21,6 +23,10 @@ export class PersonPhonePopupService {
 
         if (id) {
             this.personPhoneService.find(id).subscribe((personPhone) => {
+                personPhone.createDateTime = this.datePipe
+                    .transform(personPhone.createDateTime, 'yyyy-MM-ddThh:mm');
+                personPhone.updateDateTime = this.datePipe
+                    .transform(personPhone.updateDateTime, 'yyyy-MM-ddThh:mm');
                 this.personPhoneModalRef(component, personPhone);
             });
         } else {

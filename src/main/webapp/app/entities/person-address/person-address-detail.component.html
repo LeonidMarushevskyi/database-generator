@@ -4,22 +4,38 @@
     <hr>
     <jhi-alert-error></jhi-alert-error>
     <dl class="row-md jh-entity-details">
+        <dt><span>Create User Id</span></dt>
+        <dd>
+            <span>{{personAddress.createUserId}}</span>
+        </dd>
+        <dt><span>Create Date Time</span></dt>
+        <dd>
+            <span>{{personAddress.createDateTime | date:'medium'}}</span>
+        </dd>
+        <dt><span>Update User Id</span></dt>
+        <dd>
+            <span>{{personAddress.updateUserId}}</span>
+        </dd>
+        <dt><span>Update Date Time</span></dt>
+        <dd>
+            <span>{{personAddress.updateDateTime | date:'medium'}}</span>
+        </dd>
         <dt><span>Person</span></dt>
         <dd>
-            <div *ngIf="personAddress.personId">
-                <a [routerLink]="['/person', personAddress.personId]">{{personAddress.personId}}</a>
+            <div *ngIf="personAddress.person">
+                <a [routerLink]="['/person', personAddress.person?.id]">{{personAddress.person?.id}}</a>
             </div>
         </dd>
-        <dt><span>Race</span></dt>
+        <dt><span>Address Type</span></dt>
         <dd>
-            <div *ngIf="personAddress.raceId">
-                <a [routerLink]="['/address', personAddress.raceId]">{{personAddress.raceId}}</a>
+            <div *ngIf="personAddress.addressType">
+                <a [routerLink]="['/address-type', personAddress.addressType?.id]">{{personAddress.addressType?.id}}</a>
             </div>
         </dd>
-        <dt><span>Type</span></dt>
+        <dt><span>Address</span></dt>
         <dd>
-            <div *ngIf="personAddress.typeId">
-                <a [routerLink]="['/address-type', personAddress.typeId]">{{personAddress.typeId}}</a>
+            <div *ngIf="personAddress.address">
+                <a [routerLink]="['/address', personAddress.address?.id]">{{personAddress.address?.id}}</a>
             </div>
         </dd>
     </dl>

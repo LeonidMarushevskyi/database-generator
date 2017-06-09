@@ -9,9 +9,9 @@ import { EventManager, AlertService } from 'ng-jhipster';
 import { PersonPhone } from './person-phone.model';
 import { PersonPhonePopupService } from './person-phone-popup.service';
 import { PersonPhoneService } from './person-phone.service';
+import { PhoneNumber, PhoneNumberService } from '../phone-number';
+import { PhoneNumberType, PhoneNumberTypeService } from '../phone-number-type';
 import { Person, PersonService } from '../person';
-import { Phone, PhoneService } from '../phone';
-import { PhoneType, PhoneTypeService } from '../phone-type';
 import { ResponseWrapper } from '../../shared';
 
 @Component({
@@ -24,19 +24,19 @@ export class PersonPhoneDialogComponent implements OnInit {
     authorities: any[];
     isSaving: boolean;
 
+    phonenumbers: PhoneNumber[];
+
+    phonenumbertypes: PhoneNumberType[];
+
     people: Person[];
-
-    phones: Phone[];
-
-    phonetypes: PhoneType[];
 
     constructor(
         public activeModal: NgbActiveModal,
         private alertService: AlertService,
         private personPhoneService: PersonPhoneService,
+        private phoneNumberService: PhoneNumberService,
+        private phoneNumberTypeService: PhoneNumberTypeService,
         private personService: PersonService,
-        private phoneService: PhoneService,
-        private phoneTypeService: PhoneTypeService,
         private eventManager: EventManager
     ) {
     }
@@ -44,23 +44,23 @@ export class PersonPhoneDialogComponent implements OnInit {
     ngOnInit() {
         this.isSaving = false;
         this.authorities = ['ROLE_USER', 'ROLE_ADMIN'];
-        this.personService.query()
-            .subscribe((res: ResponseWrapper) => { this.people = res.json; }, (res: ResponseWrapper) => this.onError(res.json));
-        this.phoneService
+        this.phoneNumberService
             .query({filter: 'personphone-is-null'})
             .subscribe((res: ResponseWrapper) => {
-                if (!this.personPhone.phoneId) {
-                    this.phones = res.json;
+                if (!this.personPhone.phoneNumber || !this.personPhone.phoneNumber.id) {
+                    this.phonenumbers = res.json;
                 } else {
-                    this.phoneService
-                        .find(this.personPhone.phoneId)
-                        .subscribe((subRes: Phone) => {
-                            this.phones = [subRes].concat(res.json);
+                    this.phoneNumberService
+                        .find(this.personPhone.phoneNumber.id)
+                        .subscribe((subRes: PhoneNumber) => {
+                            this.phonenumbers = [subRes].concat(res.json);
                         }, (subRes: ResponseWrapper) => this.onError(subRes.json));
                 }
             }, (res: ResponseWrapper) => this.onError(res.json));
-        this.phoneTypeService.query()
-            .subscribe((res: ResponseWrapper) => { this.phonetypes = res.json; }, (res: ResponseWrapper) => this.onError(res.json));
+        this.phoneNumberTypeService.query()
+            .subscribe((res: ResponseWrapper) => { this.phonenumbertypes = res.json; }, (res: ResponseWrapper) => this.onError(res.json));
+        this.personService.query()
+            .subscribe((res: ResponseWrapper) => { this.people = res.json; }, (res: ResponseWrapper) => this.onError(res.json));
     }
     clear() {
         this.activeModal.dismiss('cancel');
@@ -102,15 +102,15 @@ export class PersonPhoneDialogComponent implements OnInit {
         this.alertService.error(error.message, null, null);
     }
 
+    trackPhoneNumberById(index: number, item: PhoneNumber) {
+        return item.id;
+    }
+
+    trackPhoneNumberTypeById(index: number, item: PhoneNumberType) {
+        return item.id;
+    }
+
     trackPersonById(index: number, item: Person) {
-        return item.id;
-    }
-
-    trackPhoneById(index: number, item: Phone) {
-        return item.id;
-    }
-
-    trackPhoneTypeById(index: number, item: PhoneType) {
         return item.id;
     }
 }

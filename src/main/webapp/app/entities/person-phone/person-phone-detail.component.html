@@ -4,22 +4,38 @@
     <hr>
     <jhi-alert-error></jhi-alert-error>
     <dl class="row-md jh-entity-details">
+        <dt><span>Create User Id</span></dt>
+        <dd>
+            <span>{{personPhone.createUserId}}</span>
+        </dd>
+        <dt><span>Create Date Time</span></dt>
+        <dd>
+            <span>{{personPhone.createDateTime | date:'medium'}}</span>
+        </dd>
+        <dt><span>Update User Id</span></dt>
+        <dd>
+            <span>{{personPhone.updateUserId}}</span>
+        </dd>
+        <dt><span>Update Date Time</span></dt>
+        <dd>
+            <span>{{personPhone.updateDateTime | date:'medium'}}</span>
+        </dd>
+        <dt><span>Phone Number</span></dt>
+        <dd>
+            <div *ngIf="personPhone.phoneNumber">
+                <a [routerLink]="['/phone-number', personPhone.phoneNumber?.id]">{{personPhone.phoneNumber?.id}}</a>
+            </div>
+        </dd>
+        <dt><span>Phone Type</span></dt>
+        <dd>
+            <div *ngIf="personPhone.phoneType">
+                <a [routerLink]="['/phone-number-type', personPhone.phoneType?.id]">{{personPhone.phoneType?.id}}</a>
+            </div>
+        </dd>
         <dt><span>Person</span></dt>
         <dd>
-            <div *ngIf="personPhone.personId">
-                <a [routerLink]="['/person', personPhone.personId]">{{personPhone.personId}}</a>
-            </div>
-        </dd>
-        <dt><span>Phone</span></dt>
-        <dd>
-            <div *ngIf="personPhone.phoneId">
-                <a [routerLink]="['/phone', personPhone.phoneId]">{{personPhone.phoneId}}</a>
-            </div>
-        </dd>
-        <dt><span>Type</span></dt>
-        <dd>
-            <div *ngIf="personPhone.typeId">
-                <a [routerLink]="['/phone-type', personPhone.typeId]">{{personPhone.typeId}}</a>
+            <div *ngIf="personPhone.person">
+                <a [routerLink]="['/person', personPhone.person?.id]">{{personPhone.person?.id}}</a>
             </div>
         </dd>
     </dl>

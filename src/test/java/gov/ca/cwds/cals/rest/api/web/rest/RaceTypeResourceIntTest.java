@@ -37,11 +37,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = GeneratorApp.class)
 public class RaceTypeResourceIntTest {
 
-    private static final String DEFAULT_CODE = "AA";
-    private static final String UPDATED_CODE = "BB";
-
-    private static final String DEFAULT_TYPE = "AAAAAAAAAA";
-    private static final String UPDATED_TYPE = "BBBBBBBBBB";
+    private static final String DEFAULT_NAME = "AAAAAAAAAA";
+    private static final String UPDATED_NAME = "BBBBBBBBBB";
 
     @Autowired
     private RaceTypeRepository raceTypeRepository;
@@ -80,8 +77,7 @@ public class RaceTypeResourceIntTest {
      */
     public static RaceType createEntity(EntityManager em) {
         RaceType raceType = new RaceType()
-            .code(DEFAULT_CODE)
-            .type(DEFAULT_TYPE);
+            .name(DEFAULT_NAME);
         return raceType;
     }
 
@@ -105,8 +101,7 @@ public class RaceTypeResourceIntTest {
         List<RaceType> raceTypeList = raceTypeRepository.findAll();
         assertThat(raceTypeList).hasSize(databaseSizeBeforeCreate + 1);
         RaceType testRaceType = raceTypeList.get(raceTypeList.size() - 1);
-        assertThat(testRaceType.getCode()).isEqualTo(DEFAULT_CODE);
-        assertThat(testRaceType.getType()).isEqualTo(DEFAULT_TYPE);
+        assertThat(testRaceType.getName()).isEqualTo(DEFAULT_NAME);
     }
 
     @Test
@@ -130,10 +125,10 @@ public class RaceTypeResourceIntTest {
 
     @Test
     @Transactional
-    public void checkCodeIsRequired() throws Exception {
+    public void checkNameIsRequired() throws Exception {
         int databaseSizeBeforeTest = raceTypeRepository.findAll().size();
         // set the field null
-        raceType.setCode(null);
+        raceType.setName(null);
 
         // Create the RaceType, which fails.
 
@@ -157,8 +152,7 @@ public class RaceTypeResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(raceType.getId().intValue())))
-            .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE.toString())))
-            .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE.toString())));
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())));
     }
 
     @Test
@@ -172,8 +166,7 @@ public class RaceTypeResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(raceType.getId().intValue()))
-            .andExpect(jsonPath("$.code").value(DEFAULT_CODE.toString()))
-            .andExpect(jsonPath("$.type").value(DEFAULT_TYPE.toString()));
+            .andExpect(jsonPath("$.name").value(DEFAULT_NAME.toString()));
     }
 
     @Test
@@ -194,8 +187,7 @@ public class RaceTypeResourceIntTest {
         // Update the raceType
         RaceType updatedRaceType = raceTypeRepository.findOne(raceType.getId());
         updatedRaceType
-            .code(UPDATED_CODE)
-            .type(UPDATED_TYPE);
+            .name(UPDATED_NAME);
 
         restRaceTypeMockMvc.perform(put("/api/race-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -206,8 +198,7 @@ public class RaceTypeResourceIntTest {
         List<RaceType> raceTypeList = raceTypeRepository.findAll();
         assertThat(raceTypeList).hasSize(databaseSizeBeforeUpdate);
         RaceType testRaceType = raceTypeList.get(raceTypeList.size() - 1);
-        assertThat(testRaceType.getCode()).isEqualTo(UPDATED_CODE);
-        assertThat(testRaceType.getType()).isEqualTo(UPDATED_TYPE);
+        assertThat(testRaceType.getName()).isEqualTo(UPDATED_NAME);
     }
 
     @Test

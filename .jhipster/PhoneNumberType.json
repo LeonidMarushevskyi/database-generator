@@ -1,0 +1,18 @@
+{
+    "fluentMethods": true,
+    "relationships": [],
+    "fields": [
+        {
+            "fieldName": "type",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "changelogDate": "20170608220713",
+    "entityTableName": "phone_number_type",
+    "dto": "no",
+    "pagination": "no",
+    "service": "no"
+}

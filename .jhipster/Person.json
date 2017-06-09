@@ -2,36 +2,83 @@
     "fluentMethods": true,
     "relationships": [
         {
+            "relationshipName": "application",
+            "otherEntityName": "application",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipName": "household",
+            "otherEntityName": "household",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id"
+        },
+        {
             "relationshipType": "one-to-one",
-            "relationshipName": "ethnicity",
-            "otherEntityName": "personEthnicity",
+            "relationshipName": "educationHighestLevel",
+            "otherEntityName": "educationLevelType",
             "otherEntityField": "id",
             "ownerSide": true,
             "otherEntityRelationshipName": "person"
         },
         {
             "relationshipType": "one-to-many",
-            "relationshipName": "phone",
+            "relationshipName": "previousNames",
+            "otherEntityName": "personPreviousName",
+            "otherEntityRelationshipName": "person"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "emailAddresses",
+            "otherEntityName": "emailAddress",
+            "otherEntityRelationshipName": "person"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "phoneNumbers",
             "otherEntityName": "personPhone",
             "otherEntityRelationshipName": "person"
         },
         {
             "relationshipType": "one-to-many",
-            "relationshipName": "address",
+            "relationshipName": "employments",
+            "otherEntityName": "employment",
+            "otherEntityRelationshipName": "person"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "addresses",
             "otherEntityName": "personAddress",
             "otherEntityRelationshipName": "person"
         },
         {
             "relationshipType": "one-to-many",
-            "relationshipName": "language",
-            "otherEntityName": "personLanguage",
+            "relationshipName": "educationPoints",
+            "otherEntityName": "educationPoint",
             "otherEntityRelationshipName": "person"
         },
         {
-            "relationshipType": "one-to-many",
+            "relationshipType": "many-to-one",
+            "relationshipValidateRules": "required",
+            "relationshipName": "gender",
+            "otherEntityName": "genderType",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "relationshipValidateRules": "required",
             "relationshipName": "race",
-            "otherEntityName": "personRace",
-            "otherEntityRelationshipName": "person"
+            "otherEntityName": "raceType",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-many",
+            "relationshipValidateRules": "required",
+            "otherEntityRelationshipName": "",
+            "relationshipName": "ethnicities",
+            "otherEntityName": "ethnicityType",
+            "otherEntityField": "id",
+            "ownerSide": true
         }
     ],
     "fields": [
@@ -50,25 +97,63 @@
             ]
         },
         {
-            "fieldName": "gender",
+            "fieldName": "middleName",
             "fieldType": "String"
-        },
-        {
-            "fieldName": "age",
-            "fieldType": "Integer"
-        },
-        {
-            "fieldName": "dateOfBirth",
-            "fieldType": "LocalDate"
         },
         {
             "fieldName": "ssn",
             "fieldType": "String"
+        },
+        {
+            "fieldName": "dateOfBirth",
+            "fieldType": "LocalDate",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "driversLicenseNumber",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "createUserId",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength",
+                "required"
+            ],
+            "fieldValidateRulesMaxlength": 50
+        },
+        {
+            "fieldName": "createDateTime",
+            "fieldType": "ZonedDateTime",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "updateUserId",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength",
+                "required"
+            ],
+            "fieldValidateRulesMaxlength": 50
+        },
+        {
+            "fieldName": "updateDateTime",
+            "fieldType": "ZonedDateTime",
+            "fieldValidateRules": [
+                "required"
+            ]
         }
     ],
     "changelogDate": "20170501195703",
     "entityTableName": "person",
-    "dto": "mapstruct",
+    "dto": "no",
     "pagination": "no",
     "service": "no"
 }

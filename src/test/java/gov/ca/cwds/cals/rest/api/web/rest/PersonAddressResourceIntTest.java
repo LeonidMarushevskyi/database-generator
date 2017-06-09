@@ -4,8 +4,6 @@ import gov.ca.cwds.cals.rest.api.GeneratorApp;
 
 import gov.ca.cwds.cals.rest.api.domain.PersonAddress;
 import gov.ca.cwds.cals.rest.api.repository.PersonAddressRepository;
-import gov.ca.cwds.cals.rest.api.service.dto.PersonAddressDTO;
-import gov.ca.cwds.cals.rest.api.service.mapper.PersonAddressMapper;
 import gov.ca.cwds.cals.rest.api.web.rest.errors.ExceptionTranslator;
 
 import org.junit.Before;
@@ -23,8 +21,13 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import java.time.Instant;
+import java.time.ZonedDateTime;
+import java.time.ZoneOffset;
+import java.time.ZoneId;
 import java.util.List;
 
+import static gov.ca.cwds.cals.rest.api.web.rest.TestUtil.sameInstant;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -39,11 +42,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = GeneratorApp.class)
 public class PersonAddressResourceIntTest {
 
-    @Autowired
-    private PersonAddressRepository personAddressRepository;
+    private static final String DEFAULT_CREATE_USER_ID = "AAAAAAAAAA";
+    private static final String UPDATED_CREATE_USER_ID = "BBBBBBBBBB";
+
+    private static final ZonedDateTime DEFAULT_CREATE_DATE_TIME = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
+    private static final ZonedDateTime UPDATED_CREATE_DATE_TIME = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
+
+    private static final String DEFAULT_UPDATE_USER_ID = "AAAAAAAAAA";
+    private static final String UPDATED_UPDATE_USER_ID = "BBBBBBBBBB";
+
+    private static final ZonedDateTime DEFAULT_UPDATE_DATE_TIME = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
+    private static final ZonedDateTime UPDATED_UPDATE_DATE_TIME = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
 
     @Autowired
-    private PersonAddressMapper personAddressMapper;
+    private PersonAddressRepository personAddressRepository;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -64,7 +76,7 @@ public class PersonAddressResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        PersonAddressResource personAddressResource = new PersonAddressResource(personAddressRepository, personAddressMapper);
+        PersonAddressResource personAddressResource = new PersonAddressResource(personAddressRepository);
         this.restPersonAddressMockMvc = MockMvcBuilders.standaloneSetup(personAddressResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -78,7 +90,11 @@ public class PersonAddressResourceIntTest {
      * if they test an entity which requires the current entity.
      */
     public static PersonAddress createEntity(EntityManager em) {
-        PersonAddress personAddress = new PersonAddress();
+        PersonAddress personAddress = new PersonAddress()
+            .createUserId(DEFAULT_CREATE_USER_ID)
+            .createDateTime(DEFAULT_CREATE_DATE_TIME)
+            .updateUserId(DEFAULT_UPDATE_USER_ID)
+            .updateDateTime(DEFAULT_UPDATE_DATE_TIME);
         return personAddress;
     }
 
@@ -93,16 +109,19 @@ public class PersonAddressResourceIntTest {
         int databaseSizeBeforeCreate = personAddressRepository.findAll().size();
 
         // Create the PersonAddress
-        PersonAddressDTO personAddressDTO = personAddressMapper.toDto(personAddress);
         restPersonAddressMockMvc.perform(post("/api/person-addresses")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(personAddressDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(personAddress)))
             .andExpect(status().isCreated());
 
         // Validate the PersonAddress in the database
         List<PersonAddress> personAddressList = personAddressRepository.findAll();
         assertThat(personAddressList).hasSize(databaseSizeBeforeCreate + 1);
         PersonAddress testPersonAddress = personAddressList.get(personAddressList.size() - 1);
+        assertThat(testPersonAddress.getCreateUserId()).isEqualTo(DEFAULT_CREATE_USER_ID);
+        assertThat(testPersonAddress.getCreateDateTime()).isEqualTo(DEFAULT_CREATE_DATE_TIME);
+        assertThat(testPersonAddress.getUpdateUserId()).isEqualTo(DEFAULT_UPDATE_USER_ID);
+        assertThat(testPersonAddress.getUpdateDateTime()).isEqualTo(DEFAULT_UPDATE_DATE_TIME);
     }
 
     @Test
@@ -112,17 +131,88 @@ public class PersonAddressResourceIntTest {
 
         // Create the PersonAddress with an existing ID
         personAddress.setId(1L);
-        PersonAddressDTO personAddressDTO = personAddressMapper.toDto(personAddress);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restPersonAddressMockMvc.perform(post("/api/person-addresses")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(personAddressDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(personAddress)))
             .andExpect(status().isBadRequest());
 
         // Validate the Alice in the database
         List<PersonAddress> personAddressList = personAddressRepository.findAll();
         assertThat(personAddressList).hasSize(databaseSizeBeforeCreate);
+    }
+
+    @Test
+    @Transactional
+    public void checkCreateUserIdIsRequired() throws Exception {
+        int databaseSizeBeforeTest = personAddressRepository.findAll().size();
+        // set the field null
+        personAddress.setCreateUserId(null);
+
+        // Create the PersonAddress, which fails.
+
+        restPersonAddressMockMvc.perform(post("/api/person-addresses")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(personAddress)))
+            .andExpect(status().isBadRequest());
+
+        List<PersonAddress> personAddressList = personAddressRepository.findAll();
+        assertThat(personAddressList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    public void checkCreateDateTimeIsRequired() throws Exception {
+        int databaseSizeBeforeTest = personAddressRepository.findAll().size();
+        // set the field null
+        personAddress.setCreateDateTime(null);
+
+        // Create the PersonAddress, which fails.
+
+        restPersonAddressMockMvc.perform(post("/api/person-addresses")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(personAddress)))
+            .andExpect(status().isBadRequest());
+
+        List<PersonAddress> personAddressList = personAddressRepository.findAll();
+        assertThat(personAddressList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    public void checkUpdateUserIdIsRequired() throws Exception {
+        int databaseSizeBeforeTest = personAddressRepository.findAll().size();
+        // set the field null
+        personAddress.setUpdateUserId(null);
+
+        // Create the PersonAddress, which fails.
+
+        restPersonAddressMockMvc.perform(post("/api/person-addresses")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(personAddress)))
+            .andExpect(status().isBadRequest());
+
+        List<PersonAddress> personAddressList = personAddressRepository.findAll();
+        assertThat(personAddressList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    public void checkUpdateDateTimeIsRequired() throws Exception {
+        int databaseSizeBeforeTest = personAddressRepository.findAll().size();
+        // set the field null
+        personAddress.setUpdateDateTime(null);
+
+        // Create the PersonAddress, which fails.
+
+        restPersonAddressMockMvc.perform(post("/api/person-addresses")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(personAddress)))
+            .andExpect(status().isBadRequest());
+
+        List<PersonAddress> personAddressList = personAddressRepository.findAll();
+        assertThat(personAddressList).hasSize(databaseSizeBeforeTest);
     }
 
     @Test
@@ -135,7 +225,11 @@ public class PersonAddressResourceIntTest {
         restPersonAddressMockMvc.perform(get("/api/person-addresses?sort=id,desc"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(personAddress.getId().intValue())));
+            .andExpect(jsonPath("$.[*].id").value(hasItem(personAddress.getId().intValue())))
+            .andExpect(jsonPath("$.[*].createUserId").value(hasItem(DEFAULT_CREATE_USER_ID.toString())))
+            .andExpect(jsonPath("$.[*].createDateTime").value(hasItem(sameInstant(DEFAULT_CREATE_DATE_TIME))))
+            .andExpect(jsonPath("$.[*].updateUserId").value(hasItem(DEFAULT_UPDATE_USER_ID.toString())))
+            .andExpect(jsonPath("$.[*].updateDateTime").value(hasItem(sameInstant(DEFAULT_UPDATE_DATE_TIME))));
     }
 
     @Test
@@ -148,7 +242,11 @@ public class PersonAddressResourceIntTest {
         restPersonAddressMockMvc.perform(get("/api/person-addresses/{id}", personAddress.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.id").value(personAddress.getId().intValue()));
+            .andExpect(jsonPath("$.id").value(personAddress.getId().intValue()))
+            .andExpect(jsonPath("$.createUserId").value(DEFAULT_CREATE_USER_ID.toString()))
+            .andExpect(jsonPath("$.createDateTime").value(sameInstant(DEFAULT_CREATE_DATE_TIME)))
+            .andExpect(jsonPath("$.updateUserId").value(DEFAULT_UPDATE_USER_ID.toString()))
+            .andExpect(jsonPath("$.updateDateTime").value(sameInstant(DEFAULT_UPDATE_DATE_TIME)));
     }
 
     @Test
@@ -168,17 +266,25 @@ public class PersonAddressResourceIntTest {
 
         // Update the personAddress
         PersonAddress updatedPersonAddress = personAddressRepository.findOne(personAddress.getId());
-        PersonAddressDTO personAddressDTO = personAddressMapper.toDto(updatedPersonAddress);
+        updatedPersonAddress
+            .createUserId(UPDATED_CREATE_USER_ID)
+            .createDateTime(UPDATED_CREATE_DATE_TIME)
+            .updateUserId(UPDATED_UPDATE_USER_ID)
+            .updateDateTime(UPDATED_UPDATE_DATE_TIME);
 
         restPersonAddressMockMvc.perform(put("/api/person-addresses")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(personAddressDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedPersonAddress)))
             .andExpect(status().isOk());
 
         // Validate the PersonAddress in the database
         List<PersonAddress> personAddressList = personAddressRepository.findAll();
         assertThat(personAddressList).hasSize(databaseSizeBeforeUpdate);
         PersonAddress testPersonAddress = personAddressList.get(personAddressList.size() - 1);
+        assertThat(testPersonAddress.getCreateUserId()).isEqualTo(UPDATED_CREATE_USER_ID);
+        assertThat(testPersonAddress.getCreateDateTime()).isEqualTo(UPDATED_CREATE_DATE_TIME);
+        assertThat(testPersonAddress.getUpdateUserId()).isEqualTo(UPDATED_UPDATE_USER_ID);
+        assertThat(testPersonAddress.getUpdateDateTime()).isEqualTo(UPDATED_UPDATE_DATE_TIME);
     }
 
     @Test
@@ -187,12 +293,11 @@ public class PersonAddressResourceIntTest {
         int databaseSizeBeforeUpdate = personAddressRepository.findAll().size();
 
         // Create the PersonAddress
-        PersonAddressDTO personAddressDTO = personAddressMapper.toDto(personAddress);
 
         // If the entity doesn't have an ID, it will be created instead of just being updated
         restPersonAddressMockMvc.perform(put("/api/person-addresses")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(personAddressDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(personAddress)))
             .andExpect(status().isCreated());
 
         // Validate the PersonAddress in the database
@@ -230,28 +335,5 @@ public class PersonAddressResourceIntTest {
         assertThat(personAddress1).isNotEqualTo(personAddress2);
         personAddress1.setId(null);
         assertThat(personAddress1).isNotEqualTo(personAddress2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(PersonAddressDTO.class);
-        PersonAddressDTO personAddressDTO1 = new PersonAddressDTO();
-        personAddressDTO1.setId(1L);
-        PersonAddressDTO personAddressDTO2 = new PersonAddressDTO();
-        assertThat(personAddressDTO1).isNotEqualTo(personAddressDTO2);
-        personAddressDTO2.setId(personAddressDTO1.getId());
-        assertThat(personAddressDTO1).isEqualTo(personAddressDTO2);
-        personAddressDTO2.setId(2L);
-        assertThat(personAddressDTO1).isNotEqualTo(personAddressDTO2);
-        personAddressDTO1.setId(null);
-        assertThat(personAddressDTO1).isNotEqualTo(personAddressDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(personAddressMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(personAddressMapper.fromId(null)).isNull();
     }
 }

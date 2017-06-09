@@ -1,0 +1,51 @@
+
+<div *ngIf="bodyOfWater">
+    <h2><span>Body Of Water</span> {{bodyOfWater.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span>Location</span></dt>
+        <dd>
+            <span>{{bodyOfWater.location}}</span>
+        </dd>
+        <dt><span>Size</span></dt>
+        <dd>
+            <span>{{bodyOfWater.size}}</span>
+        </dd>
+        <dt><span>Create User Id</span></dt>
+        <dd>
+            <span>{{bodyOfWater.createUserId}}</span>
+        </dd>
+        <dt><span>Create Date Time</span></dt>
+        <dd>
+            <span>{{bodyOfWater.createDateTime | date:'medium'}}</span>
+        </dd>
+        <dt><span>Update User Id</span></dt>
+        <dd>
+            <span>{{bodyOfWater.updateUserId}}</span>
+        </dd>
+        <dt><span>Update Date Time</span></dt>
+        <dd>
+            <span>{{bodyOfWater.updateDateTime | date:'medium'}}</span>
+        </dd>
+        <dt><span>Household Address</span></dt>
+        <dd>
+            <div *ngIf="bodyOfWater.householdAddress">
+                <a [routerLink]="['/household-address', bodyOfWater.householdAddress?.id]">{{bodyOfWater.householdAddress?.id}}</a>
+            </div>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            (click)="previousState()"
+            class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span> Back</span>
+    </button>
+
+    <button type="button"
+            [routerLink]="['/', { outlets: { popup: 'body-of-water/'+ bodyOfWater.id + '/edit'} }]"
+            replaceUrl="true"
+            class="btn btn-primary">
+        <span class="fa fa-pencil"></span>&nbsp;<span> Edit</span>
+    </button>
+</div>

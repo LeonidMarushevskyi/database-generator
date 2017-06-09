@@ -17,16 +17,14 @@
             <thead>
             <tr>
             <th><span>ID</span></th>
-            <th><span>Code</span></th>
-            <th><span>Type</span></th>
+            <th><span>Name</span></th>
             <th></th>
             </tr>
             </thead>
             <tbody>
             <tr *ngFor="let addressType of addressTypes ;trackBy: trackId">
                 <td><a [routerLink]="['../address-type', addressType.id ]">{{addressType.id}}</a></td>
-                <td>{{addressType.code}}</td>
-                <td>{{addressType.type}}</td>
+                <td>{{addressType.name}}</td>
                 <td class="text-right">
                     <div class="btn-group flex-btn-group-container">
                         <button type="submit"

@@ -57,17 +57,49 @@
             "fieldType": "BigDecimal"
         },
         {
-            "fieldName": "lattitude",
+            "fieldName": "latitude",
             "fieldType": "BigDecimal"
         },
         {
             "fieldName": "deliverable",
             "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "createUserId",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength",
+                "required"
+            ],
+            "fieldValidateRulesMaxlength": 50
+        },
+        {
+            "fieldName": "createDateTime",
+            "fieldType": "ZonedDateTime",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "updateUserId",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength",
+                "required"
+            ],
+            "fieldValidateRulesMaxlength": 50
+        },
+        {
+            "fieldName": "updateDateTime",
+            "fieldType": "ZonedDateTime",
+            "fieldValidateRules": [
+                "required"
+            ]
         }
     ],
     "changelogDate": "20170501060639",
     "entityTableName": "address",
-    "dto": "mapstruct",
+    "dto": "no",
     "pagination": "no",
     "service": "no"
 }

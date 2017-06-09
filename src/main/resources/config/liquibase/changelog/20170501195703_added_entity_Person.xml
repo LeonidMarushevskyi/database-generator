@@ -29,26 +29,71 @@
                 <constraints nullable="false" />
             </column>
 
-            <column name="gender" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-
-            <column name="age" type="integer">
-                <constraints nullable="true" />
-            </column>
-
-            <column name="date_of_birth" type="date">
+            <column name="middle_name" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
 
             <column name="ssn" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="ethnicity_id" type="bigint">
+
+            <column name="date_of_birth" type="date">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="drivers_license_number" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="create_user_id" type="varchar(50)">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="create_date_time" type="timestamp">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="update_user_id" type="varchar(50)">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="update_date_time" type="timestamp">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="application_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="household_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+            <column name="education_highest_level_id" type="bigint">
                 <constraints unique="true" nullable="true" />
             </column>
+            <column name="gender_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="race_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
+        <dropDefaultValue tableName="person" columnName="create_date_time" columnDataType="datetime"/>
+        <dropDefaultValue tableName="person" columnName="update_date_time" columnDataType="datetime"/>
+        
+        <createTable tableName="person_ethnicities">
+            <column name="ethnicities_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="people_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="people_id, ethnicities_id" tableName="person_ethnicities"/>
         
     </changeSet>
 </databaseChangeLog>

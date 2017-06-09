@@ -17,28 +17,36 @@
             <thead>
             <tr>
             <th><span>ID</span></th>
+            <th><span>Create User Id</span></th>
+            <th><span>Create Date Time</span></th>
+            <th><span>Update User Id</span></th>
+            <th><span>Update Date Time</span></th>
             <th><span>Person</span></th>
-            <th><span>Race</span></th>
-            <th><span>Type</span></th>
+            <th><span>Address Type</span></th>
+            <th><span>Address</span></th>
             <th></th>
             </tr>
             </thead>
             <tbody>
             <tr *ngFor="let personAddress of personAddresses ;trackBy: trackId">
                 <td><a [routerLink]="['../person-address', personAddress.id ]">{{personAddress.id}}</a></td>
+                <td>{{personAddress.createUserId}}</td>
+                <td>{{personAddress.createDateTime | date:'medium'}}</td>
+                <td>{{personAddress.updateUserId}}</td>
+                <td>{{personAddress.updateDateTime | date:'medium'}}</td>
                 <td>
-                    <div *ngIf="personAddress.personId">
-                        <a [routerLink]="['../person', personAddress.personId  ]" >{{personAddress.personId}}</a>
+                    <div *ngIf="personAddress.person">
+                        <a [routerLink]="['../person', personAddress.person?.id ]" >{{personAddress.person?.id}}</a>
                     </div>
                 </td>
                 <td>
-                    <div *ngIf="personAddress.raceId">
-                        <a [routerLink]="['../address', personAddress.raceId  ]" >{{personAddress.raceId}}</a>
+                    <div *ngIf="personAddress.addressType">
+                        <a [routerLink]="['../address-type', personAddress.addressType?.id ]" >{{personAddress.addressType?.id}}</a>
                     </div>
                 </td>
                 <td>
-                    <div *ngIf="personAddress.typeId">
-                        <a [routerLink]="['../address-type', personAddress.typeId  ]" >{{personAddress.typeId}}</a>
+                    <div *ngIf="personAddress.address">
+                        <a [routerLink]="['../address', personAddress.address?.id ]" >{{personAddress.address?.id}}</a>
                     </div>
                 </td>
                 <td class="text-right">

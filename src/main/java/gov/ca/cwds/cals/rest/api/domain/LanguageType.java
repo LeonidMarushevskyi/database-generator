@@ -24,13 +24,9 @@ public class LanguageType implements Serializable {
     private Long id;
 
     @NotNull
-    @Size(max = 2)
-    @Column(name = "code", length = 2, nullable = false)
-    private String code;
-
     @Size(max = 20)
-    @Column(name = "jhi_type", length = 20)
-    private String type;
+    @Column(name = "name", length = 20, nullable = false)
+    private String name;
 
     public Long getId() {
         return id;
@@ -40,30 +36,17 @@ public class LanguageType implements Serializable {
         this.id = id;
     }
 
-    public String getCode() {
-        return code;
+    public String getName() {
+        return name;
     }
 
-    public LanguageType code(String code) {
-        this.code = code;
+    public LanguageType name(String name) {
+        this.name = name;
         return this;
     }
 
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public LanguageType type(String type) {
-        this.type = type;
-        return this;
-    }
-
-    public void setType(String type) {
-        this.type = type;
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override
@@ -90,8 +73,7 @@ public class LanguageType implements Serializable {
     public String toString() {
         return "LanguageType{" +
             "id=" + getId() +
-            ", code='" + getCode() + "'" +
-            ", type='" + getType() + "'" +
+            ", name='" + getName() + "'" +
             "}";
     }
 }

@@ -8,23 +8,23 @@
     -->
     <changeSet id="20170501195703-2" author="jhipster">
         
+        <addForeignKeyConstraint baseColumnNames="phone_number_id"
+                                 baseTableName="person_phone"
+                                 constraintName="fk_person_phone_phone_number_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="phone_number"/>
+
+        <addForeignKeyConstraint baseColumnNames="phone_type_id"
+                                 baseTableName="person_phone"
+                                 constraintName="fk_person_phone_phone_type_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="phone_number_type"/>
+
         <addForeignKeyConstraint baseColumnNames="person_id"
                                  baseTableName="person_phone"
                                  constraintName="fk_person_phone_person_id"
                                  referencedColumnNames="id"
                                  referencedTableName="person"/>
-
-        <addForeignKeyConstraint baseColumnNames="phone_id"
-                                 baseTableName="person_phone"
-                                 constraintName="fk_person_phone_phone_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="phone"/>
-
-        <addForeignKeyConstraint baseColumnNames="type_id"
-                                 baseTableName="person_phone"
-                                 constraintName="fk_person_phone_type_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="phone_type"/>
 
     </changeSet>
 </databaseChangeLog>

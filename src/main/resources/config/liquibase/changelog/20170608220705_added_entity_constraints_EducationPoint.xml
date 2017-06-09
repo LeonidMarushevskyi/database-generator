@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <!--
+        Added the constraints for entity EducationPoint.
+    -->
+    <changeSet id="20170608220705-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="type_id"
+                                 baseTableName="education_point"
+                                 constraintName="fk_education_point_type_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="education_level_type"/>
+
+        <addForeignKeyConstraint baseColumnNames="educational_institution_address_id"
+                                 baseTableName="education_point"
+                                 constraintName="fk_education_point_educational_institution_address_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="address"/>
+
+        <addForeignKeyConstraint baseColumnNames="person_id"
+                                 baseTableName="education_point"
+                                 constraintName="fk_education_point_person_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="person"/>
+
+    </changeSet>
+</databaseChangeLog>

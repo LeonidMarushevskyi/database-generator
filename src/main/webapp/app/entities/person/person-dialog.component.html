@@ -37,26 +37,10 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="form-control-label" for="field_gender">Gender</label>
-            <input type="text" class="form-control" name="gender" id="field_gender"
-                [(ngModel)]="person.gender"
+            <label class="form-control-label" for="field_middleName">Middle Name</label>
+            <input type="text" class="form-control" name="middleName" id="field_middleName"
+                [(ngModel)]="person.middleName"
              />
-        </div>
-        <div class="form-group">
-            <label class="form-control-label" for="field_age">Age</label>
-            <input type="number" class="form-control" name="age" id="field_age"
-                [(ngModel)]="person.age"
-             />
-        </div>
-        <div class="form-group">
-            <label class="form-control-label" for="field_dateOfBirth">Date Of Birth</label>
-            <div class="input-group">
-                <input id="field_dateOfBirth" type="text" class="form-control" name="dateOfBirth" ngbDatepicker  #dateOfBirthDp="ngbDatepicker" [(ngModel)]="person.dateOfBirth"
-                />
-                <span class="input-group-btn">
-                    <button type="button" class="btn btn-default" (click)="dateOfBirthDp.toggle()"><i class="fa fa-calendar"></i></button>
-                </span>
-            </div>
         </div>
         <div class="form-group">
             <label class="form-control-label" for="field_ssn">Ssn</label>
@@ -64,13 +48,157 @@
                 [(ngModel)]="person.ssn"
              />
         </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_dateOfBirth">Date Of Birth</label>
+            <div class="input-group">
+                <input id="field_dateOfBirth" type="text" class="form-control" name="dateOfBirth" ngbDatepicker  #dateOfBirthDp="ngbDatepicker" [(ngModel)]="person.dateOfBirth"
+                required/>
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-default" (click)="dateOfBirthDp.toggle()"><i class="fa fa-calendar"></i></button>
+                </span>
+            </div>
+            <div [hidden]="!(editForm.controls.dateOfBirth?.dirty && editForm.controls.dateOfBirth?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.dateOfBirth?.errors?.required">
+                   This field is required.
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_driversLicenseNumber">Drivers License Number</label>
+            <input type="text" class="form-control" name="driversLicenseNumber" id="field_driversLicenseNumber"
+                [(ngModel)]="person.driversLicenseNumber"
+            required />
+            <div [hidden]="!(editForm.controls.driversLicenseNumber?.dirty && editForm.controls.driversLicenseNumber?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.driversLicenseNumber?.errors?.required">
+                   This field is required.
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_createUserId">Create User Id</label>
+            <input type="text" class="form-control" name="createUserId" id="field_createUserId"
+                [(ngModel)]="person.createUserId"
+            required maxlength="50" />
+            <div [hidden]="!(editForm.controls.createUserId?.dirty && editForm.controls.createUserId?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.createUserId?.errors?.required">
+                   This field is required.
+                </small>
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.createUserId?.errors?.maxlength">
+                   This field cannot be longer than 50 characters.
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_createDateTime">Create Date Time</label>
+            <div class="d-flex">
+                <input id="field_createDateTime" type="datetime-local" class="form-control" name="createDateTime" [(ngModel)]="person.createDateTime"
+                required  />
+            </div>
+            <div [hidden]="!(editForm.controls.createDateTime?.dirty && editForm.controls.createDateTime?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.createDateTime?.errors?.required">
+                   This field is required.
+                </small>
+                <small class="form-text text-danger"
+                    [hidden]="!editForm.controls.createDateTime?.errors?.ZonedDateTimelocal">
+                    This field should be a date and time.
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_updateUserId">Update User Id</label>
+            <input type="text" class="form-control" name="updateUserId" id="field_updateUserId"
+                [(ngModel)]="person.updateUserId"
+            required maxlength="50" />
+            <div [hidden]="!(editForm.controls.updateUserId?.dirty && editForm.controls.updateUserId?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.updateUserId?.errors?.required">
+                   This field is required.
+                </small>
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.updateUserId?.errors?.maxlength">
+                   This field cannot be longer than 50 characters.
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_updateDateTime">Update Date Time</label>
+            <div class="d-flex">
+                <input id="field_updateDateTime" type="datetime-local" class="form-control" name="updateDateTime" [(ngModel)]="person.updateDateTime"
+                required  />
+            </div>
+            <div [hidden]="!(editForm.controls.updateDateTime?.dirty && editForm.controls.updateDateTime?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.updateDateTime?.errors?.required">
+                   This field is required.
+                </small>
+                <small class="form-text text-danger"
+                    [hidden]="!editForm.controls.updateDateTime?.errors?.ZonedDateTimelocal">
+                    This field should be a date and time.
+                </small>
+            </div>
+        </div>
 
         <div class="form-group">
-            <label for="field_ethnicity">Ethnicity</label>
-            <select class="form-control" id="field_ethnicity" name="ethnicity" [(ngModel)]="person.ethnicityId">
+            <label for="field_application">Application</label>
+            <select class="form-control" id="field_application" name="application" [(ngModel)]="person.application" >
                 <option [ngValue]="null"></option>
-                <option [ngValue]="personEthnicityOption.id" *ngFor="let personEthnicityOption of ethnicities; trackBy: trackPersonEthnicityById">{{personEthnicityOption.id}}</option>
+                <option [ngValue]="applicationOption.id === person.application?.id ? person.application : applicationOption" *ngFor="let applicationOption of applications; trackBy: trackApplicationById">{{applicationOption.id}}</option>
             </select>
+        </div>
+        <div class="form-group">
+            <label for="field_household">Household</label>
+            <select class="form-control" id="field_household" name="household" [(ngModel)]="person.household" >
+                <option [ngValue]="null"></option>
+                <option [ngValue]="householdOption.id === person.household?.id ? person.household : householdOption" *ngFor="let householdOption of households; trackBy: trackHouseholdById">{{householdOption.id}}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="field_educationHighestLevel">Education Highest Level</label>
+            <select class="form-control" id="field_educationHighestLevel" name="educationHighestLevel" [(ngModel)]="person.educationHighestLevel">
+                <option [ngValue]="null"></option>
+                <option [ngValue]="educationLevelTypeOption.id === person.educationHighestLevel?.id ? person.educationHighestLevel : educationLevelTypeOption" *ngFor="let educationLevelTypeOption of educationhighestlevels; trackBy: trackEducationLevelTypeById">{{educationLevelTypeOption.id}}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="field_gender">Gender</label>
+            <select class="form-control" id="field_gender" name="gender" [(ngModel)]="person.gender"  required>
+                <option [ngValue]="genderTypeOption.id === person.gender?.id ? person.gender : genderTypeOption" *ngFor="let genderTypeOption of gendertypes; trackBy: trackGenderTypeById">{{genderTypeOption.id}}</option>
+            </select>
+        </div>
+        <div [hidden]="!(editForm.controls.gender?.dirty && editForm.controls.gender?.invalid)">
+            <small class="form-text text-danger"
+                [hidden]="!editForm.controls.gender?.errors?.required">
+                This field is required.
+            </small>
+        </div>
+        <div class="form-group">
+            <label for="field_race">Race</label>
+            <select class="form-control" id="field_race" name="race" [(ngModel)]="person.race"  required>
+                <option [ngValue]="raceTypeOption.id === person.race?.id ? person.race : raceTypeOption" *ngFor="let raceTypeOption of racetypes; trackBy: trackRaceTypeById">{{raceTypeOption.id}}</option>
+            </select>
+        </div>
+        <div [hidden]="!(editForm.controls.race?.dirty && editForm.controls.race?.invalid)">
+            <small class="form-text text-danger"
+                [hidden]="!editForm.controls.race?.errors?.required">
+                This field is required.
+            </small>
+        </div>
+        <div class="form-group">
+            <label for="field_ethnicities">Ethnicities</label>
+            <select class="form-control" id="field_ethnicities" multiple name="ethnicities" [(ngModel)]="person.ethnicities" required>
+                <option [ngValue]="getSelected(person.ethnicities, ethnicityTypeOption)" *ngFor="let ethnicityTypeOption of ethnicitytypes; trackBy: trackEthnicityTypeById">{{ethnicityTypeOption.id}}</option>
+            </select>
+        </div>
+        <div [hidden]="!(editForm.controls.ethnicities?.dirty && editForm.controls.ethnicities?.invalid)">
+            <small class="form-text text-danger"
+                [hidden]="!editForm.controls.ethnicities?.errors?.required">
+                This field is required.
+            </small>
         </div>
     </div>
     <div class="modal-footer">

@@ -1,0 +1,51 @@
+
+<div *ngIf="relationshipEvent">
+    <h2><span>Relationship Event</span> {{relationshipEvent.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span>Event Place</span></dt>
+        <dd>
+            <span>{{relationshipEvent.eventPlace}}</span>
+        </dd>
+        <dt><span>Event Date</span></dt>
+        <dd>
+            <span>{{relationshipEvent.eventDate | date:'mediumDate'}}</span>
+        </dd>
+        <dt><span>Create User Id</span></dt>
+        <dd>
+            <span>{{relationshipEvent.createUserId}}</span>
+        </dd>
+        <dt><span>Create Date Time</span></dt>
+        <dd>
+            <span>{{relationshipEvent.createDateTime | date:'medium'}}</span>
+        </dd>
+        <dt><span>Update User Id</span></dt>
+        <dd>
+            <span>{{relationshipEvent.updateUserId}}</span>
+        </dd>
+        <dt><span>Update Date Time</span></dt>
+        <dd>
+            <span>{{relationshipEvent.updateDateTime | date:'medium'}}</span>
+        </dd>
+        <dt><span>Event Type</span></dt>
+        <dd>
+            <div *ngIf="relationshipEvent.eventType">
+                <a [routerLink]="['/relationship-event-type', relationshipEvent.eventType?.id]">{{relationshipEvent.eventType?.id}}</a>
+            </div>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            (click)="previousState()"
+            class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span> Back</span>
+    </button>
+
+    <button type="button"
+            [routerLink]="['/', { outlets: { popup: 'relationship-event/'+ relationshipEvent.id + '/edit'} }]"
+            replaceUrl="true"
+            class="btn btn-primary">
+        <span class="fa fa-pencil"></span>&nbsp;<span> Edit</span>
+    </button>
+</div>

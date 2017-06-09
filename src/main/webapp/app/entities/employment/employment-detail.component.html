@@ -1,0 +1,65 @@
+
+<div *ngIf="employment">
+    <h2><span>Employment</span> {{employment.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span>Occupation</span></dt>
+        <dd>
+            <span>{{employment.occupation}}</span>
+        </dd>
+        <dt><span>Annual Income</span></dt>
+        <dd>
+            <span>{{employment.annualIncome}}</span>
+        </dd>
+        <dt><span>Start Date</span></dt>
+        <dd>
+            <span>{{employment.startDate | date:'mediumDate'}}</span>
+        </dd>
+        <dt><span>End Date</span></dt>
+        <dd>
+            <span>{{employment.endDate | date:'mediumDate'}}</span>
+        </dd>
+        <dt><span>Create User Id</span></dt>
+        <dd>
+            <span>{{employment.createUserId}}</span>
+        </dd>
+        <dt><span>Create Date Time</span></dt>
+        <dd>
+            <span>{{employment.createDateTime | date:'medium'}}</span>
+        </dd>
+        <dt><span>Update User Id</span></dt>
+        <dd>
+            <span>{{employment.updateUserId}}</span>
+        </dd>
+        <dt><span>Update Date Time</span></dt>
+        <dd>
+            <span>{{employment.updateDateTime | date:'medium'}}</span>
+        </dd>
+        <dt><span>Employer</span></dt>
+        <dd>
+            <div *ngIf="employment.employer">
+                <a [routerLink]="['/employer', employment.employer?.id]">{{employment.employer?.id}}</a>
+            </div>
+        </dd>
+        <dt><span>Person</span></dt>
+        <dd>
+            <div *ngIf="employment.person">
+                <a [routerLink]="['/person', employment.person?.id]">{{employment.person?.id}}</a>
+            </div>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            (click)="previousState()"
+            class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span> Back</span>
+    </button>
+
+    <button type="button"
+            [routerLink]="['/', { outlets: { popup: 'employment/'+ employment.id + '/edit'} }]"
+            replaceUrl="true"
+            class="btn btn-primary">
+        <span class="fa fa-pencil"></span>&nbsp;<span> Edit</span>
+    </button>
+</div>

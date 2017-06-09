@@ -1,0 +1,64 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "relationshipName": "householdPerson",
+            "otherEntityName": "householdAdult",
+            "otherEntityField": "id",
+            "ownerSide": true,
+            "otherEntityRelationshipName": "applicant"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "relationHistoryRecords",
+            "otherEntityName": "applicantRelationHistoryRecord",
+            "otherEntityRelationshipName": "applicant"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "relationshipName": "application",
+            "otherEntityName": "application",
+            "otherEntityField": "id"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "createUserId",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength",
+                "required"
+            ],
+            "fieldValidateRulesMaxlength": 50
+        },
+        {
+            "fieldName": "createDateTime",
+            "fieldType": "ZonedDateTime",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "updateUserId",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength",
+                "required"
+            ],
+            "fieldValidateRulesMaxlength": 50
+        },
+        {
+            "fieldName": "updateDateTime",
+            "fieldType": "ZonedDateTime",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "changelogDate": "20170608220658",
+    "entityTableName": "applicant",
+    "dto": "no",
+    "pagination": "no",
+    "service": "no"
+}

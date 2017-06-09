@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <!--
+        Added the constraints for entity AppRelHistory.
+    -->
+    <changeSet id="20170608220724-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="start_event_id"
+                                 baseTableName="app_rel_history"
+                                 constraintName="fk_app_rel_history_start_event_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="relationship_event"/>
+
+        <addForeignKeyConstraint baseColumnNames="end_event_id"
+                                 baseTableName="app_rel_history"
+                                 constraintName="fk_app_rel_history_end_event_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="relationship_event"/>
+
+        <addForeignKeyConstraint baseColumnNames="relationship_type_id"
+                                 baseTableName="app_rel_history"
+                                 constraintName="fk_app_rel_history_relationship_type_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="relationship_type"/>
+
+        <addForeignKeyConstraint baseColumnNames="applicant_id"
+                                 baseTableName="app_rel_history"
+                                 constraintName="fk_app_rel_history_applicant_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="applicant"/>
+
+    </changeSet>
+</databaseChangeLog>

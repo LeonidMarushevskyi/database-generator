@@ -17,28 +17,36 @@
             <thead>
             <tr>
             <th><span>ID</span></th>
+            <th><span>Create User Id</span></th>
+            <th><span>Create Date Time</span></th>
+            <th><span>Update User Id</span></th>
+            <th><span>Update Date Time</span></th>
+            <th><span>Phone Number</span></th>
+            <th><span>Phone Type</span></th>
             <th><span>Person</span></th>
-            <th><span>Phone</span></th>
-            <th><span>Type</span></th>
             <th></th>
             </tr>
             </thead>
             <tbody>
             <tr *ngFor="let personPhone of personPhones ;trackBy: trackId">
                 <td><a [routerLink]="['../person-phone', personPhone.id ]">{{personPhone.id}}</a></td>
+                <td>{{personPhone.createUserId}}</td>
+                <td>{{personPhone.createDateTime | date:'medium'}}</td>
+                <td>{{personPhone.updateUserId}}</td>
+                <td>{{personPhone.updateDateTime | date:'medium'}}</td>
                 <td>
-                    <div *ngIf="personPhone.personId">
-                        <a [routerLink]="['../person', personPhone.personId  ]" >{{personPhone.personId}}</a>
+                    <div *ngIf="personPhone.phoneNumber">
+                        <a [routerLink]="['../phone-number', personPhone.phoneNumber?.id ]" >{{personPhone.phoneNumber?.id}}</a>
                     </div>
                 </td>
                 <td>
-                    <div *ngIf="personPhone.phoneId">
-                        <a [routerLink]="['../phone', personPhone.phoneId  ]" >{{personPhone.phoneId}}</a>
+                    <div *ngIf="personPhone.phoneType">
+                        <a [routerLink]="['../phone-number-type', personPhone.phoneType?.id ]" >{{personPhone.phoneType?.id}}</a>
                     </div>
                 </td>
                 <td>
-                    <div *ngIf="personPhone.typeId">
-                        <a [routerLink]="['../phone-type', personPhone.typeId  ]" >{{personPhone.typeId}}</a>
+                    <div *ngIf="personPhone.person">
+                        <a [routerLink]="['../person', personPhone.person?.id ]" >{{personPhone.person?.id}}</a>
                     </div>
                 </td>
                 <td class="text-right">

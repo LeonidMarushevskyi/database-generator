@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <!--
+        Added the constraints for entity Application.
+    -->
+    <changeSet id="20170608220652-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="licensure_history_id"
+                                 baseTableName="application"
+                                 constraintName="fk_application_licensure_history_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="licensure_history"/>
+
+        <addForeignKeyConstraint baseColumnNames="_id"
+                                 baseTableName="application"
+                                 constraintName="fk_application__id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="child_preferences"/>
+
+        <addForeignKeyConstraint baseColumnNames="for_county_use_only_id"
+                                 baseTableName="application"
+                                 constraintName="fk_application_for_county_use_only_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="county_type"/>
+
+        <addForeignKeyConstraint baseColumnNames="status_id"
+                                 baseTableName="application"
+                                 constraintName="fk_application_status_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="application_status_type"/>
+
+    </changeSet>
+</databaseChangeLog>

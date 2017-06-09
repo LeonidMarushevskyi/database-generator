@@ -5,14 +5,13 @@ import gov.ca.cwds.cals.rest.api.domain.PersonAddress;
 
 import gov.ca.cwds.cals.rest.api.repository.PersonAddressRepository;
 import gov.ca.cwds.cals.rest.api.web.rest.util.HeaderUtil;
-import gov.ca.cwds.cals.rest.api.service.dto.PersonAddressDTO;
-import gov.ca.cwds.cals.rest.api.service.mapper.PersonAddressMapper;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -32,30 +31,25 @@ public class PersonAddressResource {
         
     private final PersonAddressRepository personAddressRepository;
 
-    private final PersonAddressMapper personAddressMapper;
-
-    public PersonAddressResource(PersonAddressRepository personAddressRepository, PersonAddressMapper personAddressMapper) {
+    public PersonAddressResource(PersonAddressRepository personAddressRepository) {
         this.personAddressRepository = personAddressRepository;
-        this.personAddressMapper = personAddressMapper;
     }
 
     /**
      * POST  /person-addresses : Create a new personAddress.
      *
-     * @param personAddressDTO the personAddressDTO to create
-     * @return the ResponseEntity with status 201 (Created) and with body the new personAddressDTO, or with status 400 (Bad Request) if the personAddress has already an ID
+     * @param personAddress the personAddress to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new personAddress, or with status 400 (Bad Request) if the personAddress has already an ID
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PostMapping("/person-addresses")
     @Timed
-    public ResponseEntity<PersonAddressDTO> createPersonAddress(@RequestBody PersonAddressDTO personAddressDTO) throws URISyntaxException {
-        log.debug("REST request to save PersonAddress : {}", personAddressDTO);
-        if (personAddressDTO.getId() != null) {
+    public ResponseEntity<PersonAddress> createPersonAddress(@Valid @RequestBody PersonAddress personAddress) throws URISyntaxException {
+        log.debug("REST request to save PersonAddress : {}", personAddress);
+        if (personAddress.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new personAddress cannot already have an ID")).body(null);
         }
-        PersonAddress personAddress = personAddressMapper.toEntity(personAddressDTO);
-        personAddress = personAddressRepository.save(personAddress);
-        PersonAddressDTO result = personAddressMapper.toDto(personAddress);
+        PersonAddress result = personAddressRepository.save(personAddress);
         return ResponseEntity.created(new URI("/api/person-addresses/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -64,24 +58,22 @@ public class PersonAddressResource {
     /**
      * PUT  /person-addresses : Updates an existing personAddress.
      *
-     * @param personAddressDTO the personAddressDTO to update
-     * @return the ResponseEntity with status 200 (OK) and with body the updated personAddressDTO,
-     * or with status 400 (Bad Request) if the personAddressDTO is not valid,
-     * or with status 500 (Internal Server Error) if the personAddressDTO couldnt be updated
+     * @param personAddress the personAddress to update
+     * @return the ResponseEntity with status 200 (OK) and with body the updated personAddress,
+     * or with status 400 (Bad Request) if the personAddress is not valid,
+     * or with status 500 (Internal Server Error) if the personAddress couldnt be updated
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PutMapping("/person-addresses")
     @Timed
-    public ResponseEntity<PersonAddressDTO> updatePersonAddress(@RequestBody PersonAddressDTO personAddressDTO) throws URISyntaxException {
-        log.debug("REST request to update PersonAddress : {}", personAddressDTO);
-        if (personAddressDTO.getId() == null) {
-            return createPersonAddress(personAddressDTO);
+    public ResponseEntity<PersonAddress> updatePersonAddress(@Valid @RequestBody PersonAddress personAddress) throws URISyntaxException {
+        log.debug("REST request to update PersonAddress : {}", personAddress);
+        if (personAddress.getId() == null) {
+            return createPersonAddress(personAddress);
         }
-        PersonAddress personAddress = personAddressMapper.toEntity(personAddressDTO);
-        personAddress = personAddressRepository.save(personAddress);
-        PersonAddressDTO result = personAddressMapper.toDto(personAddress);
+        PersonAddress result = personAddressRepository.save(personAddress);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, personAddressDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, personAddress.getId().toString()))
             .body(result);
     }
 
@@ -92,31 +84,30 @@ public class PersonAddressResource {
      */
     @GetMapping("/person-addresses")
     @Timed
-    public List<PersonAddressDTO> getAllPersonAddresses() {
+    public List<PersonAddress> getAllPersonAddresses() {
         log.debug("REST request to get all PersonAddresses");
         List<PersonAddress> personAddresses = personAddressRepository.findAll();
-        return personAddressMapper.toDto(personAddresses);
+        return personAddresses;
     }
 
     /**
      * GET  /person-addresses/:id : get the "id" personAddress.
      *
-     * @param id the id of the personAddressDTO to retrieve
-     * @return the ResponseEntity with status 200 (OK) and with body the personAddressDTO, or with status 404 (Not Found)
+     * @param id the id of the personAddress to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the personAddress, or with status 404 (Not Found)
      */
     @GetMapping("/person-addresses/{id}")
     @Timed
-    public ResponseEntity<PersonAddressDTO> getPersonAddress(@PathVariable Long id) {
+    public ResponseEntity<PersonAddress> getPersonAddress(@PathVariable Long id) {
         log.debug("REST request to get PersonAddress : {}", id);
         PersonAddress personAddress = personAddressRepository.findOne(id);
-        PersonAddressDTO personAddressDTO = personAddressMapper.toDto(personAddress);
-        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(personAddressDTO));
+        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(personAddress));
     }
 
     /**
      * DELETE  /person-addresses/:id : delete the "id" personAddress.
      *
-     * @param id the id of the personAddressDTO to delete
+     * @param id the id of the personAddress to delete
      * @return the ResponseEntity with status 200 (OK)
      */
     @DeleteMapping("/person-addresses/{id}")

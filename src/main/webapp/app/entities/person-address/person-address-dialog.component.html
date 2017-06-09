@@ -12,26 +12,92 @@
             <input type="text" class="form-control" id="id" name="id"
                    [(ngModel)]="personAddress.id" readonly />
         </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_createUserId">Create User Id</label>
+            <input type="text" class="form-control" name="createUserId" id="field_createUserId"
+                [(ngModel)]="personAddress.createUserId"
+            required maxlength="50" />
+            <div [hidden]="!(editForm.controls.createUserId?.dirty && editForm.controls.createUserId?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.createUserId?.errors?.required">
+                   This field is required.
+                </small>
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.createUserId?.errors?.maxlength">
+                   This field cannot be longer than 50 characters.
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_createDateTime">Create Date Time</label>
+            <div class="d-flex">
+                <input id="field_createDateTime" type="datetime-local" class="form-control" name="createDateTime" [(ngModel)]="personAddress.createDateTime"
+                required  />
+            </div>
+            <div [hidden]="!(editForm.controls.createDateTime?.dirty && editForm.controls.createDateTime?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.createDateTime?.errors?.required">
+                   This field is required.
+                </small>
+                <small class="form-text text-danger"
+                    [hidden]="!editForm.controls.createDateTime?.errors?.ZonedDateTimelocal">
+                    This field should be a date and time.
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_updateUserId">Update User Id</label>
+            <input type="text" class="form-control" name="updateUserId" id="field_updateUserId"
+                [(ngModel)]="personAddress.updateUserId"
+            required maxlength="50" />
+            <div [hidden]="!(editForm.controls.updateUserId?.dirty && editForm.controls.updateUserId?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.updateUserId?.errors?.required">
+                   This field is required.
+                </small>
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.updateUserId?.errors?.maxlength">
+                   This field cannot be longer than 50 characters.
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_updateDateTime">Update Date Time</label>
+            <div class="d-flex">
+                <input id="field_updateDateTime" type="datetime-local" class="form-control" name="updateDateTime" [(ngModel)]="personAddress.updateDateTime"
+                required  />
+            </div>
+            <div [hidden]="!(editForm.controls.updateDateTime?.dirty && editForm.controls.updateDateTime?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.updateDateTime?.errors?.required">
+                   This field is required.
+                </small>
+                <small class="form-text text-danger"
+                    [hidden]="!editForm.controls.updateDateTime?.errors?.ZonedDateTimelocal">
+                    This field should be a date and time.
+                </small>
+            </div>
+        </div>
 
         <div class="form-group">
             <label for="field_person">Person</label>
-            <select class="form-control" id="field_person" name="person" [(ngModel)]="personAddress.personId" >
+            <select class="form-control" id="field_person" name="person" [(ngModel)]="personAddress.person" >
                 <option [ngValue]="null"></option>
-                <option [ngValue]="personOption.id" *ngFor="let personOption of people; trackBy: trackPersonById">{{personOption.id}}</option>
+                <option [ngValue]="personOption.id === personAddress.person?.id ? personAddress.person : personOption" *ngFor="let personOption of people; trackBy: trackPersonById">{{personOption.id}}</option>
             </select>
         </div>
         <div class="form-group">
-            <label for="field_race">Race</label>
-            <select class="form-control" id="field_race" name="race" [(ngModel)]="personAddress.raceId">
+            <label for="field_addressType">Address Type</label>
+            <select class="form-control" id="field_addressType" name="addressType" [(ngModel)]="personAddress.addressType" >
                 <option [ngValue]="null"></option>
-                <option [ngValue]="addressOption.id" *ngFor="let addressOption of races; trackBy: trackAddressById">{{addressOption.id}}</option>
+                <option [ngValue]="addressTypeOption.id === personAddress.addressType?.id ? personAddress.addressType : addressTypeOption" *ngFor="let addressTypeOption of addresstypes; trackBy: trackAddressTypeById">{{addressTypeOption.id}}</option>
             </select>
         </div>
         <div class="form-group">
-            <label for="field_type">Type</label>
-            <select class="form-control" id="field_type" name="type" [(ngModel)]="personAddress.typeId" >
+            <label for="field_address">Address</label>
+            <select class="form-control" id="field_address" name="address" [(ngModel)]="personAddress.address" >
                 <option [ngValue]="null"></option>
-                <option [ngValue]="addressTypeOption.id" *ngFor="let addressTypeOption of addresstypes; trackBy: trackAddressTypeById">{{addressTypeOption.id}}</option>
+                <option [ngValue]="addressOption.id === personAddress.address?.id ? personAddress.address : addressOption" *ngFor="let addressOption of addresses; trackBy: trackAddressById">{{addressOption.id}}</option>
             </select>
         </div>
     </div>

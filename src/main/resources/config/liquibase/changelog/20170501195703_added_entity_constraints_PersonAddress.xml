@@ -14,17 +14,17 @@
                                  referencedColumnNames="id"
                                  referencedTableName="person"/>
 
-        <addForeignKeyConstraint baseColumnNames="race_id"
+        <addForeignKeyConstraint baseColumnNames="address_type_id"
                                  baseTableName="person_address"
-                                 constraintName="fk_person_address_race_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="address"/>
-
-        <addForeignKeyConstraint baseColumnNames="type_id"
-                                 baseTableName="person_address"
-                                 constraintName="fk_person_address_type_id"
+                                 constraintName="fk_person_address_address_type_id"
                                  referencedColumnNames="id"
                                  referencedTableName="address_type"/>
+
+        <addForeignKeyConstraint baseColumnNames="address_id"
+                                 baseTableName="person_address"
+                                 constraintName="fk_person_address_address_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="address"/>
 
     </changeSet>
 </databaseChangeLog>

@@ -1,0 +1,61 @@
+
+<div *ngIf="appRelHistory">
+    <h2><span>App Rel History</span> {{appRelHistory.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span>Create User Id</span></dt>
+        <dd>
+            <span>{{appRelHistory.createUserId}}</span>
+        </dd>
+        <dt><span>Create Date Time</span></dt>
+        <dd>
+            <span>{{appRelHistory.createDateTime | date:'medium'}}</span>
+        </dd>
+        <dt><span>Update User Id</span></dt>
+        <dd>
+            <span>{{appRelHistory.updateUserId}}</span>
+        </dd>
+        <dt><span>Update Date Time</span></dt>
+        <dd>
+            <span>{{appRelHistory.updateDateTime | date:'medium'}}</span>
+        </dd>
+        <dt><span>Start Event</span></dt>
+        <dd>
+            <div *ngIf="appRelHistory.startEvent">
+                <a [routerLink]="['/relationship-event', appRelHistory.startEvent?.id]">{{appRelHistory.startEvent?.id}}</a>
+            </div>
+        </dd>
+        <dt><span>End Event</span></dt>
+        <dd>
+            <div *ngIf="appRelHistory.endEvent">
+                <a [routerLink]="['/relationship-event', appRelHistory.endEvent?.id]">{{appRelHistory.endEvent?.id}}</a>
+            </div>
+        </dd>
+        <dt><span>Relationship Type</span></dt>
+        <dd>
+            <div *ngIf="appRelHistory.relationshipType">
+                <a [routerLink]="['/relationship-type', appRelHistory.relationshipType?.id]">{{appRelHistory.relationshipType?.id}}</a>
+            </div>
+        </dd>
+        <dt><span>Applicant</span></dt>
+        <dd>
+            <div *ngIf="appRelHistory.applicant">
+                <a [routerLink]="['/applicant', appRelHistory.applicant?.id]">{{appRelHistory.applicant?.id}}</a>
+            </div>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            (click)="previousState()"
+            class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span> Back</span>
+    </button>
+
+    <button type="button"
+            [routerLink]="['/', { outlets: { popup: 'app-rel-history/'+ appRelHistory.id + '/edit'} }]"
+            replaceUrl="true"
+            class="btn btn-primary">
+        <span class="fa fa-pencil"></span>&nbsp;<span> Edit</span>
+    </button>
+</div>

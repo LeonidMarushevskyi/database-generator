@@ -10,8 +10,8 @@ import { PersonAddress } from './person-address.model';
 import { PersonAddressPopupService } from './person-address-popup.service';
 import { PersonAddressService } from './person-address.service';
 import { Person, PersonService } from '../person';
-import { Address, AddressService } from '../address';
 import { AddressType, AddressTypeService } from '../address-type';
+import { Address, AddressService } from '../address';
 import { ResponseWrapper } from '../../shared';
 
 @Component({
@@ -26,17 +26,17 @@ export class PersonAddressDialogComponent implements OnInit {
 
     people: Person[];
 
-    races: Address[];
-
     addresstypes: AddressType[];
+
+    addresses: Address[];
 
     constructor(
         public activeModal: NgbActiveModal,
         private alertService: AlertService,
         private personAddressService: PersonAddressService,
         private personService: PersonService,
-        private addressService: AddressService,
         private addressTypeService: AddressTypeService,
+        private addressService: AddressService,
         private eventManager: EventManager
     ) {
     }
@@ -46,21 +46,10 @@ export class PersonAddressDialogComponent implements OnInit {
         this.authorities = ['ROLE_USER', 'ROLE_ADMIN'];
         this.personService.query()
             .subscribe((res: ResponseWrapper) => { this.people = res.json; }, (res: ResponseWrapper) => this.onError(res.json));
-        this.addressService
-            .query({filter: 'personaddress-is-null'})
-            .subscribe((res: ResponseWrapper) => {
-                if (!this.personAddress.raceId) {
-                    this.races = res.json;
-                } else {
-                    this.addressService
-                        .find(this.personAddress.raceId)
-                        .subscribe((subRes: Address) => {
-                            this.races = [subRes].concat(res.json);
-                        }, (subRes: ResponseWrapper) => this.onError(subRes.json));
-                }
-            }, (res: ResponseWrapper) => this.onError(res.json));
         this.addressTypeService.query()
             .subscribe((res: ResponseWrapper) => { this.addresstypes = res.json; }, (res: ResponseWrapper) => this.onError(res.json));
+        this.addressService.query()
+            .subscribe((res: ResponseWrapper) => { this.addresses = res.json; }, (res: ResponseWrapper) => this.onError(res.json));
     }
     clear() {
         this.activeModal.dismiss('cancel');
@@ -106,11 +95,11 @@ export class PersonAddressDialogComponent implements OnInit {
         return item.id;
     }
 
-    trackAddressById(index: number, item: Address) {
+    trackAddressTypeById(index: number, item: AddressType) {
         return item.id;
     }
 
-    trackAddressTypeById(index: number, item: AddressType) {
+    trackAddressById(index: number, item: Address) {
         return item.id;
     }
 }

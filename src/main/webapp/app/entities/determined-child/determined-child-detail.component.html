@@ -1,0 +1,43 @@
+
+<div *ngIf="determinedChild">
+    <h2><span>Determined Child</span> {{determinedChild.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span>Date Of Placement</span></dt>
+        <dd>
+            <span>{{determinedChild.dateOfPlacement | date:'mediumDate'}}</span>
+        </dd>
+        <dt><span>Person</span></dt>
+        <dd>
+            <div *ngIf="determinedChild.person">
+                <a [routerLink]="['/person', determinedChild.person?.id]">{{determinedChild.person?.id}}</a>
+            </div>
+        </dd>
+        <dt><span>County Of Jurisdiction</span></dt>
+        <dd>
+            <div *ngIf="determinedChild.countyOfJurisdiction">
+                <a [routerLink]="['/county-type', determinedChild.countyOfJurisdiction?.id]">{{determinedChild.countyOfJurisdiction?.id}}</a>
+            </div>
+        </dd>
+        <dt><span>Application</span></dt>
+        <dd>
+            <div *ngIf="determinedChild.application">
+                <a [routerLink]="['/application', determinedChild.application?.id]">{{determinedChild.application?.id}}</a>
+            </div>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            (click)="previousState()"
+            class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span> Back</span>
+    </button>
+
+    <button type="button"
+            [routerLink]="['/', { outlets: { popup: 'determined-child/'+ determinedChild.id + '/edit'} }]"
+            replaceUrl="true"
+            class="btn btn-primary">
+        <span class="fa fa-pencil"></span>&nbsp;<span> Edit</span>
+    </button>
+</div>

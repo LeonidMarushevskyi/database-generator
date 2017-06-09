@@ -9,7 +9,12 @@ import { EventManager, AlertService } from 'ng-jhipster';
 import { Person } from './person.model';
 import { PersonPopupService } from './person-popup.service';
 import { PersonService } from './person.service';
-import { PersonEthnicity, PersonEthnicityService } from '../person-ethnicity';
+import { Application, ApplicationService } from '../application';
+import { Household, HouseholdService } from '../household';
+import { EducationLevelType, EducationLevelTypeService } from '../education-level-type';
+import { GenderType, GenderTypeService } from '../gender-type';
+import { RaceType, RaceTypeService } from '../race-type';
+import { EthnicityType, EthnicityTypeService } from '../ethnicity-type';
 import { ResponseWrapper } from '../../shared';
 
 @Component({
@@ -22,14 +27,29 @@ export class PersonDialogComponent implements OnInit {
     authorities: any[];
     isSaving: boolean;
 
-    ethnicities: PersonEthnicity[];
+    applications: Application[];
+
+    households: Household[];
+
+    educationhighestlevels: EducationLevelType[];
+
+    gendertypes: GenderType[];
+
+    racetypes: RaceType[];
+
+    ethnicitytypes: EthnicityType[];
     dateOfBirthDp: any;
 
     constructor(
         public activeModal: NgbActiveModal,
         private alertService: AlertService,
         private personService: PersonService,
-        private personEthnicityService: PersonEthnicityService,
+        private applicationService: ApplicationService,
+        private householdService: HouseholdService,
+        private educationLevelTypeService: EducationLevelTypeService,
+        private genderTypeService: GenderTypeService,
+        private raceTypeService: RaceTypeService,
+        private ethnicityTypeService: EthnicityTypeService,
         private eventManager: EventManager
     ) {
     }
@@ -37,19 +57,29 @@ export class PersonDialogComponent implements OnInit {
     ngOnInit() {
         this.isSaving = false;
         this.authorities = ['ROLE_USER', 'ROLE_ADMIN'];
-        this.personEthnicityService
+        this.applicationService.query()
+            .subscribe((res: ResponseWrapper) => { this.applications = res.json; }, (res: ResponseWrapper) => this.onError(res.json));
+        this.householdService.query()
+            .subscribe((res: ResponseWrapper) => { this.households = res.json; }, (res: ResponseWrapper) => this.onError(res.json));
+        this.educationLevelTypeService
             .query({filter: 'person-is-null'})
             .subscribe((res: ResponseWrapper) => {
-                if (!this.person.ethnicityId) {
-                    this.ethnicities = res.json;
+                if (!this.person.educationHighestLevel || !this.person.educationHighestLevel.id) {
+                    this.educationhighestlevels = res.json;
                 } else {
-                    this.personEthnicityService
-                        .find(this.person.ethnicityId)
-                        .subscribe((subRes: PersonEthnicity) => {
-                            this.ethnicities = [subRes].concat(res.json);
+                    this.educationLevelTypeService
+                        .find(this.person.educationHighestLevel.id)
+                        .subscribe((subRes: EducationLevelType) => {
+                            this.educationhighestlevels = [subRes].concat(res.json);
                         }, (subRes: ResponseWrapper) => this.onError(subRes.json));
                 }
             }, (res: ResponseWrapper) => this.onError(res.json));
+        this.genderTypeService.query()
+            .subscribe((res: ResponseWrapper) => { this.gendertypes = res.json; }, (res: ResponseWrapper) => this.onError(res.json));
+        this.raceTypeService.query()
+            .subscribe((res: ResponseWrapper) => { this.racetypes = res.json; }, (res: ResponseWrapper) => this.onError(res.json));
+        this.ethnicityTypeService.query()
+            .subscribe((res: ResponseWrapper) => { this.ethnicitytypes = res.json; }, (res: ResponseWrapper) => this.onError(res.json));
     }
     clear() {
         this.activeModal.dismiss('cancel');
@@ -91,8 +121,39 @@ export class PersonDialogComponent implements OnInit {
         this.alertService.error(error.message, null, null);
     }
 
-    trackPersonEthnicityById(index: number, item: PersonEthnicity) {
+    trackApplicationById(index: number, item: Application) {
         return item.id;
+    }
+
+    trackHouseholdById(index: number, item: Household) {
+        return item.id;
+    }
+
+    trackEducationLevelTypeById(index: number, item: EducationLevelType) {
+        return item.id;
+    }
+
+    trackGenderTypeById(index: number, item: GenderType) {
+        return item.id;
+    }
+
+    trackRaceTypeById(index: number, item: RaceType) {
+        return item.id;
+    }
+
+    trackEthnicityTypeById(index: number, item: EthnicityType) {
+        return item.id;
+    }
+
+    getSelected(selectedVals: Array<any>, option: any) {
+        if (selectedVals) {
+            for (let i = 0; i < selectedVals.length; i++) {
+                if (option.id === selectedVals[i].id) {
+                    return selectedVals[i];
+                }
+            }
+        }
+        return option;
     }
 }
 

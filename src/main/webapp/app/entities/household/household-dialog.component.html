@@ -1,0 +1,97 @@
+<form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+
+    <div class="modal-header">
+        <h4 class="modal-title" id="myHouseholdLabel">Create or edit a Household</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                (click)="clear()">&times;</button>
+    </div>
+    <div class="modal-body">
+        <jhi-alert-error></jhi-alert-error>
+        <div class="form-group" [hidden]="!household.id">
+            <label for="id">ID</label>
+            <input type="text" class="form-control" id="id" name="id"
+                   [(ngModel)]="household.id" readonly />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_createUserId">Create User Id</label>
+            <input type="text" class="form-control" name="createUserId" id="field_createUserId"
+                [(ngModel)]="household.createUserId"
+            required maxlength="50" />
+            <div [hidden]="!(editForm.controls.createUserId?.dirty && editForm.controls.createUserId?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.createUserId?.errors?.required">
+                   This field is required.
+                </small>
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.createUserId?.errors?.maxlength">
+                   This field cannot be longer than 50 characters.
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_createDateTime">Create Date Time</label>
+            <div class="d-flex">
+                <input id="field_createDateTime" type="datetime-local" class="form-control" name="createDateTime" [(ngModel)]="household.createDateTime"
+                required  />
+            </div>
+            <div [hidden]="!(editForm.controls.createDateTime?.dirty && editForm.controls.createDateTime?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.createDateTime?.errors?.required">
+                   This field is required.
+                </small>
+                <small class="form-text text-danger"
+                    [hidden]="!editForm.controls.createDateTime?.errors?.ZonedDateTimelocal">
+                    This field should be a date and time.
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_updateUserId">Update User Id</label>
+            <input type="text" class="form-control" name="updateUserId" id="field_updateUserId"
+                [(ngModel)]="household.updateUserId"
+            required maxlength="50" />
+            <div [hidden]="!(editForm.controls.updateUserId?.dirty && editForm.controls.updateUserId?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.updateUserId?.errors?.required">
+                   This field is required.
+                </small>
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.updateUserId?.errors?.maxlength">
+                   This field cannot be longer than 50 characters.
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_updateDateTime">Update Date Time</label>
+            <div class="d-flex">
+                <input id="field_updateDateTime" type="datetime-local" class="form-control" name="updateDateTime" [(ngModel)]="household.updateDateTime"
+                required  />
+            </div>
+            <div [hidden]="!(editForm.controls.updateDateTime?.dirty && editForm.controls.updateDateTime?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.updateDateTime?.errors?.required">
+                   This field is required.
+                </small>
+                <small class="form-text text-danger"
+                    [hidden]="!editForm.controls.updateDateTime?.errors?.ZonedDateTimelocal">
+                    This field should be a date and time.
+                </small>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="field_languages">Languages</label>
+            <select class="form-control" id="field_languages" multiple name="languages" [(ngModel)]="household.languages">
+                <option [ngValue]="getSelected(household.languages, languageTypeOption)" *ngFor="let languageTypeOption of languagetypes; trackBy: trackLanguageTypeById">{{languageTypeOption.id}}</option>
+            </select>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" (click)="clear()">
+            <span class="fa fa-ban"></span>&nbsp;<span>Cancel</span>
+        </button>
+        <button type="submit" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+            <span class="fa fa-save"></span>&nbsp;<span>Save</span>
+        </button>
+    </div>
+</form>

@@ -5,8 +5,6 @@ import gov.ca.cwds.cals.rest.api.domain.Person;
 
 import gov.ca.cwds.cals.rest.api.repository.PersonRepository;
 import gov.ca.cwds.cals.rest.api.web.rest.util.HeaderUtil;
-import gov.ca.cwds.cals.rest.api.service.dto.PersonDTO;
-import gov.ca.cwds.cals.rest.api.service.mapper.PersonMapper;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,30 +31,25 @@ public class PersonResource {
         
     private final PersonRepository personRepository;
 
-    private final PersonMapper personMapper;
-
-    public PersonResource(PersonRepository personRepository, PersonMapper personMapper) {
+    public PersonResource(PersonRepository personRepository) {
         this.personRepository = personRepository;
-        this.personMapper = personMapper;
     }
 
     /**
      * POST  /people : Create a new person.
      *
-     * @param personDTO the personDTO to create
-     * @return the ResponseEntity with status 201 (Created) and with body the new personDTO, or with status 400 (Bad Request) if the person has already an ID
+     * @param person the person to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new person, or with status 400 (Bad Request) if the person has already an ID
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PostMapping("/people")
     @Timed
-    public ResponseEntity<PersonDTO> createPerson(@Valid @RequestBody PersonDTO personDTO) throws URISyntaxException {
-        log.debug("REST request to save Person : {}", personDTO);
-        if (personDTO.getId() != null) {
+    public ResponseEntity<Person> createPerson(@Valid @RequestBody Person person) throws URISyntaxException {
+        log.debug("REST request to save Person : {}", person);
+        if (person.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new person cannot already have an ID")).body(null);
         }
-        Person person = personMapper.toEntity(personDTO);
-        person = personRepository.save(person);
-        PersonDTO result = personMapper.toDto(person);
+        Person result = personRepository.save(person);
         return ResponseEntity.created(new URI("/api/people/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -65,24 +58,22 @@ public class PersonResource {
     /**
      * PUT  /people : Updates an existing person.
      *
-     * @param personDTO the personDTO to update
-     * @return the ResponseEntity with status 200 (OK) and with body the updated personDTO,
-     * or with status 400 (Bad Request) if the personDTO is not valid,
-     * or with status 500 (Internal Server Error) if the personDTO couldnt be updated
+     * @param person the person to update
+     * @return the ResponseEntity with status 200 (OK) and with body the updated person,
+     * or with status 400 (Bad Request) if the person is not valid,
+     * or with status 500 (Internal Server Error) if the person couldnt be updated
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PutMapping("/people")
     @Timed
-    public ResponseEntity<PersonDTO> updatePerson(@Valid @RequestBody PersonDTO personDTO) throws URISyntaxException {
-        log.debug("REST request to update Person : {}", personDTO);
-        if (personDTO.getId() == null) {
-            return createPerson(personDTO);
+    public ResponseEntity<Person> updatePerson(@Valid @RequestBody Person person) throws URISyntaxException {
+        log.debug("REST request to update Person : {}", person);
+        if (person.getId() == null) {
+            return createPerson(person);
         }
-        Person person = personMapper.toEntity(personDTO);
-        person = personRepository.save(person);
-        PersonDTO result = personMapper.toDto(person);
+        Person result = personRepository.save(person);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, personDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, person.getId().toString()))
             .body(result);
     }
 
@@ -93,31 +84,30 @@ public class PersonResource {
      */
     @GetMapping("/people")
     @Timed
-    public List<PersonDTO> getAllPeople() {
+    public List<Person> getAllPeople() {
         log.debug("REST request to get all People");
-        List<Person> people = personRepository.findAll();
-        return personMapper.toDto(people);
+        List<Person> people = personRepository.findAllWithEagerRelationships();
+        return people;
     }
 
     /**
      * GET  /people/:id : get the "id" person.
      *
-     * @param id the id of the personDTO to retrieve
-     * @return the ResponseEntity with status 200 (OK) and with body the personDTO, or with status 404 (Not Found)
+     * @param id the id of the person to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the person, or with status 404 (Not Found)
      */
     @GetMapping("/people/{id}")
     @Timed
-    public ResponseEntity<PersonDTO> getPerson(@PathVariable Long id) {
+    public ResponseEntity<Person> getPerson(@PathVariable Long id) {
         log.debug("REST request to get Person : {}", id);
-        Person person = personRepository.findOne(id);
-        PersonDTO personDTO = personMapper.toDto(person);
-        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(personDTO));
+        Person person = personRepository.findOneWithEagerRelationships(id);
+        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(person));
     }
 
     /**
      * DELETE  /people/:id : delete the "id" person.
      *
-     * @param id the id of the personDTO to delete
+     * @param id the id of the person to delete
      * @return the ResponseEntity with status 200 (OK)
      */
     @DeleteMapping("/people/{id}")

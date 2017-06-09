@@ -4,8 +4,6 @@ import gov.ca.cwds.cals.rest.api.GeneratorApp;
 
 import gov.ca.cwds.cals.rest.api.domain.Address;
 import gov.ca.cwds.cals.rest.api.repository.AddressRepository;
-import gov.ca.cwds.cals.rest.api.service.dto.AddressDTO;
-import gov.ca.cwds.cals.rest.api.service.mapper.AddressMapper;
 import gov.ca.cwds.cals.rest.api.web.rest.errors.ExceptionTranslator;
 
 import org.junit.Before;
@@ -24,8 +22,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.math.BigDecimal;
+import java.time.Instant;
+import java.time.ZonedDateTime;
+import java.time.ZoneOffset;
+import java.time.ZoneId;
 import java.util.List;
 
+import static gov.ca.cwds.cals.rest.api.web.rest.TestUtil.sameInstant;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -58,17 +61,26 @@ public class AddressResourceIntTest {
     private static final BigDecimal DEFAULT_LONGITUDE = new BigDecimal(1);
     private static final BigDecimal UPDATED_LONGITUDE = new BigDecimal(2);
 
-    private static final BigDecimal DEFAULT_LATTITUDE = new BigDecimal(1);
-    private static final BigDecimal UPDATED_LATTITUDE = new BigDecimal(2);
+    private static final BigDecimal DEFAULT_LATITUDE = new BigDecimal(1);
+    private static final BigDecimal UPDATED_LATITUDE = new BigDecimal(2);
 
     private static final Boolean DEFAULT_DELIVERABLE = false;
     private static final Boolean UPDATED_DELIVERABLE = true;
 
-    @Autowired
-    private AddressRepository addressRepository;
+    private static final String DEFAULT_CREATE_USER_ID = "AAAAAAAAAA";
+    private static final String UPDATED_CREATE_USER_ID = "BBBBBBBBBB";
+
+    private static final ZonedDateTime DEFAULT_CREATE_DATE_TIME = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
+    private static final ZonedDateTime UPDATED_CREATE_DATE_TIME = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
+
+    private static final String DEFAULT_UPDATE_USER_ID = "AAAAAAAAAA";
+    private static final String UPDATED_UPDATE_USER_ID = "BBBBBBBBBB";
+
+    private static final ZonedDateTime DEFAULT_UPDATE_DATE_TIME = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
+    private static final ZonedDateTime UPDATED_UPDATE_DATE_TIME = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
 
     @Autowired
-    private AddressMapper addressMapper;
+    private AddressRepository addressRepository;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -89,7 +101,7 @@ public class AddressResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        AddressResource addressResource = new AddressResource(addressRepository, addressMapper);
+        AddressResource addressResource = new AddressResource(addressRepository);
         this.restAddressMockMvc = MockMvcBuilders.standaloneSetup(addressResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -110,8 +122,12 @@ public class AddressResourceIntTest {
             .zipCode(DEFAULT_ZIP_CODE)
             .zipSuffixCode(DEFAULT_ZIP_SUFFIX_CODE)
             .longitude(DEFAULT_LONGITUDE)
-            .lattitude(DEFAULT_LATTITUDE)
-            .deliverable(DEFAULT_DELIVERABLE);
+            .latitude(DEFAULT_LATITUDE)
+            .deliverable(DEFAULT_DELIVERABLE)
+            .createUserId(DEFAULT_CREATE_USER_ID)
+            .createDateTime(DEFAULT_CREATE_DATE_TIME)
+            .updateUserId(DEFAULT_UPDATE_USER_ID)
+            .updateDateTime(DEFAULT_UPDATE_DATE_TIME);
         return address;
     }
 
@@ -126,10 +142,9 @@ public class AddressResourceIntTest {
         int databaseSizeBeforeCreate = addressRepository.findAll().size();
 
         // Create the Address
-        AddressDTO addressDTO = addressMapper.toDto(address);
         restAddressMockMvc.perform(post("/api/addresses")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(addressDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(address)))
             .andExpect(status().isCreated());
 
         // Validate the Address in the database
@@ -142,8 +157,12 @@ public class AddressResourceIntTest {
         assertThat(testAddress.getZipCode()).isEqualTo(DEFAULT_ZIP_CODE);
         assertThat(testAddress.getZipSuffixCode()).isEqualTo(DEFAULT_ZIP_SUFFIX_CODE);
         assertThat(testAddress.getLongitude()).isEqualTo(DEFAULT_LONGITUDE);
-        assertThat(testAddress.getLattitude()).isEqualTo(DEFAULT_LATTITUDE);
+        assertThat(testAddress.getLatitude()).isEqualTo(DEFAULT_LATITUDE);
         assertThat(testAddress.isDeliverable()).isEqualTo(DEFAULT_DELIVERABLE);
+        assertThat(testAddress.getCreateUserId()).isEqualTo(DEFAULT_CREATE_USER_ID);
+        assertThat(testAddress.getCreateDateTime()).isEqualTo(DEFAULT_CREATE_DATE_TIME);
+        assertThat(testAddress.getUpdateUserId()).isEqualTo(DEFAULT_UPDATE_USER_ID);
+        assertThat(testAddress.getUpdateDateTime()).isEqualTo(DEFAULT_UPDATE_DATE_TIME);
     }
 
     @Test
@@ -153,12 +172,11 @@ public class AddressResourceIntTest {
 
         // Create the Address with an existing ID
         address.setId(1L);
-        AddressDTO addressDTO = addressMapper.toDto(address);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restAddressMockMvc.perform(post("/api/addresses")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(addressDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(address)))
             .andExpect(status().isBadRequest());
 
         // Validate the Alice in the database
@@ -174,11 +192,10 @@ public class AddressResourceIntTest {
         address.setStreetAddress(null);
 
         // Create the Address, which fails.
-        AddressDTO addressDTO = addressMapper.toDto(address);
 
         restAddressMockMvc.perform(post("/api/addresses")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(addressDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(address)))
             .andExpect(status().isBadRequest());
 
         List<Address> addressList = addressRepository.findAll();
@@ -193,11 +210,10 @@ public class AddressResourceIntTest {
         address.setCity(null);
 
         // Create the Address, which fails.
-        AddressDTO addressDTO = addressMapper.toDto(address);
 
         restAddressMockMvc.perform(post("/api/addresses")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(addressDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(address)))
             .andExpect(status().isBadRequest());
 
         List<Address> addressList = addressRepository.findAll();
@@ -212,11 +228,10 @@ public class AddressResourceIntTest {
         address.setState(null);
 
         // Create the Address, which fails.
-        AddressDTO addressDTO = addressMapper.toDto(address);
 
         restAddressMockMvc.perform(post("/api/addresses")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(addressDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(address)))
             .andExpect(status().isBadRequest());
 
         List<Address> addressList = addressRepository.findAll();
@@ -231,11 +246,82 @@ public class AddressResourceIntTest {
         address.setZipCode(null);
 
         // Create the Address, which fails.
-        AddressDTO addressDTO = addressMapper.toDto(address);
 
         restAddressMockMvc.perform(post("/api/addresses")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(addressDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(address)))
+            .andExpect(status().isBadRequest());
+
+        List<Address> addressList = addressRepository.findAll();
+        assertThat(addressList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    public void checkCreateUserIdIsRequired() throws Exception {
+        int databaseSizeBeforeTest = addressRepository.findAll().size();
+        // set the field null
+        address.setCreateUserId(null);
+
+        // Create the Address, which fails.
+
+        restAddressMockMvc.perform(post("/api/addresses")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(address)))
+            .andExpect(status().isBadRequest());
+
+        List<Address> addressList = addressRepository.findAll();
+        assertThat(addressList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    public void checkCreateDateTimeIsRequired() throws Exception {
+        int databaseSizeBeforeTest = addressRepository.findAll().size();
+        // set the field null
+        address.setCreateDateTime(null);
+
+        // Create the Address, which fails.
+
+        restAddressMockMvc.perform(post("/api/addresses")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(address)))
+            .andExpect(status().isBadRequest());
+
+        List<Address> addressList = addressRepository.findAll();
+        assertThat(addressList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    public void checkUpdateUserIdIsRequired() throws Exception {
+        int databaseSizeBeforeTest = addressRepository.findAll().size();
+        // set the field null
+        address.setUpdateUserId(null);
+
+        // Create the Address, which fails.
+
+        restAddressMockMvc.perform(post("/api/addresses")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(address)))
+            .andExpect(status().isBadRequest());
+
+        List<Address> addressList = addressRepository.findAll();
+        assertThat(addressList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    public void checkUpdateDateTimeIsRequired() throws Exception {
+        int databaseSizeBeforeTest = addressRepository.findAll().size();
+        // set the field null
+        address.setUpdateDateTime(null);
+
+        // Create the Address, which fails.
+
+        restAddressMockMvc.perform(post("/api/addresses")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(address)))
             .andExpect(status().isBadRequest());
 
         List<Address> addressList = addressRepository.findAll();
@@ -259,8 +345,12 @@ public class AddressResourceIntTest {
             .andExpect(jsonPath("$.[*].zipCode").value(hasItem(DEFAULT_ZIP_CODE.toString())))
             .andExpect(jsonPath("$.[*].zipSuffixCode").value(hasItem(DEFAULT_ZIP_SUFFIX_CODE.toString())))
             .andExpect(jsonPath("$.[*].longitude").value(hasItem(DEFAULT_LONGITUDE.intValue())))
-            .andExpect(jsonPath("$.[*].lattitude").value(hasItem(DEFAULT_LATTITUDE.intValue())))
-            .andExpect(jsonPath("$.[*].deliverable").value(hasItem(DEFAULT_DELIVERABLE.booleanValue())));
+            .andExpect(jsonPath("$.[*].latitude").value(hasItem(DEFAULT_LATITUDE.intValue())))
+            .andExpect(jsonPath("$.[*].deliverable").value(hasItem(DEFAULT_DELIVERABLE.booleanValue())))
+            .andExpect(jsonPath("$.[*].createUserId").value(hasItem(DEFAULT_CREATE_USER_ID.toString())))
+            .andExpect(jsonPath("$.[*].createDateTime").value(hasItem(sameInstant(DEFAULT_CREATE_DATE_TIME))))
+            .andExpect(jsonPath("$.[*].updateUserId").value(hasItem(DEFAULT_UPDATE_USER_ID.toString())))
+            .andExpect(jsonPath("$.[*].updateDateTime").value(hasItem(sameInstant(DEFAULT_UPDATE_DATE_TIME))));
     }
 
     @Test
@@ -280,8 +370,12 @@ public class AddressResourceIntTest {
             .andExpect(jsonPath("$.zipCode").value(DEFAULT_ZIP_CODE.toString()))
             .andExpect(jsonPath("$.zipSuffixCode").value(DEFAULT_ZIP_SUFFIX_CODE.toString()))
             .andExpect(jsonPath("$.longitude").value(DEFAULT_LONGITUDE.intValue()))
-            .andExpect(jsonPath("$.lattitude").value(DEFAULT_LATTITUDE.intValue()))
-            .andExpect(jsonPath("$.deliverable").value(DEFAULT_DELIVERABLE.booleanValue()));
+            .andExpect(jsonPath("$.latitude").value(DEFAULT_LATITUDE.intValue()))
+            .andExpect(jsonPath("$.deliverable").value(DEFAULT_DELIVERABLE.booleanValue()))
+            .andExpect(jsonPath("$.createUserId").value(DEFAULT_CREATE_USER_ID.toString()))
+            .andExpect(jsonPath("$.createDateTime").value(sameInstant(DEFAULT_CREATE_DATE_TIME)))
+            .andExpect(jsonPath("$.updateUserId").value(DEFAULT_UPDATE_USER_ID.toString()))
+            .andExpect(jsonPath("$.updateDateTime").value(sameInstant(DEFAULT_UPDATE_DATE_TIME)));
     }
 
     @Test
@@ -308,13 +402,16 @@ public class AddressResourceIntTest {
             .zipCode(UPDATED_ZIP_CODE)
             .zipSuffixCode(UPDATED_ZIP_SUFFIX_CODE)
             .longitude(UPDATED_LONGITUDE)
-            .lattitude(UPDATED_LATTITUDE)
-            .deliverable(UPDATED_DELIVERABLE);
-        AddressDTO addressDTO = addressMapper.toDto(updatedAddress);
+            .latitude(UPDATED_LATITUDE)
+            .deliverable(UPDATED_DELIVERABLE)
+            .createUserId(UPDATED_CREATE_USER_ID)
+            .createDateTime(UPDATED_CREATE_DATE_TIME)
+            .updateUserId(UPDATED_UPDATE_USER_ID)
+            .updateDateTime(UPDATED_UPDATE_DATE_TIME);
 
         restAddressMockMvc.perform(put("/api/addresses")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(addressDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedAddress)))
             .andExpect(status().isOk());
 
         // Validate the Address in the database
@@ -327,8 +424,12 @@ public class AddressResourceIntTest {
         assertThat(testAddress.getZipCode()).isEqualTo(UPDATED_ZIP_CODE);
         assertThat(testAddress.getZipSuffixCode()).isEqualTo(UPDATED_ZIP_SUFFIX_CODE);
         assertThat(testAddress.getLongitude()).isEqualTo(UPDATED_LONGITUDE);
-        assertThat(testAddress.getLattitude()).isEqualTo(UPDATED_LATTITUDE);
+        assertThat(testAddress.getLatitude()).isEqualTo(UPDATED_LATITUDE);
         assertThat(testAddress.isDeliverable()).isEqualTo(UPDATED_DELIVERABLE);
+        assertThat(testAddress.getCreateUserId()).isEqualTo(UPDATED_CREATE_USER_ID);
+        assertThat(testAddress.getCreateDateTime()).isEqualTo(UPDATED_CREATE_DATE_TIME);
+        assertThat(testAddress.getUpdateUserId()).isEqualTo(UPDATED_UPDATE_USER_ID);
+        assertThat(testAddress.getUpdateDateTime()).isEqualTo(UPDATED_UPDATE_DATE_TIME);
     }
 
     @Test
@@ -337,12 +438,11 @@ public class AddressResourceIntTest {
         int databaseSizeBeforeUpdate = addressRepository.findAll().size();
 
         // Create the Address
-        AddressDTO addressDTO = addressMapper.toDto(address);
 
         // If the entity doesn't have an ID, it will be created instead of just being updated
         restAddressMockMvc.perform(put("/api/addresses")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(addressDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(address)))
             .andExpect(status().isCreated());
 
         // Validate the Address in the database
@@ -380,28 +480,5 @@ public class AddressResourceIntTest {
         assertThat(address1).isNotEqualTo(address2);
         address1.setId(null);
         assertThat(address1).isNotEqualTo(address2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(AddressDTO.class);
-        AddressDTO addressDTO1 = new AddressDTO();
-        addressDTO1.setId(1L);
-        AddressDTO addressDTO2 = new AddressDTO();
-        assertThat(addressDTO1).isNotEqualTo(addressDTO2);
-        addressDTO2.setId(addressDTO1.getId());
-        assertThat(addressDTO1).isEqualTo(addressDTO2);
-        addressDTO2.setId(2L);
-        assertThat(addressDTO1).isNotEqualTo(addressDTO2);
-        addressDTO1.setId(null);
-        assertThat(addressDTO1).isNotEqualTo(addressDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(addressMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(addressMapper.fromId(null)).isNull();
     }
 }

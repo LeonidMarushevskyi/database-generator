@@ -1,0 +1,47 @@
+
+<div *ngIf="personPreviousName">
+    <h2><span>Person Previous Name</span> {{personPreviousName.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span>Name</span></dt>
+        <dd>
+            <span>{{personPreviousName.name}}</span>
+        </dd>
+        <dt><span>Create User Id</span></dt>
+        <dd>
+            <span>{{personPreviousName.createUserId}}</span>
+        </dd>
+        <dt><span>Create Date Time</span></dt>
+        <dd>
+            <span>{{personPreviousName.createDateTime | date:'medium'}}</span>
+        </dd>
+        <dt><span>Update User Id</span></dt>
+        <dd>
+            <span>{{personPreviousName.updateUserId}}</span>
+        </dd>
+        <dt><span>Update Date Time</span></dt>
+        <dd>
+            <span>{{personPreviousName.updateDateTime | date:'medium'}}</span>
+        </dd>
+        <dt><span>Person</span></dt>
+        <dd>
+            <div *ngIf="personPreviousName.person">
+                <a [routerLink]="['/person', personPreviousName.person?.id]">{{personPreviousName.person?.id}}</a>
+            </div>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            (click)="previousState()"
+            class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span> Back</span>
+    </button>
+
+    <button type="button"
+            [routerLink]="['/', { outlets: { popup: 'person-previous-name/'+ personPreviousName.id + '/edit'} }]"
+            replaceUrl="true"
+            class="btn btn-primary">
+        <span class="fa fa-pencil"></span>&nbsp;<span> Edit</span>
+    </button>
+</div>

@@ -1,0 +1,72 @@
+<div>
+    <h2>
+        <span>Relationship Events</span>
+        <button class="btn btn-primary float-right create-relationship-event" [routerLink]="['/', { outlets: { popup: ['relationship-event-new'] } }]">
+            <span class="fa fa-plus"></span>
+            <span >
+            Create new Relationship Event
+            </span>
+        </button>
+    </h2>
+    <jhi-alert></jhi-alert>
+    <div class="row">
+    </div>
+    <br/>
+    <div class="table-responsive" *ngIf="relationshipEvents">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+            <th><span>ID</span></th>
+            <th><span>Event Place</span></th>
+            <th><span>Event Date</span></th>
+            <th><span>Create User Id</span></th>
+            <th><span>Create Date Time</span></th>
+            <th><span>Update User Id</span></th>
+            <th><span>Update Date Time</span></th>
+            <th><span>Event Type</span></th>
+            <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let relationshipEvent of relationshipEvents ;trackBy: trackId">
+                <td><a [routerLink]="['../relationship-event', relationshipEvent.id ]">{{relationshipEvent.id}}</a></td>
+                <td>{{relationshipEvent.eventPlace}}</td>
+                <td>{{relationshipEvent.eventDate | date:'mediumDate'}}</td>
+                <td>{{relationshipEvent.createUserId}}</td>
+                <td>{{relationshipEvent.createDateTime | date:'medium'}}</td>
+                <td>{{relationshipEvent.updateUserId}}</td>
+                <td>{{relationshipEvent.updateDateTime | date:'medium'}}</td>
+                <td>
+                    <div *ngIf="relationshipEvent.eventType">
+                        <a [routerLink]="['../relationship-event-type', relationshipEvent.eventType?.id ]" >{{relationshipEvent.eventType?.id}}</a>
+                    </div>
+                </td>
+                <td class="text-right">
+                    <div class="btn-group flex-btn-group-container">
+                        <button type="submit"
+                                [routerLink]="['../relationship-event', relationshipEvent.id ]"
+                                class="btn btn-info btn-sm">
+                            <span class="fa fa-eye"></span>
+                            <span class="hidden-md-down">View</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', { outlets: { popup: 'relationship-event/'+ relationshipEvent.id + '/edit'} }]"
+                                replaceUrl="true"
+                                class="btn btn-primary btn-sm">
+                            <span class="fa fa-pencil"></span>
+                            <span class="hidden-md-down">Edit</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', { outlets: { popup: 'relationship-event/'+ relationshipEvent.id + '/delete'} }]"
+                                replaceUrl="true"
+                                class="btn btn-danger btn-sm">
+                            <span class="fa fa-remove"></span>
+                            <span class="hidden-md-down">Delete</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

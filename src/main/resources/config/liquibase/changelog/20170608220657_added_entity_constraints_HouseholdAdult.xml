@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <!--
+        Added the constraints for entity HouseholdAdult.
+    -->
+    <changeSet id="20170608220657-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="person_id"
+                                 baseTableName="household_adult"
+                                 constraintName="fk_household_adult_person_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="person"/>
+
+        <addForeignKeyConstraint baseColumnNames="household_id"
+                                 baseTableName="household_adult"
+                                 constraintName="fk_household_adult_household_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="household"/>
+
+        <addForeignKeyConstraint baseColumnNames="household_adults_id"
+                                 baseTableName="household_adult_other_states"
+                                 constraintName="fk_household_adult_other_states_household_adults_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="household_adult"/>
+        <addForeignKeyConstraint baseColumnNames="other_states_id"
+                                 baseTableName="household_adult_other_states"
+                                 constraintName="fk_household_adult_other_states_other_states_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="state_type"/>
+        
+    </changeSet>
+</databaseChangeLog>

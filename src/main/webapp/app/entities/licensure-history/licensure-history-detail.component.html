@@ -1,0 +1,81 @@
+
+<div *ngIf="licensureHistory">
+    <h2><span>Licensure History</span> {{licensureHistory.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span>Licensure History Question 1</span></dt>
+        <dd>
+            <span>{{licensureHistory.licensureHistoryQuestion1}}</span>
+        </dd>
+        <dt><span>Licensure History Question 11</span></dt>
+        <dd>
+            <span>{{licensureHistory.licensureHistoryQuestion11}}</span>
+        </dd>
+        <dt><span>Licensure History Question 12</span></dt>
+        <dd>
+            <span>{{licensureHistory.licensureHistoryQuestion12}}</span>
+        </dd>
+        <dt><span>Licensure History Question 2</span></dt>
+        <dd>
+            <span>{{licensureHistory.licensureHistoryQuestion2}}</span>
+        </dd>
+        <dt><span>Licensure History Question 21</span></dt>
+        <dd>
+            <span>{{licensureHistory.licensureHistoryQuestion21}}</span>
+        </dd>
+        <dt><span>Licensure History Question 3</span></dt>
+        <dd>
+            <span>{{licensureHistory.licensureHistoryQuestion3}}</span>
+        </dd>
+        <dt><span>Licensure History Question 31</span></dt>
+        <dd>
+            <span>{{licensureHistory.licensureHistoryQuestion31}}</span>
+        </dd>
+        <dt><span>Licensure History Question 4</span></dt>
+        <dd>
+            <span>{{licensureHistory.licensureHistoryQuestion4}}</span>
+        </dd>
+        <dt><span>Licensure History Question 41</span></dt>
+        <dd>
+            <span>{{licensureHistory.licensureHistoryQuestion41}}</span>
+        </dd>
+        <dt><span>Licensure History Question 5</span></dt>
+        <dd>
+            <span>{{licensureHistory.licensureHistoryQuestion5}}</span>
+        </dd>
+        <dt><span>Licensure History Question 51</span></dt>
+        <dd>
+            <span>{{licensureHistory.licensureHistoryQuestion51}}</span>
+        </dd>
+        <dt><span>Licensure History Question 6</span></dt>
+        <dd>
+            <span>{{licensureHistory.licensureHistoryQuestion6}}</span>
+        </dd>
+        <dt><span>Licensure History Question 61</span></dt>
+        <dd>
+            <span>{{licensureHistory.licensureHistoryQuestion61}}</span>
+        </dd>
+        <dt><span>Licensure History Question 7</span></dt>
+        <dd>
+            <span>{{licensureHistory.licensureHistoryQuestion7}}</span>
+        </dd>
+        <dt><span>Licensure History Question 71</span></dt>
+        <dd>
+            <span>{{licensureHistory.licensureHistoryQuestion71}}</span>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            (click)="previousState()"
+            class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span> Back</span>
+    </button>
+
+    <button type="button"
+            [routerLink]="['/', { outlets: { popup: 'licensure-history/'+ licensureHistory.id + '/edit'} }]"
+            replaceUrl="true"
+            class="btn btn-primary">
+        <span class="fa fa-pencil"></span>&nbsp;<span> Edit</span>
+    </button>
+</div>

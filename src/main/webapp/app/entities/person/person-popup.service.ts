@@ -1,12 +1,14 @@
 import { Injectable, Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { DatePipe } from '@angular/common';
 import { Person } from './person.model';
 import { PersonService } from './person.service';
 @Injectable()
 export class PersonPopupService {
     private isOpen = false;
     constructor(
+        private datePipe: DatePipe,
         private modalService: NgbModal,
         private router: Router,
         private personService: PersonService
@@ -28,6 +30,10 @@ export class PersonPopupService {
                         day: person.dateOfBirth.getDate()
                     };
                 }
+                person.createDateTime = this.datePipe
+                    .transform(person.createDateTime, 'yyyy-MM-ddThh:mm');
+                person.updateDateTime = this.datePipe
+                    .transform(person.updateDateTime, 'yyyy-MM-ddThh:mm');
                 this.personModalRef(component, person);
             });
         } else {

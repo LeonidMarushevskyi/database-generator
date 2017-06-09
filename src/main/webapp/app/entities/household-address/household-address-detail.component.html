@@ -1,0 +1,69 @@
+
+<div *ngIf="householdAddress">
+    <h2><span>Household Address</span> {{householdAddress.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span>Is Weapons In Home</span></dt>
+        <dd>
+            <span>{{householdAddress.isWeaponsInHome}}</span>
+        </dd>
+        <dt><span>Directions To Home</span></dt>
+        <dd>
+            <span>{{householdAddress.directionsToHome}}</span>
+        </dd>
+        <dt><span>Create User Id</span></dt>
+        <dd>
+            <span>{{householdAddress.createUserId}}</span>
+        </dd>
+        <dt><span>Create Date Time</span></dt>
+        <dd>
+            <span>{{householdAddress.createDateTime | date:'medium'}}</span>
+        </dd>
+        <dt><span>Update User Id</span></dt>
+        <dd>
+            <span>{{householdAddress.updateUserId}}</span>
+        </dd>
+        <dt><span>Update Date Time</span></dt>
+        <dd>
+            <span>{{householdAddress.updateDateTime | date:'medium'}}</span>
+        </dd>
+        <dt><span>Address</span></dt>
+        <dd>
+            <div *ngIf="householdAddress.address">
+                <a [routerLink]="['/address', householdAddress.address?.id]">{{householdAddress.address?.id}}</a>
+            </div>
+        </dd>
+        <dt><span>Address Type</span></dt>
+        <dd>
+            <div *ngIf="householdAddress.addressType">
+                <a [routerLink]="['/address-type', householdAddress.addressType?.id]">{{householdAddress.addressType?.id}}</a>
+            </div>
+        </dd>
+        <dt><span>Posession Type</span></dt>
+        <dd>
+            <div *ngIf="householdAddress.posessionType">
+                <a [routerLink]="['/posession-type', householdAddress.posessionType?.id]">{{householdAddress.posessionType?.id}}</a>
+            </div>
+        </dd>
+        <dt><span>Address</span></dt>
+        <dd>
+            <div *ngIf="householdAddress.address">
+                <a [routerLink]="['/household', householdAddress.address?.id]">{{householdAddress.address?.id}}</a>
+            </div>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            (click)="previousState()"
+            class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span> Back</span>
+    </button>
+
+    <button type="button"
+            [routerLink]="['/', { outlets: { popup: 'household-address/'+ householdAddress.id + '/edit'} }]"
+            replaceUrl="true"
+            class="btn btn-primary">
+        <span class="fa fa-pencil"></span>&nbsp;<span> Edit</span>
+    </button>
+</div>

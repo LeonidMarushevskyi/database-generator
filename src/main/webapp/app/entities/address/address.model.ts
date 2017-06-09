@@ -7,8 +7,12 @@ export class Address {
         public zipCode?: string,
         public zipSuffixCode?: string,
         public longitude?: number,
-        public lattitude?: number,
+        public latitude?: number,
         public deliverable?: boolean,
+        public createUserId?: string,
+        public createDateTime?: any,
+        public updateUserId?: string,
+        public updateDateTime?: any,
     ) {
         this.deliverable = false;
     }

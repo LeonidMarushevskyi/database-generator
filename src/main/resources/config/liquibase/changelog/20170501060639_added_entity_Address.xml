@@ -45,7 +45,7 @@
                 <constraints nullable="true" />
             </column>
 
-            <column name="lattitude" type="decimal(10,2)">
+            <column name="latitude" type="decimal(10,2)">
                 <constraints nullable="true" />
             </column>
 
@@ -53,8 +53,26 @@
                 <constraints nullable="true" />
             </column>
 
+            <column name="create_user_id" type="varchar(50)">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="create_date_time" type="timestamp">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="update_user_id" type="varchar(50)">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="update_date_time" type="timestamp">
+                <constraints nullable="false" />
+            </column>
+
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
+        <dropDefaultValue tableName="address" columnName="create_date_time" columnDataType="datetime"/>
+        <dropDefaultValue tableName="address" columnName="update_date_time" columnDataType="datetime"/>
         
     </changeSet>
 </databaseChangeLog>

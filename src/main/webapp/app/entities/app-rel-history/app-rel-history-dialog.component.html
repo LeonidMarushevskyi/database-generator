@@ -1,0 +1,129 @@
+<form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+
+    <div class="modal-header">
+        <h4 class="modal-title" id="myAppRelHistoryLabel">Create or edit a App Rel History</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                (click)="clear()">&times;</button>
+    </div>
+    <div class="modal-body">
+        <jhi-alert-error></jhi-alert-error>
+        <div class="form-group" [hidden]="!appRelHistory.id">
+            <label for="id">ID</label>
+            <input type="text" class="form-control" id="id" name="id"
+                   [(ngModel)]="appRelHistory.id" readonly />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_createUserId">Create User Id</label>
+            <input type="text" class="form-control" name="createUserId" id="field_createUserId"
+                [(ngModel)]="appRelHistory.createUserId"
+            required maxlength="50" />
+            <div [hidden]="!(editForm.controls.createUserId?.dirty && editForm.controls.createUserId?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.createUserId?.errors?.required">
+                   This field is required.
+                </small>
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.createUserId?.errors?.maxlength">
+                   This field cannot be longer than 50 characters.
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_createDateTime">Create Date Time</label>
+            <div class="d-flex">
+                <input id="field_createDateTime" type="datetime-local" class="form-control" name="createDateTime" [(ngModel)]="appRelHistory.createDateTime"
+                required  />
+            </div>
+            <div [hidden]="!(editForm.controls.createDateTime?.dirty && editForm.controls.createDateTime?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.createDateTime?.errors?.required">
+                   This field is required.
+                </small>
+                <small class="form-text text-danger"
+                    [hidden]="!editForm.controls.createDateTime?.errors?.ZonedDateTimelocal">
+                    This field should be a date and time.
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_updateUserId">Update User Id</label>
+            <input type="text" class="form-control" name="updateUserId" id="field_updateUserId"
+                [(ngModel)]="appRelHistory.updateUserId"
+            required maxlength="50" />
+            <div [hidden]="!(editForm.controls.updateUserId?.dirty && editForm.controls.updateUserId?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.updateUserId?.errors?.required">
+                   This field is required.
+                </small>
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.updateUserId?.errors?.maxlength">
+                   This field cannot be longer than 50 characters.
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_updateDateTime">Update Date Time</label>
+            <div class="d-flex">
+                <input id="field_updateDateTime" type="datetime-local" class="form-control" name="updateDateTime" [(ngModel)]="appRelHistory.updateDateTime"
+                required  />
+            </div>
+            <div [hidden]="!(editForm.controls.updateDateTime?.dirty && editForm.controls.updateDateTime?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.updateDateTime?.errors?.required">
+                   This field is required.
+                </small>
+                <small class="form-text text-danger"
+                    [hidden]="!editForm.controls.updateDateTime?.errors?.ZonedDateTimelocal">
+                    This field should be a date and time.
+                </small>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="field_startEvent">Start Event</label>
+            <select class="form-control" id="field_startEvent" name="startEvent" [(ngModel)]="appRelHistory.startEvent" required>
+                <option [ngValue]="relationshipEventOption.id === appRelHistory.startEvent?.id ? appRelHistory.startEvent : relationshipEventOption" *ngFor="let relationshipEventOption of startevents; trackBy: trackRelationshipEventById">{{relationshipEventOption.id}}</option>
+            </select>
+        </div>
+        <div [hidden]="!(editForm.controls.startEvent?.dirty && editForm.controls.startEvent?.invalid)">
+            <small class="form-text text-danger"
+                [hidden]="!editForm.controls.startEvent?.errors?.required">
+                This field is required.
+            </small>
+        </div>
+        <div class="form-group">
+            <label for="field_endEvent">End Event</label>
+            <select class="form-control" id="field_endEvent" name="endEvent" [(ngModel)]="appRelHistory.endEvent" required>
+                <option [ngValue]="relationshipEventOption.id === appRelHistory.endEvent?.id ? appRelHistory.endEvent : relationshipEventOption" *ngFor="let relationshipEventOption of endevents; trackBy: trackRelationshipEventById">{{relationshipEventOption.id}}</option>
+            </select>
+        </div>
+        <div [hidden]="!(editForm.controls.endEvent?.dirty && editForm.controls.endEvent?.invalid)">
+            <small class="form-text text-danger"
+                [hidden]="!editForm.controls.endEvent?.errors?.required">
+                This field is required.
+            </small>
+        </div>
+        <div class="form-group">
+            <label for="field_relationshipType">Relationship Type</label>
+            <select class="form-control" id="field_relationshipType" name="relationshipType" [(ngModel)]="appRelHistory.relationshipType" >
+                <option [ngValue]="null"></option>
+                <option [ngValue]="relationshipTypeOption.id === appRelHistory.relationshipType?.id ? appRelHistory.relationshipType : relationshipTypeOption" *ngFor="let relationshipTypeOption of relationshiptypes; trackBy: trackRelationshipTypeById">{{relationshipTypeOption.id}}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="field_applicant">Applicant</label>
+            <select class="form-control" id="field_applicant" name="applicant" [(ngModel)]="appRelHistory.applicant" >
+                <option [ngValue]="null"></option>
+                <option [ngValue]="applicantOption.id === appRelHistory.applicant?.id ? appRelHistory.applicant : applicantOption" *ngFor="let applicantOption of applicants; trackBy: trackApplicantById">{{applicantOption.id}}</option>
+            </select>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" (click)="clear()">
+            <span class="fa fa-ban"></span>&nbsp;<span>Cancel</span>
+        </button>
+        <button type="submit" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+            <span class="fa fa-save"></span>&nbsp;<span>Save</span>
+        </button>
+    </div>
+</form>

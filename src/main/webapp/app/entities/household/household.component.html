@@ -1,0 +1,68 @@
+<div>
+    <h2>
+        <span>Households</span>
+        <button class="btn btn-primary float-right create-household" [routerLink]="['/', { outlets: { popup: ['household-new'] } }]">
+            <span class="fa fa-plus"></span>
+            <span >
+            Create new Household
+            </span>
+        </button>
+    </h2>
+    <jhi-alert></jhi-alert>
+    <div class="row">
+    </div>
+    <br/>
+    <div class="table-responsive" *ngIf="households">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+            <th><span>ID</span></th>
+            <th><span>Create User Id</span></th>
+            <th><span>Create Date Time</span></th>
+            <th><span>Update User Id</span></th>
+            <th><span>Update Date Time</span></th>
+            <th><span>Languages</span></th>
+            <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let household of households ;trackBy: trackId">
+                <td><a [routerLink]="['../household', household.id ]">{{household.id}}</a></td>
+                <td>{{household.createUserId}}</td>
+                <td>{{household.createDateTime | date:'medium'}}</td>
+                <td>{{household.updateUserId}}</td>
+                <td>{{household.updateDateTime | date:'medium'}}</td>
+                <td>
+                    <span *ngFor="let languages of household.languages; let last = last">
+                            <a class="form-control-static" [routerLink]="['../language-type', languages?.id ]">{{languages.id}}</a>{{last ? '' : ', '}}
+                        </span>
+                </td>
+                <td class="text-right">
+                    <div class="btn-group flex-btn-group-container">
+                        <button type="submit"
+                                [routerLink]="['../household', household.id ]"
+                                class="btn btn-info btn-sm">
+                            <span class="fa fa-eye"></span>
+                            <span class="hidden-md-down">View</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', { outlets: { popup: 'household/'+ household.id + '/edit'} }]"
+                                replaceUrl="true"
+                                class="btn btn-primary btn-sm">
+                            <span class="fa fa-pencil"></span>
+                            <span class="hidden-md-down">Edit</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', { outlets: { popup: 'household/'+ household.id + '/delete'} }]"
+                                replaceUrl="true"
+                                class="btn btn-danger btn-sm">
+                            <span class="fa fa-remove"></span>
+                            <span class="hidden-md-down">Delete</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

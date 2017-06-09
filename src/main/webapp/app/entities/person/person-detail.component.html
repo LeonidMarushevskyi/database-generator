@@ -12,27 +12,73 @@
         <dd>
             <span>{{person.lastName}}</span>
         </dd>
-        <dt><span>Gender</span></dt>
+        <dt><span>Middle Name</span></dt>
         <dd>
-            <span>{{person.gender}}</span>
-        </dd>
-        <dt><span>Age</span></dt>
-        <dd>
-            <span>{{person.age}}</span>
-        </dd>
-        <dt><span>Date Of Birth</span></dt>
-        <dd>
-            <span>{{person.dateOfBirth | date:'mediumDate'}}</span>
+            <span>{{person.middleName}}</span>
         </dd>
         <dt><span>Ssn</span></dt>
         <dd>
             <span>{{person.ssn}}</span>
         </dd>
-        <dt><span>Ethnicity</span></dt>
+        <dt><span>Date Of Birth</span></dt>
         <dd>
-            <div *ngIf="person.ethnicityId">
-                <a [routerLink]="['/person-ethnicity', person.ethnicityId]">{{person.ethnicityId}}</a>
+            <span>{{person.dateOfBirth | date:'mediumDate'}}</span>
+        </dd>
+        <dt><span>Drivers License Number</span></dt>
+        <dd>
+            <span>{{person.driversLicenseNumber}}</span>
+        </dd>
+        <dt><span>Create User Id</span></dt>
+        <dd>
+            <span>{{person.createUserId}}</span>
+        </dd>
+        <dt><span>Create Date Time</span></dt>
+        <dd>
+            <span>{{person.createDateTime | date:'medium'}}</span>
+        </dd>
+        <dt><span>Update User Id</span></dt>
+        <dd>
+            <span>{{person.updateUserId}}</span>
+        </dd>
+        <dt><span>Update Date Time</span></dt>
+        <dd>
+            <span>{{person.updateDateTime | date:'medium'}}</span>
+        </dd>
+        <dt><span>Application</span></dt>
+        <dd>
+            <div *ngIf="person.application">
+                <a [routerLink]="['/application', person.application?.id]">{{person.application?.id}}</a>
             </div>
+        </dd>
+        <dt><span>Household</span></dt>
+        <dd>
+            <div *ngIf="person.household">
+                <a [routerLink]="['/household', person.household?.id]">{{person.household?.id}}</a>
+            </div>
+        </dd>
+        <dt><span>Education Highest Level</span></dt>
+        <dd>
+            <div *ngIf="person.educationHighestLevel">
+                <a [routerLink]="['/education-level-type', person.educationHighestLevel?.id]">{{person.educationHighestLevel?.id}}</a>
+            </div>
+        </dd>
+        <dt><span>Gender</span></dt>
+        <dd>
+            <div *ngIf="person.gender">
+                <a [routerLink]="['/gender-type', person.gender?.id]">{{person.gender?.id}}</a>
+            </div>
+        </dd>
+        <dt><span>Race</span></dt>
+        <dd>
+            <div *ngIf="person.race">
+                <a [routerLink]="['/race-type', person.race?.id]">{{person.race?.id}}</a>
+            </div>
+        </dd>
+        <dt><span>Ethnicities</span></dt>
+        <dd>
+            <span *ngFor="let ethnicities of person.ethnicities; let last = last">
+                <a [routerLink]="['/ethnicity-type', ethnicities?.id ]">{{ethnicities.id}}</a>{{last ? '' : ', '}}
+            </span>
         </dd>
     </dl>
 

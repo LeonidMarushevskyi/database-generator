@@ -23,8 +23,12 @@
             <th><span>Zip Code</span></th>
             <th><span>Zip Suffix Code</span></th>
             <th><span>Longitude</span></th>
-            <th><span>Lattitude</span></th>
+            <th><span>Latitude</span></th>
             <th><span>Deliverable</span></th>
+            <th><span>Create User Id</span></th>
+            <th><span>Create Date Time</span></th>
+            <th><span>Update User Id</span></th>
+            <th><span>Update Date Time</span></th>
             <th></th>
             </tr>
             </thead>
@@ -37,8 +41,12 @@
                 <td>{{address.zipCode}}</td>
                 <td>{{address.zipSuffixCode}}</td>
                 <td>{{address.longitude}}</td>
-                <td>{{address.lattitude}}</td>
+                <td>{{address.latitude}}</td>
                 <td>{{address.deliverable}}</td>
+                <td>{{address.createUserId}}</td>
+                <td>{{address.createDateTime | date:'medium'}}</td>
+                <td>{{address.updateUserId}}</td>
+                <td>{{address.updateDateTime | date:'medium'}}</td>
                 <td class="text-right">
                     <div class="btn-group flex-btn-group-container">
                         <button type="submit"

@@ -1,0 +1,157 @@
+<form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+
+    <div class="modal-header">
+        <h4 class="modal-title" id="myLicensureHistoryLabel">Create or edit a Licensure History</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                (click)="clear()">&times;</button>
+    </div>
+    <div class="modal-body">
+        <jhi-alert-error></jhi-alert-error>
+        <div class="form-group" [hidden]="!licensureHistory.id">
+            <label for="id">ID</label>
+            <input type="text" class="form-control" id="id" name="id"
+                   [(ngModel)]="licensureHistory.id" readonly />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_licensureHistoryQuestion1">Licensure History Question 1</label>
+            <input type="checkbox" class="form-control" name="licensureHistoryQuestion1" id="field_licensureHistoryQuestion1"
+                [(ngModel)]="licensureHistory.licensureHistoryQuestion1"
+             />
+            <div [hidden]="!(editForm.controls.licensureHistoryQuestion1?.dirty && editForm.controls.licensureHistoryQuestion1?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.licensureHistoryQuestion1?.errors?.required">
+                   This field is required.
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_licensureHistoryQuestion11">Licensure History Question 11</label>
+            <input type="text" class="form-control" name="licensureHistoryQuestion11" id="field_licensureHistoryQuestion11"
+                [(ngModel)]="licensureHistory.licensureHistoryQuestion11"
+             />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_licensureHistoryQuestion12">Licensure History Question 12</label>
+            <input type="text" class="form-control" name="licensureHistoryQuestion12" id="field_licensureHistoryQuestion12"
+                [(ngModel)]="licensureHistory.licensureHistoryQuestion12"
+             />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_licensureHistoryQuestion2">Licensure History Question 2</label>
+            <input type="checkbox" class="form-control" name="licensureHistoryQuestion2" id="field_licensureHistoryQuestion2"
+                [(ngModel)]="licensureHistory.licensureHistoryQuestion2"
+             />
+            <div [hidden]="!(editForm.controls.licensureHistoryQuestion2?.dirty && editForm.controls.licensureHistoryQuestion2?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.licensureHistoryQuestion2?.errors?.required">
+                   This field is required.
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_licensureHistoryQuestion21">Licensure History Question 21</label>
+            <input type="text" class="form-control" name="licensureHistoryQuestion21" id="field_licensureHistoryQuestion21"
+                [(ngModel)]="licensureHistory.licensureHistoryQuestion21"
+             />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_licensureHistoryQuestion3">Licensure History Question 3</label>
+            <input type="checkbox" class="form-control" name="licensureHistoryQuestion3" id="field_licensureHistoryQuestion3"
+                [(ngModel)]="licensureHistory.licensureHistoryQuestion3"
+             />
+            <div [hidden]="!(editForm.controls.licensureHistoryQuestion3?.dirty && editForm.controls.licensureHistoryQuestion3?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.licensureHistoryQuestion3?.errors?.required">
+                   This field is required.
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_licensureHistoryQuestion31">Licensure History Question 31</label>
+            <input type="text" class="form-control" name="licensureHistoryQuestion31" id="field_licensureHistoryQuestion31"
+                [(ngModel)]="licensureHistory.licensureHistoryQuestion31"
+             />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_licensureHistoryQuestion4">Licensure History Question 4</label>
+            <input type="checkbox" class="form-control" name="licensureHistoryQuestion4" id="field_licensureHistoryQuestion4"
+                [(ngModel)]="licensureHistory.licensureHistoryQuestion4"
+             />
+            <div [hidden]="!(editForm.controls.licensureHistoryQuestion4?.dirty && editForm.controls.licensureHistoryQuestion4?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.licensureHistoryQuestion4?.errors?.required">
+                   This field is required.
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_licensureHistoryQuestion41">Licensure History Question 41</label>
+            <input type="text" class="form-control" name="licensureHistoryQuestion41" id="field_licensureHistoryQuestion41"
+                [(ngModel)]="licensureHistory.licensureHistoryQuestion41"
+             />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_licensureHistoryQuestion5">Licensure History Question 5</label>
+            <input type="checkbox" class="form-control" name="licensureHistoryQuestion5" id="field_licensureHistoryQuestion5"
+                [(ngModel)]="licensureHistory.licensureHistoryQuestion5"
+             />
+            <div [hidden]="!(editForm.controls.licensureHistoryQuestion5?.dirty && editForm.controls.licensureHistoryQuestion5?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.licensureHistoryQuestion5?.errors?.required">
+                   This field is required.
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_licensureHistoryQuestion51">Licensure History Question 51</label>
+            <input type="text" class="form-control" name="licensureHistoryQuestion51" id="field_licensureHistoryQuestion51"
+                [(ngModel)]="licensureHistory.licensureHistoryQuestion51"
+             />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_licensureHistoryQuestion6">Licensure History Question 6</label>
+            <input type="checkbox" class="form-control" name="licensureHistoryQuestion6" id="field_licensureHistoryQuestion6"
+                [(ngModel)]="licensureHistory.licensureHistoryQuestion6"
+             />
+            <div [hidden]="!(editForm.controls.licensureHistoryQuestion6?.dirty && editForm.controls.licensureHistoryQuestion6?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.licensureHistoryQuestion6?.errors?.required">
+                   This field is required.
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_licensureHistoryQuestion61">Licensure History Question 61</label>
+            <input type="text" class="form-control" name="licensureHistoryQuestion61" id="field_licensureHistoryQuestion61"
+                [(ngModel)]="licensureHistory.licensureHistoryQuestion61"
+             />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_licensureHistoryQuestion7">Licensure History Question 7</label>
+            <input type="checkbox" class="form-control" name="licensureHistoryQuestion7" id="field_licensureHistoryQuestion7"
+                [(ngModel)]="licensureHistory.licensureHistoryQuestion7"
+             />
+            <div [hidden]="!(editForm.controls.licensureHistoryQuestion7?.dirty && editForm.controls.licensureHistoryQuestion7?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.licensureHistoryQuestion7?.errors?.required">
+                   This field is required.
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_licensureHistoryQuestion71">Licensure History Question 71</label>
+            <input type="text" class="form-control" name="licensureHistoryQuestion71" id="field_licensureHistoryQuestion71"
+                [(ngModel)]="licensureHistory.licensureHistoryQuestion71"
+             />
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" (click)="clear()">
+            <span class="fa fa-ban"></span>&nbsp;<span>Cancel</span>
+        </button>
+        <button type="submit" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+            <span class="fa fa-save"></span>&nbsp;<span>Save</span>
+        </button>
+    </div>
+</form>

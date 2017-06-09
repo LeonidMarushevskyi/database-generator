@@ -60,12 +60,20 @@ export class PersonService {
     private convertItemFromServer(entity: any) {
         entity.dateOfBirth = this.dateUtils
             .convertLocalDateFromServer(entity.dateOfBirth);
+        entity.createDateTime = this.dateUtils
+            .convertDateTimeFromServer(entity.createDateTime);
+        entity.updateDateTime = this.dateUtils
+            .convertDateTimeFromServer(entity.updateDateTime);
     }
 
     private convert(person: Person): Person {
         const copy: Person = Object.assign({}, person);
         copy.dateOfBirth = this.dateUtils
             .convertLocalDateToServer(person.dateOfBirth);
+
+        copy.createDateTime = this.dateUtils.toDate(person.createDateTime);
+
+        copy.updateDateTime = this.dateUtils.toDate(person.updateDateTime);
         return copy;
     }
 }

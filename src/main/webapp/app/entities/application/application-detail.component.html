@@ -1,0 +1,77 @@
+
+<div *ngIf="application">
+    <h2><span>Application</span> {{application.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span>Is Initial Application</span></dt>
+        <dd>
+            <span>{{application.isInitialApplication}}</span>
+        </dd>
+        <dt><span>Other Application Type</span></dt>
+        <dd>
+            <span>{{application.otherApplicationType}}</span>
+        </dd>
+        <dt><span>Is Child Identified</span></dt>
+        <dd>
+            <span>{{application.isChildIdentified}}</span>
+        </dd>
+        <dt><span>Is Child Currently In Your Home</span></dt>
+        <dd>
+            <span>{{application.isChildCurrentlyInYourHome}}</span>
+        </dd>
+        <dt><span>Create User Id</span></dt>
+        <dd>
+            <span>{{application.createUserId}}</span>
+        </dd>
+        <dt><span>Create Date Time</span></dt>
+        <dd>
+            <span>{{application.createDateTime | date:'medium'}}</span>
+        </dd>
+        <dt><span>Update User Id</span></dt>
+        <dd>
+            <span>{{application.updateUserId}}</span>
+        </dd>
+        <dt><span>Update Date Time</span></dt>
+        <dd>
+            <span>{{application.updateDateTime | date:'medium'}}</span>
+        </dd>
+        <dt><span>Licensure History</span></dt>
+        <dd>
+            <div *ngIf="application.licensureHistory">
+                <a [routerLink]="['/licensure-history', application.licensureHistory?.id]">{{application.licensureHistory?.id}}</a>
+            </div>
+        </dd>
+        <dt><span></span></dt>
+        <dd>
+            <div *ngIf="application.">
+                <a [routerLink]="['/child-preferences', application.?.id]">{{application.?.id}}</a>
+            </div>
+        </dd>
+        <dt><span>For County Use Only</span></dt>
+        <dd>
+            <div *ngIf="application.forCountyUseOnly">
+                <a [routerLink]="['/county-type', application.forCountyUseOnly?.id]">{{application.forCountyUseOnly?.id}}</a>
+            </div>
+        </dd>
+        <dt><span>Status</span></dt>
+        <dd>
+            <div *ngIf="application.status">
+                <a [routerLink]="['/application-status-type', application.status?.id]">{{application.status?.id}}</a>
+            </div>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            (click)="previousState()"
+            class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span> Back</span>
+    </button>
+
+    <button type="button"
+            [routerLink]="['/', { outlets: { popup: 'application/'+ application.id + '/edit'} }]"
+            replaceUrl="true"
+            class="btn btn-primary">
+        <span class="fa fa-pencil"></span>&nbsp;<span> Edit</span>
+    </button>
+</div>

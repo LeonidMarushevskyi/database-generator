@@ -1,0 +1,113 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "relationshipName": "licensureHistory",
+            "otherEntityName": "licensureHistory",
+            "otherEntityField": "id",
+            "ownerSide": true,
+            "otherEntityRelationshipName": "application"
+        },
+        {
+            "relationshipType": "one-to-one",
+            "relationshipName": "",
+            "otherEntityName": "childPreferences",
+            "otherEntityField": "id",
+            "ownerSide": true,
+            "otherEntityRelationshipName": "application"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "references",
+            "otherEntityName": "person",
+            "otherEntityRelationshipName": "application"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "determinedChild",
+            "otherEntityName": "determinedChild",
+            "otherEntityRelationshipName": "application"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "applicants",
+            "otherEntityName": "applicant",
+            "otherEntityRelationshipName": "application"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "relationshipName": "forCountyUseOnly",
+            "otherEntityName": "countyType",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "relationshipName": "status",
+            "otherEntityName": "applicationStatusType",
+            "otherEntityField": "id"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "isInitialApplication",
+            "fieldType": "Boolean",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "otherApplicationType",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "isChildIdentified",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "isChildCurrentlyInYourHome",
+            "fieldType": "Boolean",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "createUserId",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength",
+                "required"
+            ],
+            "fieldValidateRulesMaxlength": 50
+        },
+        {
+            "fieldName": "createDateTime",
+            "fieldType": "ZonedDateTime",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "updateUserId",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength",
+                "required"
+            ],
+            "fieldValidateRulesMaxlength": 50
+        },
+        {
+            "fieldName": "updateDateTime",
+            "fieldType": "ZonedDateTime",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "changelogDate": "20170608220652",
+    "javadoc": "@author CALS API team.",
+    "entityTableName": "application",
+    "dto": "no",
+    "pagination": "no",
+    "service": "no"
+}

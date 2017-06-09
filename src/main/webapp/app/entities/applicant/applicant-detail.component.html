@@ -1,0 +1,49 @@
+
+<div *ngIf="applicant">
+    <h2><span>Applicant</span> {{applicant.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span>Create User Id</span></dt>
+        <dd>
+            <span>{{applicant.createUserId}}</span>
+        </dd>
+        <dt><span>Create Date Time</span></dt>
+        <dd>
+            <span>{{applicant.createDateTime | date:'medium'}}</span>
+        </dd>
+        <dt><span>Update User Id</span></dt>
+        <dd>
+            <span>{{applicant.updateUserId}}</span>
+        </dd>
+        <dt><span>Update Date Time</span></dt>
+        <dd>
+            <span>{{applicant.updateDateTime | date:'medium'}}</span>
+        </dd>
+        <dt><span>Household Person</span></dt>
+        <dd>
+            <div *ngIf="applicant.householdPerson">
+                <a [routerLink]="['/household-adult', applicant.householdPerson?.id]">{{applicant.householdPerson?.id}}</a>
+            </div>
+        </dd>
+        <dt><span>Application</span></dt>
+        <dd>
+            <div *ngIf="applicant.application">
+                <a [routerLink]="['/application', applicant.application?.id]">{{applicant.application?.id}}</a>
+            </div>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            (click)="previousState()"
+            class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span> Back</span>
+    </button>
+
+    <button type="button"
+            [routerLink]="['/', { outlets: { popup: 'applicant/'+ applicant.id + '/edit'} }]"
+            replaceUrl="true"
+            class="btn btn-primary">
+        <span class="fa fa-pencil"></span>&nbsp;<span> Edit</span>
+    </button>
+</div>

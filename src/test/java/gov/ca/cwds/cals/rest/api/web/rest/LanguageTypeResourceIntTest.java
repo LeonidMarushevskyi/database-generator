@@ -37,11 +37,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = GeneratorApp.class)
 public class LanguageTypeResourceIntTest {
 
-    private static final String DEFAULT_CODE = "AA";
-    private static final String UPDATED_CODE = "BB";
-
-    private static final String DEFAULT_TYPE = "AAAAAAAAAA";
-    private static final String UPDATED_TYPE = "BBBBBBBBBB";
+    private static final String DEFAULT_NAME = "AAAAAAAAAA";
+    private static final String UPDATED_NAME = "BBBBBBBBBB";
 
     @Autowired
     private LanguageTypeRepository languageTypeRepository;
@@ -80,8 +77,7 @@ public class LanguageTypeResourceIntTest {
      */
     public static LanguageType createEntity(EntityManager em) {
         LanguageType languageType = new LanguageType()
-            .code(DEFAULT_CODE)
-            .type(DEFAULT_TYPE);
+            .name(DEFAULT_NAME);
         return languageType;
     }
 
@@ -105,8 +101,7 @@ public class LanguageTypeResourceIntTest {
         List<LanguageType> languageTypeList = languageTypeRepository.findAll();
         assertThat(languageTypeList).hasSize(databaseSizeBeforeCreate + 1);
         LanguageType testLanguageType = languageTypeList.get(languageTypeList.size() - 1);
-        assertThat(testLanguageType.getCode()).isEqualTo(DEFAULT_CODE);
-        assertThat(testLanguageType.getType()).isEqualTo(DEFAULT_TYPE);
+        assertThat(testLanguageType.getName()).isEqualTo(DEFAULT_NAME);
     }
 
     @Test
@@ -130,10 +125,10 @@ public class LanguageTypeResourceIntTest {
 
     @Test
     @Transactional
-    public void checkCodeIsRequired() throws Exception {
+    public void checkNameIsRequired() throws Exception {
         int databaseSizeBeforeTest = languageTypeRepository.findAll().size();
         // set the field null
-        languageType.setCode(null);
+        languageType.setName(null);
 
         // Create the LanguageType, which fails.
 
@@ -157,8 +152,7 @@ public class LanguageTypeResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(languageType.getId().intValue())))
-            .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE.toString())))
-            .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE.toString())));
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())));
     }
 
     @Test
@@ -172,8 +166,7 @@ public class LanguageTypeResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(languageType.getId().intValue()))
-            .andExpect(jsonPath("$.code").value(DEFAULT_CODE.toString()))
-            .andExpect(jsonPath("$.type").value(DEFAULT_TYPE.toString()));
+            .andExpect(jsonPath("$.name").value(DEFAULT_NAME.toString()));
     }
 
     @Test
@@ -194,8 +187,7 @@ public class LanguageTypeResourceIntTest {
         // Update the languageType
         LanguageType updatedLanguageType = languageTypeRepository.findOne(languageType.getId());
         updatedLanguageType
-            .code(UPDATED_CODE)
-            .type(UPDATED_TYPE);
+            .name(UPDATED_NAME);
 
         restLanguageTypeMockMvc.perform(put("/api/language-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -206,8 +198,7 @@ public class LanguageTypeResourceIntTest {
         List<LanguageType> languageTypeList = languageTypeRepository.findAll();
         assertThat(languageTypeList).hasSize(databaseSizeBeforeUpdate);
         LanguageType testLanguageType = languageTypeList.get(languageTypeList.size() - 1);
-        assertThat(testLanguageType.getCode()).isEqualTo(UPDATED_CODE);
-        assertThat(testLanguageType.getType()).isEqualTo(UPDATED_TYPE);
+        assertThat(testLanguageType.getName()).isEqualTo(UPDATED_NAME);
     }
 
     @Test

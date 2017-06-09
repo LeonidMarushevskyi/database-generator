@@ -1,0 +1,355 @@
+/**
+ * @author CALS API team.
+ */
+
+entity Application {
+	isInitialApplication Boolean required,
+    otherApplicationType String, //3NF violated!!!
+    isChildIdentified Boolean,
+	isChildCurrentlyInYourHome Boolean required,
+    createUserId String maxlength(50) required,
+    createDateTime ZonedDateTime required,
+ 	updateUserId String maxlength(50) required,
+ 	updateDateTime ZonedDateTime required
+}
+
+entity DeterminedChild {
+   dateOfPlacement LocalDate required
+}
+
+entity ApplicationStatusType {
+    name String maxlength(100) required
+}
+
+entity LicensureHistory {
+    licensureHistoryQuestion1 Boolean required,
+    licensureHistoryQuestion11 String,
+	licensureHistoryQuestion12 String,
+    licensureHistoryQuestion2 Boolean required,
+	licensureHistoryQuestion21 String,
+	licensureHistoryQuestion3 Boolean required,
+	licensureHistoryQuestion31 String,
+	licensureHistoryQuestion4 Boolean required,
+	licensureHistoryQuestion41 String,
+	licensureHistoryQuestion5 Boolean required,
+	licensureHistoryQuestion51 String,
+	licensureHistoryQuestion6 Boolean required,
+	licensureHistoryQuestion61 String,
+	licensureHistoryQuestion7 Boolean required,
+	licensureHistoryQuestion71 String
+}
+
+entity Household {
+    createUserId String maxlength(50) required,
+    createDateTime ZonedDateTime required,
+    updateUserId String maxlength(50) required,
+    updateDateTime ZonedDateTime required
+}
+
+entity HouseholdAdult {
+	outOfStateDisclosureState Boolean required,
+	criminalRecordStatementQuestion1 Boolean required,
+	criminalRecordStatementQuestion2 Boolean required,
+	criminalRecordStatementQuestion3 Boolean required,
+    createUserId String maxlength(50) required,
+    createDateTime ZonedDateTime required,
+    updateUserId String maxlength(50) required,
+    updateDateTime ZonedDateTime required
+}
+
+entity Applicant {
+    createUserId String maxlength(50) required,
+    createDateTime ZonedDateTime required,
+    updateUserId String maxlength(50) required,
+    updateDateTime ZonedDateTime required
+}
+
+entity CriminalRecord {
+	offenseDescription TextBlob required,
+    offenseDate LocalDate,
+    offenseExplanation TextBlob required,
+	city String maxlength(100),
+    createUserId String maxlength(50) required,
+    createDateTime ZonedDateTime required,
+    updateUserId String maxlength(50) required,
+    updateDateTime ZonedDateTime required
+}
+
+entity Person {
+    firstName String required,
+    lastName String required,
+    middleName String,
+    ssn String,
+	dateOfBirth LocalDate required,
+    driversLicenseNumber String required,
+    createUserId String maxlength(50) required,
+    createDateTime ZonedDateTime required,
+ 	updateUserId String maxlength(50) required,
+ 	updateDateTime ZonedDateTime required
+}
+
+entity CountyType {
+    fipsCode String required minlength(3) maxlength(3),
+    description String maxlength(20)
+}
+
+entity StateType {
+    name String maxlength(100) required,
+}
+
+entity PersonPreviousName {
+	name String required,
+    createUserId String maxlength(50) required,
+    createDateTime ZonedDateTime required,
+   	updateUserId String maxlength(50) required,
+   	updateDateTime ZonedDateTime required
+}
+
+entity EducationLevelType {
+  	name String required,
+    level Integer
+}
+
+entity EducationPoint {
+  	degree String required,
+    name String required,
+    createUserId String maxlength(50) required,
+    createDateTime ZonedDateTime required,
+   	updateUserId String maxlength(50) required,
+   	updateDateTime ZonedDateTime required
+}
+
+entity GenderType {
+	name String required
+}
+
+entity RaceType {
+	name String required
+}
+
+entity EthnicityType {
+	name String required
+}
+
+entity EmailAddress {
+  	email String required,
+    createUserId String maxlength(50) required,
+    createDateTime ZonedDateTime required,
+   	updateUserId String maxlength(50) required,
+   	updateDateTime ZonedDateTime required
+}
+
+entity PhoneNumber {
+  	phoneNumber String required,
+    createUserId String maxlength(50) required,
+    createDateTime ZonedDateTime required,
+   	updateUserId String maxlength(50) required,
+   	updateDateTime ZonedDateTime required
+}
+
+entity PersonPhone {
+    createUserId String maxlength(50) required,
+    createDateTime ZonedDateTime required,
+   	updateUserId String maxlength(50) required,
+   	updateDateTime ZonedDateTime required
+}
+
+entity PersonAddress {
+    createUserId String maxlength(50) required,
+    createDateTime ZonedDateTime required,
+   	updateUserId String maxlength(50) required,
+   	updateDateTime ZonedDateTime required
+}
+
+entity PhoneNumberType {
+	type String required
+}
+
+entity Address {
+    streetAddress String required maxlength(100),
+    city String required maxlength(50),
+    state String required minlength(2) maxlength(2),
+    zipCode String required minlength(5) maxlength(5),
+    zipSuffixCode String minlength(4) maxlength(4),
+    longitude BigDecimal,
+    latitude BigDecimal,
+    deliverable Boolean,
+    createUserId String maxlength(50) required,
+    createDateTime ZonedDateTime required,
+   	updateUserId String maxlength(50) required,
+   	updateDateTime ZonedDateTime required
+}
+
+entity Employer {
+    name String,
+    createUserId String maxlength(50) required,
+    createDateTime ZonedDateTime required,
+   	updateUserId String maxlength(50) required,
+   	updateDateTime ZonedDateTime required
+}
+
+entity Employment {
+  	occupation String required,
+  	annualIncome BigDecimal required,
+    startDate LocalDate required,
+    endDate LocalDate,
+    createUserId String maxlength(50) required,
+    createDateTime ZonedDateTime required,
+   	updateUserId String maxlength(50) required,
+   	updateDateTime ZonedDateTime required
+}
+
+entity AddressType {
+	name String required
+}
+
+entity PosessionType { //own, rent, lease
+	name String required
+}
+
+entity HouseholdAddress {
+    isWeaponsInHome Boolean required,
+    directionsToHome String maxlength(255),
+    createUserId String maxlength(50) required,
+    createDateTime ZonedDateTime required,
+    updateUserId String maxlength(50) required,
+    updateDateTime ZonedDateTime required
+}
+
+entity BodyOfWater {
+  	location String,
+    size Integer,
+    createUserId String maxlength(50) required,
+    createDateTime ZonedDateTime required,
+   	updateUserId String maxlength(50) required,
+   	updateDateTime ZonedDateTime required
+}
+
+entity LanguageType {
+    name String  maxlength(20) required
+}
+
+entity RelationshipType {
+    name String maxlength(100) required
+}
+
+entity Relationship {
+    createUserId String maxlength(50) required,
+    createDateTime ZonedDateTime required,
+   	updateUserId String maxlength(50) required,
+    updateDateTime ZonedDateTime required
+}
+
+entity AppRelHistory {
+    createUserId String maxlength(50) required,
+    createDateTime ZonedDateTime required,
+   	updateUserId String maxlength(50) required,
+    updateDateTime ZonedDateTime required
+}
+
+entity RelationshipEvent {
+  	eventPlace String,
+    eventDate LocalDate,
+    createUserId String maxlength(50) required,
+    createDateTime ZonedDateTime required,
+   	updateUserId String maxlength(50) required,
+   	updateDateTime ZonedDateTime required
+}
+
+entity RelationshipEventType {
+   name String  maxlength(100) required
+}
+
+entity HouseholdChild {
+  	isFinanciallySupported Boolean required,
+    isAdopted Boolean required,
+    createUserId String maxlength(50) required,
+    createDateTime ZonedDateTime required,
+   	updateUserId String maxlength(50) required,
+   	updateDateTime ZonedDateTime required
+}
+
+entity AgeGroupType {
+   name String  maxlength(20) required
+}
+
+entity SiblingGroupType {
+   name String  maxlength(20) required
+}
+
+entity ChildPreferences {
+    createUserId String maxlength(50) required,
+    createDateTime ZonedDateTime required,
+   	updateUserId String maxlength(50) required,
+   	updateDateTime ZonedDateTime required
+}
+
+entity ApplicationStatusType {
+   name String  maxlength(100) required
+}
+
+relationship ManyToOne {
+  Application{forCountyUseOnly} to CountyType,
+  Application{status} to ApplicationStatusType,
+  Person{gender required} to GenderType,
+  Person{race required} to RaceType,
+  PersonPhone{phoneType} to PhoneNumberType,
+  Employment{employer} to Employer,
+  HouseholdAdult{household} to Household,
+  HouseholdAddress{addressType} to AddressType,
+  HouseholdAddress{posessionType} to PosessionType,
+  PersonAddress{addressType} to AddressType,
+  PersonAddress{address} to Address,
+  Relationship{from required} to Person,
+  Relationship{to required} to Person,
+  HouseholdChild{household required} to Household,
+  Relationship{relationshipType} to RelationshipType,
+  AppRelHistory{relationshipType} to RelationshipType,
+  DeterminedChild{countyOfJurisdiction required} to CountyType,
+  EducationPoint{type} to EducationLevelType,
+  EducationPoint{educationalInstitutionAddress} to Address,
+  RelationshipEvent{eventType} to RelationshipEventType
+}
+
+relationship ManyToMany {
+  Person{ethnicities required} to EthnicityType,
+  Household{languages} to LanguageType,
+  ChildPreferences{ageGroupTypes} to AgeGroupType,
+  ChildPreferences{siblingGroupTypes} to SiblingGroupType,
+  HouseholdAdult{otherStates} to StateType
+}
+
+relationship OneToMany {
+    Application{references} to Person,
+    Application to DeterminedChild{application},
+    Application{applicants} to Applicant{application},
+    Person{previousNames} to PersonPreviousName,
+    Person{emailAddresses} to EmailAddress,
+    Person{phoneNumbers} to PersonPhone{person},
+    Person{employments} to Employment{person},
+    Person{addresses} to PersonAddress,
+    Person{educationPoints} to EducationPoint{person},
+    Employer{phoneNumbers} to PhoneNumber,
+    Household{persons} to Person,
+    Household{addresses} to HouseholdAddress{address},
+    HouseholdAddress{bodyOfWaters} to BodyOfWater,
+	StateType{counties} to CountyType{state},
+    HouseholdAdult{criminalRecords} to CriminalRecord{person},
+	Applicant{relationHistoryRecords} to AppRelHistory{applicant}
+}
+
+relationship OneToOne {
+  	Application{licensureHistory} to LicensureHistory{application},
+    Application to ChildPreferences{application},
+    PersonPhone{phoneNumber} to PhoneNumber,
+    Person{educationHighestLevel} to EducationLevelType, //denormalization !!!!
+    Employer{address} to Address,
+    HouseholdAdult{person} to Person,
+	Applicant{householdPerson} to HouseholdAdult,
+    HouseholdAddress{address} to Address,
+    AppRelHistory{startEvent required} to RelationshipEvent{relationShip},
+    AppRelHistory{endEvent required} to RelationshipEvent{relationShip},
+    DeterminedChild{person} to Person,
+    HouseholdChild{person} to Person,
+    CriminalRecord{state} to StateType
+}

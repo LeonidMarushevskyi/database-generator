@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <!--
+        Added the constraints for entity HouseholdAddress.
+    -->
+    <changeSet id="20170608220719-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="address_id"
+                                 baseTableName="household_address"
+                                 constraintName="fk_household_address_address_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="address"/>
+
+        <addForeignKeyConstraint baseColumnNames="address_type_id"
+                                 baseTableName="household_address"
+                                 constraintName="fk_household_address_address_type_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="address_type"/>
+
+        <addForeignKeyConstraint baseColumnNames="posession_type_id"
+                                 baseTableName="household_address"
+                                 constraintName="fk_household_address_posession_type_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="posession_type"/>
+
+        <addForeignKeyConstraint baseColumnNames="address_id"
+                                 baseTableName="household_address"
+                                 constraintName="fk_household_address_address_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="household"/>
+
+    </changeSet>
+</databaseChangeLog>

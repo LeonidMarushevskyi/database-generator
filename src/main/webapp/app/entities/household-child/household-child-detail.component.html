@@ -1,0 +1,57 @@
+
+<div *ngIf="householdChild">
+    <h2><span>Household Child</span> {{householdChild.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span>Is Financially Supported</span></dt>
+        <dd>
+            <span>{{householdChild.isFinanciallySupported}}</span>
+        </dd>
+        <dt><span>Is Adopted</span></dt>
+        <dd>
+            <span>{{householdChild.isAdopted}}</span>
+        </dd>
+        <dt><span>Create User Id</span></dt>
+        <dd>
+            <span>{{householdChild.createUserId}}</span>
+        </dd>
+        <dt><span>Create Date Time</span></dt>
+        <dd>
+            <span>{{householdChild.createDateTime | date:'medium'}}</span>
+        </dd>
+        <dt><span>Update User Id</span></dt>
+        <dd>
+            <span>{{householdChild.updateUserId}}</span>
+        </dd>
+        <dt><span>Update Date Time</span></dt>
+        <dd>
+            <span>{{householdChild.updateDateTime | date:'medium'}}</span>
+        </dd>
+        <dt><span>Person</span></dt>
+        <dd>
+            <div *ngIf="householdChild.person">
+                <a [routerLink]="['/person', householdChild.person?.id]">{{householdChild.person?.id}}</a>
+            </div>
+        </dd>
+        <dt><span>Household</span></dt>
+        <dd>
+            <div *ngIf="householdChild.household">
+                <a [routerLink]="['/household', householdChild.household?.id]">{{householdChild.household?.id}}</a>
+            </div>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            (click)="previousState()"
+            class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span> Back</span>
+    </button>
+
+    <button type="button"
+            [routerLink]="['/', { outlets: { popup: 'household-child/'+ householdChild.id + '/edit'} }]"
+            replaceUrl="true"
+            class="btn btn-primary">
+        <span class="fa fa-pencil"></span>&nbsp;<span> Edit</span>
+    </button>
+</div>

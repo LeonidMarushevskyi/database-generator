@@ -1,0 +1,65 @@
+
+<div *ngIf="criminalRecord">
+    <h2><span>Criminal Record</span> {{criminalRecord.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span>Offense Description</span></dt>
+        <dd>
+            <span>{{criminalRecord.offenseDescription}}</span>
+        </dd>
+        <dt><span>Offense Date</span></dt>
+        <dd>
+            <span>{{criminalRecord.offenseDate | date:'mediumDate'}}</span>
+        </dd>
+        <dt><span>Offense Explanation</span></dt>
+        <dd>
+            <span>{{criminalRecord.offenseExplanation}}</span>
+        </dd>
+        <dt><span>City</span></dt>
+        <dd>
+            <span>{{criminalRecord.city}}</span>
+        </dd>
+        <dt><span>Create User Id</span></dt>
+        <dd>
+            <span>{{criminalRecord.createUserId}}</span>
+        </dd>
+        <dt><span>Create Date Time</span></dt>
+        <dd>
+            <span>{{criminalRecord.createDateTime | date:'medium'}}</span>
+        </dd>
+        <dt><span>Update User Id</span></dt>
+        <dd>
+            <span>{{criminalRecord.updateUserId}}</span>
+        </dd>
+        <dt><span>Update Date Time</span></dt>
+        <dd>
+            <span>{{criminalRecord.updateDateTime | date:'medium'}}</span>
+        </dd>
+        <dt><span>State</span></dt>
+        <dd>
+            <div *ngIf="criminalRecord.state">
+                <a [routerLink]="['/state-type', criminalRecord.state?.id]">{{criminalRecord.state?.id}}</a>
+            </div>
+        </dd>
+        <dt><span>Person</span></dt>
+        <dd>
+            <div *ngIf="criminalRecord.person">
+                <a [routerLink]="['/household-adult', criminalRecord.person?.id]">{{criminalRecord.person?.id}}</a>
+            </div>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            (click)="previousState()"
+            class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span> Back</span>
+    </button>
+
+    <button type="button"
+            [routerLink]="['/', { outlets: { popup: 'criminal-record/'+ criminalRecord.id + '/edit'} }]"
+            replaceUrl="true"
+            class="btn btn-primary">
+        <span class="fa fa-pencil"></span>&nbsp;<span> Edit</span>
+    </button>
+</div>

@@ -1,0 +1,80 @@
+<div>
+    <h2>
+        <span>Relationships</span>
+        <button class="btn btn-primary float-right create-relationship" [routerLink]="['/', { outlets: { popup: ['relationship-new'] } }]">
+            <span class="fa fa-plus"></span>
+            <span >
+            Create new Relationship
+            </span>
+        </button>
+    </h2>
+    <jhi-alert></jhi-alert>
+    <div class="row">
+    </div>
+    <br/>
+    <div class="table-responsive" *ngIf="relationships">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+            <th><span>ID</span></th>
+            <th><span>Create User Id</span></th>
+            <th><span>Create Date Time</span></th>
+            <th><span>Update User Id</span></th>
+            <th><span>Update Date Time</span></th>
+            <th><span>From</span></th>
+            <th><span>To</span></th>
+            <th><span>Relationship Type</span></th>
+            <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let relationship of relationships ;trackBy: trackId">
+                <td><a [routerLink]="['../relationship', relationship.id ]">{{relationship.id}}</a></td>
+                <td>{{relationship.createUserId}}</td>
+                <td>{{relationship.createDateTime | date:'medium'}}</td>
+                <td>{{relationship.updateUserId}}</td>
+                <td>{{relationship.updateDateTime | date:'medium'}}</td>
+                <td>
+                    <div *ngIf="relationship.from">
+                        <a [routerLink]="['../person', relationship.from?.id ]" >{{relationship.from?.id}}</a>
+                    </div>
+                </td>
+                <td>
+                    <div *ngIf="relationship.to">
+                        <a [routerLink]="['../person', relationship.to?.id ]" >{{relationship.to?.id}}</a>
+                    </div>
+                </td>
+                <td>
+                    <div *ngIf="relationship.relationshipType">
+                        <a [routerLink]="['../relationship-type', relationship.relationshipType?.id ]" >{{relationship.relationshipType?.id}}</a>
+                    </div>
+                </td>
+                <td class="text-right">
+                    <div class="btn-group flex-btn-group-container">
+                        <button type="submit"
+                                [routerLink]="['../relationship', relationship.id ]"
+                                class="btn btn-info btn-sm">
+                            <span class="fa fa-eye"></span>
+                            <span class="hidden-md-down">View</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', { outlets: { popup: 'relationship/'+ relationship.id + '/edit'} }]"
+                                replaceUrl="true"
+                                class="btn btn-primary btn-sm">
+                            <span class="fa fa-pencil"></span>
+                            <span class="hidden-md-down">Edit</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', { outlets: { popup: 'relationship/'+ relationship.id + '/delete'} }]"
+                                replaceUrl="true"
+                                class="btn btn-danger btn-sm">
+                            <span class="fa fa-remove"></span>
+                            <span class="hidden-md-down">Delete</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

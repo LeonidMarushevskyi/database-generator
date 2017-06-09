@@ -1,0 +1,49 @@
+
+<div *ngIf="childPreferences">
+    <h2><span>Child Preferences</span> {{childPreferences.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span>Create User Id</span></dt>
+        <dd>
+            <span>{{childPreferences.createUserId}}</span>
+        </dd>
+        <dt><span>Create Date Time</span></dt>
+        <dd>
+            <span>{{childPreferences.createDateTime | date:'medium'}}</span>
+        </dd>
+        <dt><span>Update User Id</span></dt>
+        <dd>
+            <span>{{childPreferences.updateUserId}}</span>
+        </dd>
+        <dt><span>Update Date Time</span></dt>
+        <dd>
+            <span>{{childPreferences.updateDateTime | date:'medium'}}</span>
+        </dd>
+        <dt><span>Age Group Types</span></dt>
+        <dd>
+            <span *ngFor="let ageGroupTypes of childPreferences.ageGroupTypes; let last = last">
+                <a [routerLink]="['/age-group-type', ageGroupTypes?.id ]">{{ageGroupTypes.id}}</a>{{last ? '' : ', '}}
+            </span>
+        </dd>
+        <dt><span>Sibling Group Types</span></dt>
+        <dd>
+            <span *ngFor="let siblingGroupTypes of childPreferences.siblingGroupTypes; let last = last">
+                <a [routerLink]="['/sibling-group-type', siblingGroupTypes?.id ]">{{siblingGroupTypes.id}}</a>{{last ? '' : ', '}}
+            </span>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            (click)="previousState()"
+            class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span> Back</span>
+    </button>
+
+    <button type="button"
+            [routerLink]="['/', { outlets: { popup: 'child-preferences/'+ childPreferences.id + '/edit'} }]"
+            replaceUrl="true"
+            class="btn btn-primary">
+        <span class="fa fa-pencil"></span>&nbsp;<span> Edit</span>
+    </button>
+</div>

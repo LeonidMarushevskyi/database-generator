@@ -4,7 +4,9 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.time.ZonedDateTime;
 import java.util.Objects;
 
 /**
@@ -22,15 +24,33 @@ public class PersonPhone implements Serializable {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
-    @ManyToOne
-    private Person person;
+    @NotNull
+    @Size(max = 50)
+    @Column(name = "create_user_id", length = 50, nullable = false)
+    private String createUserId;
+
+    @NotNull
+    @Column(name = "create_date_time", nullable = false)
+    private ZonedDateTime createDateTime;
+
+    @NotNull
+    @Size(max = 50)
+    @Column(name = "update_user_id", length = 50, nullable = false)
+    private String updateUserId;
+
+    @NotNull
+    @Column(name = "update_date_time", nullable = false)
+    private ZonedDateTime updateDateTime;
 
     @OneToOne
     @JoinColumn(unique = true)
-    private Phone phone;
+    private PhoneNumber phoneNumber;
 
     @ManyToOne
-    private PhoneType type;
+    private PhoneNumberType phoneType;
+
+    @ManyToOne
+    private Person person;
 
     public Long getId() {
         return id;
@@ -38,6 +58,84 @@ public class PersonPhone implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getCreateUserId() {
+        return createUserId;
+    }
+
+    public PersonPhone createUserId(String createUserId) {
+        this.createUserId = createUserId;
+        return this;
+    }
+
+    public void setCreateUserId(String createUserId) {
+        this.createUserId = createUserId;
+    }
+
+    public ZonedDateTime getCreateDateTime() {
+        return createDateTime;
+    }
+
+    public PersonPhone createDateTime(ZonedDateTime createDateTime) {
+        this.createDateTime = createDateTime;
+        return this;
+    }
+
+    public void setCreateDateTime(ZonedDateTime createDateTime) {
+        this.createDateTime = createDateTime;
+    }
+
+    public String getUpdateUserId() {
+        return updateUserId;
+    }
+
+    public PersonPhone updateUserId(String updateUserId) {
+        this.updateUserId = updateUserId;
+        return this;
+    }
+
+    public void setUpdateUserId(String updateUserId) {
+        this.updateUserId = updateUserId;
+    }
+
+    public ZonedDateTime getUpdateDateTime() {
+        return updateDateTime;
+    }
+
+    public PersonPhone updateDateTime(ZonedDateTime updateDateTime) {
+        this.updateDateTime = updateDateTime;
+        return this;
+    }
+
+    public void setUpdateDateTime(ZonedDateTime updateDateTime) {
+        this.updateDateTime = updateDateTime;
+    }
+
+    public PhoneNumber getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public PersonPhone phoneNumber(PhoneNumber phoneNumber) {
+        this.phoneNumber = phoneNumber;
+        return this;
+    }
+
+    public void setPhoneNumber(PhoneNumber phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public PhoneNumberType getPhoneType() {
+        return phoneType;
+    }
+
+    public PersonPhone phoneType(PhoneNumberType phoneNumberType) {
+        this.phoneType = phoneNumberType;
+        return this;
+    }
+
+    public void setPhoneType(PhoneNumberType phoneNumberType) {
+        this.phoneType = phoneNumberType;
     }
 
     public Person getPerson() {
@@ -51,32 +149,6 @@ public class PersonPhone implements Serializable {
 
     public void setPerson(Person person) {
         this.person = person;
-    }
-
-    public Phone getPhone() {
-        return phone;
-    }
-
-    public PersonPhone phone(Phone phone) {
-        this.phone = phone;
-        return this;
-    }
-
-    public void setPhone(Phone phone) {
-        this.phone = phone;
-    }
-
-    public PhoneType getType() {
-        return type;
-    }
-
-    public PersonPhone type(PhoneType phoneType) {
-        this.type = phoneType;
-        return this;
-    }
-
-    public void setType(PhoneType phoneType) {
-        this.type = phoneType;
     }
 
     @Override
@@ -103,6 +175,10 @@ public class PersonPhone implements Serializable {
     public String toString() {
         return "PersonPhone{" +
             "id=" + getId() +
+            ", createUserId='" + getCreateUserId() + "'" +
+            ", createDateTime='" + getCreateDateTime() + "'" +
+            ", updateUserId='" + getUpdateUserId() + "'" +
+            ", updateDateTime='" + getUpdateDateTime() + "'" +
             "}";
     }
 }

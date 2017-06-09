@@ -24,13 +24,8 @@ public class RaceType implements Serializable {
     private Long id;
 
     @NotNull
-    @Size(max = 2)
-    @Column(name = "code", length = 2, nullable = false)
-    private String code;
-
-    @Size(max = 20)
-    @Column(name = "jhi_type", length = 20)
-    private String type;
+    @Column(name = "name", nullable = false)
+    private String name;
 
     public Long getId() {
         return id;
@@ -40,30 +35,17 @@ public class RaceType implements Serializable {
         this.id = id;
     }
 
-    public String getCode() {
-        return code;
+    public String getName() {
+        return name;
     }
 
-    public RaceType code(String code) {
-        this.code = code;
+    public RaceType name(String name) {
+        this.name = name;
         return this;
     }
 
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public RaceType type(String type) {
-        this.type = type;
-        return this;
-    }
-
-    public void setType(String type) {
-        this.type = type;
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override
@@ -90,8 +72,7 @@ public class RaceType implements Serializable {
     public String toString() {
         return "RaceType{" +
             "id=" + getId() +
-            ", code='" + getCode() + "'" +
-            ", type='" + getType() + "'" +
+            ", name='" + getName() + "'" +
             "}";
     }
 }

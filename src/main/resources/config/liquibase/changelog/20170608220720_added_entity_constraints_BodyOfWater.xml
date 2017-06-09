@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <!--
+        Added the constraints for entity BodyOfWater.
+    -->
+    <changeSet id="20170608220720-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="household_address_id"
+                                 baseTableName="body_of_water"
+                                 constraintName="fk_body_of_water_household_address_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="household_address"/>
+
+    </changeSet>
+</databaseChangeLog>

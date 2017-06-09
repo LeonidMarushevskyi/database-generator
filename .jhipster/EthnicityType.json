@@ -3,21 +3,11 @@
     "relationships": [],
     "fields": [
         {
-            "fieldName": "code",
+            "fieldName": "name",
             "fieldType": "String",
             "fieldValidateRules": [
-                "maxlength",
                 "required"
-            ],
-            "fieldValidateRulesMaxlength": 2
-        },
-        {
-            "fieldName": "type",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "maxlength"
-            ],
-            "fieldValidateRulesMaxlength": 20
+            ]
         }
     ],
     "changelogDate": "20170501195703",

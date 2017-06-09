@@ -1,0 +1,72 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "relationshipName": "eventType",
+            "otherEntityName": "relationshipEventType",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "one-to-one",
+            "relationshipName": "relationShip",
+            "otherEntityName": "applicantRelationHistoryRecord",
+            "ownerSide": false,
+            "otherEntityRelationshipName": "startEvent"
+        },
+        {
+            "relationshipType": "one-to-one",
+            "relationshipName": "relationShip",
+            "otherEntityName": "applicantRelationHistoryRecord",
+            "ownerSide": false,
+            "otherEntityRelationshipName": "endEvent"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "eventPlace",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "eventDate",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "createUserId",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength",
+                "required"
+            ],
+            "fieldValidateRulesMaxlength": 50
+        },
+        {
+            "fieldName": "createDateTime",
+            "fieldType": "ZonedDateTime",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "updateUserId",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength",
+                "required"
+            ],
+            "fieldValidateRulesMaxlength": 50
+        },
+        {
+            "fieldName": "updateDateTime",
+            "fieldType": "ZonedDateTime",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "changelogDate": "20170608220725",
+    "entityTableName": "relationship_event",
+    "dto": "no",
+    "pagination": "no",
+    "service": "no"
+}

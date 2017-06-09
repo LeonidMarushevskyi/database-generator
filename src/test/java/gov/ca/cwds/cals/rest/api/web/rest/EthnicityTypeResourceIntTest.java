@@ -37,11 +37,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = GeneratorApp.class)
 public class EthnicityTypeResourceIntTest {
 
-    private static final String DEFAULT_CODE = "AA";
-    private static final String UPDATED_CODE = "BB";
-
-    private static final String DEFAULT_TYPE = "AAAAAAAAAA";
-    private static final String UPDATED_TYPE = "BBBBBBBBBB";
+    private static final String DEFAULT_NAME = "AAAAAAAAAA";
+    private static final String UPDATED_NAME = "BBBBBBBBBB";
 
     @Autowired
     private EthnicityTypeRepository ethnicityTypeRepository;
@@ -80,8 +77,7 @@ public class EthnicityTypeResourceIntTest {
      */
     public static EthnicityType createEntity(EntityManager em) {
         EthnicityType ethnicityType = new EthnicityType()
-            .code(DEFAULT_CODE)
-            .type(DEFAULT_TYPE);
+            .name(DEFAULT_NAME);
         return ethnicityType;
     }
 
@@ -105,8 +101,7 @@ public class EthnicityTypeResourceIntTest {
         List<EthnicityType> ethnicityTypeList = ethnicityTypeRepository.findAll();
         assertThat(ethnicityTypeList).hasSize(databaseSizeBeforeCreate + 1);
         EthnicityType testEthnicityType = ethnicityTypeList.get(ethnicityTypeList.size() - 1);
-        assertThat(testEthnicityType.getCode()).isEqualTo(DEFAULT_CODE);
-        assertThat(testEthnicityType.getType()).isEqualTo(DEFAULT_TYPE);
+        assertThat(testEthnicityType.getName()).isEqualTo(DEFAULT_NAME);
     }
 
     @Test
@@ -130,10 +125,10 @@ public class EthnicityTypeResourceIntTest {
 
     @Test
     @Transactional
-    public void checkCodeIsRequired() throws Exception {
+    public void checkNameIsRequired() throws Exception {
         int databaseSizeBeforeTest = ethnicityTypeRepository.findAll().size();
         // set the field null
-        ethnicityType.setCode(null);
+        ethnicityType.setName(null);
 
         // Create the EthnicityType, which fails.
 
@@ -157,8 +152,7 @@ public class EthnicityTypeResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(ethnicityType.getId().intValue())))
-            .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE.toString())))
-            .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE.toString())));
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())));
     }
 
     @Test
@@ -172,8 +166,7 @@ public class EthnicityTypeResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(ethnicityType.getId().intValue()))
-            .andExpect(jsonPath("$.code").value(DEFAULT_CODE.toString()))
-            .andExpect(jsonPath("$.type").value(DEFAULT_TYPE.toString()));
+            .andExpect(jsonPath("$.name").value(DEFAULT_NAME.toString()));
     }
 
     @Test
@@ -194,8 +187,7 @@ public class EthnicityTypeResourceIntTest {
         // Update the ethnicityType
         EthnicityType updatedEthnicityType = ethnicityTypeRepository.findOne(ethnicityType.getId());
         updatedEthnicityType
-            .code(UPDATED_CODE)
-            .type(UPDATED_TYPE);
+            .name(UPDATED_NAME);
 
         restEthnicityTypeMockMvc.perform(put("/api/ethnicity-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -206,8 +198,7 @@ public class EthnicityTypeResourceIntTest {
         List<EthnicityType> ethnicityTypeList = ethnicityTypeRepository.findAll();
         assertThat(ethnicityTypeList).hasSize(databaseSizeBeforeUpdate);
         EthnicityType testEthnicityType = ethnicityTypeList.get(ethnicityTypeList.size() - 1);
-        assertThat(testEthnicityType.getCode()).isEqualTo(UPDATED_CODE);
-        assertThat(testEthnicityType.getType()).isEqualTo(UPDATED_TYPE);
+        assertThat(testEthnicityType.getName()).isEqualTo(UPDATED_NAME);
     }
 
     @Test

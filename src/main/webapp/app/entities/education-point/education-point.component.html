@@ -1,0 +1,84 @@
+<div>
+    <h2>
+        <span>Education Points</span>
+        <button class="btn btn-primary float-right create-education-point" [routerLink]="['/', { outlets: { popup: ['education-point-new'] } }]">
+            <span class="fa fa-plus"></span>
+            <span >
+            Create new Education Point
+            </span>
+        </button>
+    </h2>
+    <jhi-alert></jhi-alert>
+    <div class="row">
+    </div>
+    <br/>
+    <div class="table-responsive" *ngIf="educationPoints">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+            <th><span>ID</span></th>
+            <th><span>Degree</span></th>
+            <th><span>Name</span></th>
+            <th><span>Create User Id</span></th>
+            <th><span>Create Date Time</span></th>
+            <th><span>Update User Id</span></th>
+            <th><span>Update Date Time</span></th>
+            <th><span>Type</span></th>
+            <th><span>Educational Institution Address</span></th>
+            <th><span>Person</span></th>
+            <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let educationPoint of educationPoints ;trackBy: trackId">
+                <td><a [routerLink]="['../education-point', educationPoint.id ]">{{educationPoint.id}}</a></td>
+                <td>{{educationPoint.degree}}</td>
+                <td>{{educationPoint.name}}</td>
+                <td>{{educationPoint.createUserId}}</td>
+                <td>{{educationPoint.createDateTime | date:'medium'}}</td>
+                <td>{{educationPoint.updateUserId}}</td>
+                <td>{{educationPoint.updateDateTime | date:'medium'}}</td>
+                <td>
+                    <div *ngIf="educationPoint.type">
+                        <a [routerLink]="['../education-level-type', educationPoint.type?.id ]" >{{educationPoint.type?.id}}</a>
+                    </div>
+                </td>
+                <td>
+                    <div *ngIf="educationPoint.educationalInstitutionAddress">
+                        <a [routerLink]="['../address', educationPoint.educationalInstitutionAddress?.id ]" >{{educationPoint.educationalInstitutionAddress?.id}}</a>
+                    </div>
+                </td>
+                <td>
+                    <div *ngIf="educationPoint.person">
+                        <a [routerLink]="['../person', educationPoint.person?.id ]" >{{educationPoint.person?.id}}</a>
+                    </div>
+                </td>
+                <td class="text-right">
+                    <div class="btn-group flex-btn-group-container">
+                        <button type="submit"
+                                [routerLink]="['../education-point', educationPoint.id ]"
+                                class="btn btn-info btn-sm">
+                            <span class="fa fa-eye"></span>
+                            <span class="hidden-md-down">View</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', { outlets: { popup: 'education-point/'+ educationPoint.id + '/edit'} }]"
+                                replaceUrl="true"
+                                class="btn btn-primary btn-sm">
+                            <span class="fa fa-pencil"></span>
+                            <span class="hidden-md-down">Edit</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', { outlets: { popup: 'education-point/'+ educationPoint.id + '/delete'} }]"
+                                replaceUrl="true"
+                                class="btn btn-danger btn-sm">
+                            <span class="fa fa-remove"></span>
+                            <span class="hidden-md-down">Delete</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

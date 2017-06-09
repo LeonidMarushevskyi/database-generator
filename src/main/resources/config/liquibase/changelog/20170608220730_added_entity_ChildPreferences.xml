@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <property name="now" value="now()" dbms="h2"/>
+
+    <property name="now" value="current_timestamp" dbms="postgresql"/>
+
+    <property name="floatType" value="float4" dbms="postgresql, h2"/>
+    <property name="floatType" value="float" dbms="mysql, oracle, mssql"/>
+
+    <!--
+        Added the entity ChildPreferences.
+    -->
+    <changeSet id="20170608220730-1" author="jhipster">
+        <createTable tableName="child_preferences">
+            <column name="id" type="bigint" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="create_user_id" type="varchar(50)">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="create_date_time" type="timestamp">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="update_user_id" type="varchar(50)">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="update_date_time" type="timestamp">
+                <constraints nullable="false" />
+            </column>
+
+            <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
+        </createTable>
+        <dropDefaultValue tableName="child_preferences" columnName="create_date_time" columnDataType="datetime"/>
+        <dropDefaultValue tableName="child_preferences" columnName="update_date_time" columnDataType="datetime"/>
+        
+        <createTable tableName="child_preferences_age_group_types">
+            <column name="age_group_types_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="child_preferences_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="child_preferences_id, age_group_types_id" tableName="child_preferences_age_group_types"/>
+        
+        <createTable tableName="child_preferences_sibling_group_types">
+            <column name="sibling_group_types_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="child_preferences_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="child_preferences_id, sibling_group_types_id" tableName="child_preferences_sibling_group_types"/>
+        
+    </changeSet>
+</databaseChangeLog>

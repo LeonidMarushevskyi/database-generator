@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <property name="now" value="now()" dbms="h2"/>
+
+    <property name="now" value="current_timestamp" dbms="postgresql"/>
+
+    <property name="floatType" value="float4" dbms="postgresql, h2"/>
+    <property name="floatType" value="float" dbms="mysql, oracle, mssql"/>
+
+    <!--
+        Added the entity CriminalRecord.
+    -->
+    <changeSet id="20170608220659-1" author="jhipster">
+        <createTable tableName="criminal_record">
+            <column name="id" type="bigint" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="offense_description" type="clob">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="offense_date" type="date">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="offense_explanation" type="clob">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="city" type="varchar(100)">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="create_user_id" type="varchar(50)">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="create_date_time" type="timestamp">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="update_user_id" type="varchar(50)">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="update_date_time" type="timestamp">
+                <constraints nullable="false" />
+            </column>
+            <column name="state_id" type="bigint">
+                <constraints unique="true" nullable="true" />
+            </column>
+            <column name="person_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+
+            <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
+        </createTable>
+        <dropDefaultValue tableName="criminal_record" columnName="create_date_time" columnDataType="datetime"/>
+        <dropDefaultValue tableName="criminal_record" columnName="update_date_time" columnDataType="datetime"/>
+        
+    </changeSet>
+</databaseChangeLog>

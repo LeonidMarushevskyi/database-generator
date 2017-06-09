@@ -5,8 +5,6 @@ import gov.ca.cwds.cals.rest.api.domain.Address;
 
 import gov.ca.cwds.cals.rest.api.repository.AddressRepository;
 import gov.ca.cwds.cals.rest.api.web.rest.util.HeaderUtil;
-import gov.ca.cwds.cals.rest.api.service.dto.AddressDTO;
-import gov.ca.cwds.cals.rest.api.service.mapper.AddressMapper;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,30 +31,25 @@ public class AddressResource {
         
     private final AddressRepository addressRepository;
 
-    private final AddressMapper addressMapper;
-
-    public AddressResource(AddressRepository addressRepository, AddressMapper addressMapper) {
+    public AddressResource(AddressRepository addressRepository) {
         this.addressRepository = addressRepository;
-        this.addressMapper = addressMapper;
     }
 
     /**
      * POST  /addresses : Create a new address.
      *
-     * @param addressDTO the addressDTO to create
-     * @return the ResponseEntity with status 201 (Created) and with body the new addressDTO, or with status 400 (Bad Request) if the address has already an ID
+     * @param address the address to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new address, or with status 400 (Bad Request) if the address has already an ID
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PostMapping("/addresses")
     @Timed
-    public ResponseEntity<AddressDTO> createAddress(@Valid @RequestBody AddressDTO addressDTO) throws URISyntaxException {
-        log.debug("REST request to save Address : {}", addressDTO);
-        if (addressDTO.getId() != null) {
+    public ResponseEntity<Address> createAddress(@Valid @RequestBody Address address) throws URISyntaxException {
+        log.debug("REST request to save Address : {}", address);
+        if (address.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new address cannot already have an ID")).body(null);
         }
-        Address address = addressMapper.toEntity(addressDTO);
-        address = addressRepository.save(address);
-        AddressDTO result = addressMapper.toDto(address);
+        Address result = addressRepository.save(address);
         return ResponseEntity.created(new URI("/api/addresses/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -65,24 +58,22 @@ public class AddressResource {
     /**
      * PUT  /addresses : Updates an existing address.
      *
-     * @param addressDTO the addressDTO to update
-     * @return the ResponseEntity with status 200 (OK) and with body the updated addressDTO,
-     * or with status 400 (Bad Request) if the addressDTO is not valid,
-     * or with status 500 (Internal Server Error) if the addressDTO couldnt be updated
+     * @param address the address to update
+     * @return the ResponseEntity with status 200 (OK) and with body the updated address,
+     * or with status 400 (Bad Request) if the address is not valid,
+     * or with status 500 (Internal Server Error) if the address couldnt be updated
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PutMapping("/addresses")
     @Timed
-    public ResponseEntity<AddressDTO> updateAddress(@Valid @RequestBody AddressDTO addressDTO) throws URISyntaxException {
-        log.debug("REST request to update Address : {}", addressDTO);
-        if (addressDTO.getId() == null) {
-            return createAddress(addressDTO);
+    public ResponseEntity<Address> updateAddress(@Valid @RequestBody Address address) throws URISyntaxException {
+        log.debug("REST request to update Address : {}", address);
+        if (address.getId() == null) {
+            return createAddress(address);
         }
-        Address address = addressMapper.toEntity(addressDTO);
-        address = addressRepository.save(address);
-        AddressDTO result = addressMapper.toDto(address);
+        Address result = addressRepository.save(address);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, addressDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, address.getId().toString()))
             .body(result);
     }
 
@@ -93,31 +84,30 @@ public class AddressResource {
      */
     @GetMapping("/addresses")
     @Timed
-    public List<AddressDTO> getAllAddresses() {
+    public List<Address> getAllAddresses() {
         log.debug("REST request to get all Addresses");
         List<Address> addresses = addressRepository.findAll();
-        return addressMapper.toDto(addresses);
+        return addresses;
     }
 
     /**
      * GET  /addresses/:id : get the "id" address.
      *
-     * @param id the id of the addressDTO to retrieve
-     * @return the ResponseEntity with status 200 (OK) and with body the addressDTO, or with status 404 (Not Found)
+     * @param id the id of the address to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the address, or with status 404 (Not Found)
      */
     @GetMapping("/addresses/{id}")
     @Timed
-    public ResponseEntity<AddressDTO> getAddress(@PathVariable Long id) {
+    public ResponseEntity<Address> getAddress(@PathVariable Long id) {
         log.debug("REST request to get Address : {}", id);
         Address address = addressRepository.findOne(id);
-        AddressDTO addressDTO = addressMapper.toDto(address);
-        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(addressDTO));
+        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(address));
     }
 
     /**
      * DELETE  /addresses/:id : delete the "id" address.
      *
-     * @param id the id of the addressDTO to delete
+     * @param id the id of the address to delete
      * @return the ResponseEntity with status 200 (OK)
      */
     @DeleteMapping("/addresses/{id}")

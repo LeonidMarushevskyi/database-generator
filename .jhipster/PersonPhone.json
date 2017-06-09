@@ -2,30 +2,63 @@
     "fluentMethods": true,
     "relationships": [
         {
-            "relationshipName": "person",
-            "otherEntityName": "person",
-            "relationshipType": "many-to-one",
-            "otherEntityField": "id"
-        },
-        {
             "relationshipType": "one-to-one",
-            "relationshipName": "phone",
-            "otherEntityName": "phone",
+            "relationshipName": "phoneNumber",
+            "otherEntityName": "phoneNumber",
             "otherEntityField": "id",
             "ownerSide": true,
             "otherEntityRelationshipName": "personPhone"
         },
         {
             "relationshipType": "many-to-one",
-            "relationshipName": "type",
-            "otherEntityName": "phoneType",
+            "relationshipName": "phoneType",
+            "otherEntityName": "phoneNumberType",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "relationshipName": "person",
+            "otherEntityName": "person",
             "otherEntityField": "id"
         }
     ],
-    "fields": [],
+    "fields": [
+        {
+            "fieldName": "createUserId",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength",
+                "required"
+            ],
+            "fieldValidateRulesMaxlength": 50
+        },
+        {
+            "fieldName": "createDateTime",
+            "fieldType": "ZonedDateTime",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "updateUserId",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength",
+                "required"
+            ],
+            "fieldValidateRulesMaxlength": 50
+        },
+        {
+            "fieldName": "updateDateTime",
+            "fieldType": "ZonedDateTime",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
     "changelogDate": "20170501195703",
     "entityTableName": "person_phone",
-    "dto": "mapstruct",
+    "dto": "no",
     "pagination": "no",
     "service": "no"
 }

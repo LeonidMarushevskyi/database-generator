@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <!--
+        Added the constraints for entity Relationship.
+    -->
+    <changeSet id="20170608220723-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="from_id"
+                                 baseTableName="relationship"
+                                 constraintName="fk_relationship_from_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="person"/>
+
+        <addForeignKeyConstraint baseColumnNames="to_id"
+                                 baseTableName="relationship"
+                                 constraintName="fk_relationship_to_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="person"/>
+
+        <addForeignKeyConstraint baseColumnNames="relationship_type_id"
+                                 baseTableName="relationship"
+                                 constraintName="fk_relationship_relationship_type_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="relationship_type"/>
+
+    </changeSet>
+</databaseChangeLog>

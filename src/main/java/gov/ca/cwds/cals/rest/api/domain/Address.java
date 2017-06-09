@@ -7,6 +7,7 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.ZonedDateTime;
 import java.util.Objects;
 
 /**
@@ -51,11 +52,29 @@ public class Address implements Serializable {
     @Column(name = "longitude", precision=10, scale=2)
     private BigDecimal longitude;
 
-    @Column(name = "lattitude", precision=10, scale=2)
-    private BigDecimal lattitude;
+    @Column(name = "latitude", precision=10, scale=2)
+    private BigDecimal latitude;
 
     @Column(name = "deliverable")
     private Boolean deliverable;
+
+    @NotNull
+    @Size(max = 50)
+    @Column(name = "create_user_id", length = 50, nullable = false)
+    private String createUserId;
+
+    @NotNull
+    @Column(name = "create_date_time", nullable = false)
+    private ZonedDateTime createDateTime;
+
+    @NotNull
+    @Size(max = 50)
+    @Column(name = "update_user_id", length = 50, nullable = false)
+    private String updateUserId;
+
+    @NotNull
+    @Column(name = "update_date_time", nullable = false)
+    private ZonedDateTime updateDateTime;
 
     public Long getId() {
         return id;
@@ -143,17 +162,17 @@ public class Address implements Serializable {
         this.longitude = longitude;
     }
 
-    public BigDecimal getLattitude() {
-        return lattitude;
+    public BigDecimal getLatitude() {
+        return latitude;
     }
 
-    public Address lattitude(BigDecimal lattitude) {
-        this.lattitude = lattitude;
+    public Address latitude(BigDecimal latitude) {
+        this.latitude = latitude;
         return this;
     }
 
-    public void setLattitude(BigDecimal lattitude) {
-        this.lattitude = lattitude;
+    public void setLatitude(BigDecimal latitude) {
+        this.latitude = latitude;
     }
 
     public Boolean isDeliverable() {
@@ -167,6 +186,58 @@ public class Address implements Serializable {
 
     public void setDeliverable(Boolean deliverable) {
         this.deliverable = deliverable;
+    }
+
+    public String getCreateUserId() {
+        return createUserId;
+    }
+
+    public Address createUserId(String createUserId) {
+        this.createUserId = createUserId;
+        return this;
+    }
+
+    public void setCreateUserId(String createUserId) {
+        this.createUserId = createUserId;
+    }
+
+    public ZonedDateTime getCreateDateTime() {
+        return createDateTime;
+    }
+
+    public Address createDateTime(ZonedDateTime createDateTime) {
+        this.createDateTime = createDateTime;
+        return this;
+    }
+
+    public void setCreateDateTime(ZonedDateTime createDateTime) {
+        this.createDateTime = createDateTime;
+    }
+
+    public String getUpdateUserId() {
+        return updateUserId;
+    }
+
+    public Address updateUserId(String updateUserId) {
+        this.updateUserId = updateUserId;
+        return this;
+    }
+
+    public void setUpdateUserId(String updateUserId) {
+        this.updateUserId = updateUserId;
+    }
+
+    public ZonedDateTime getUpdateDateTime() {
+        return updateDateTime;
+    }
+
+    public Address updateDateTime(ZonedDateTime updateDateTime) {
+        this.updateDateTime = updateDateTime;
+        return this;
+    }
+
+    public void setUpdateDateTime(ZonedDateTime updateDateTime) {
+        this.updateDateTime = updateDateTime;
     }
 
     @Override
@@ -199,8 +270,12 @@ public class Address implements Serializable {
             ", zipCode='" + getZipCode() + "'" +
             ", zipSuffixCode='" + getZipSuffixCode() + "'" +
             ", longitude='" + getLongitude() + "'" +
-            ", lattitude='" + getLattitude() + "'" +
+            ", latitude='" + getLatitude() + "'" +
             ", deliverable='" + isDeliverable() + "'" +
+            ", createUserId='" + getCreateUserId() + "'" +
+            ", createDateTime='" + getCreateDateTime() + "'" +
+            ", updateUserId='" + getUpdateUserId() + "'" +
+            ", updateDateTime='" + getUpdateDateTime() + "'" +
             "}";
     }
 }

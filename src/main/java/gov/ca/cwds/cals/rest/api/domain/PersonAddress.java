@@ -4,7 +4,9 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.time.ZonedDateTime;
 import java.util.Objects;
 
 /**
@@ -22,15 +24,32 @@ public class PersonAddress implements Serializable {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
+    @NotNull
+    @Size(max = 50)
+    @Column(name = "create_user_id", length = 50, nullable = false)
+    private String createUserId;
+
+    @NotNull
+    @Column(name = "create_date_time", nullable = false)
+    private ZonedDateTime createDateTime;
+
+    @NotNull
+    @Size(max = 50)
+    @Column(name = "update_user_id", length = 50, nullable = false)
+    private String updateUserId;
+
+    @NotNull
+    @Column(name = "update_date_time", nullable = false)
+    private ZonedDateTime updateDateTime;
+
     @ManyToOne
     private Person person;
 
-    @OneToOne
-    @JoinColumn(unique = true)
-    private Address race;
+    @ManyToOne
+    private AddressType addressType;
 
     @ManyToOne
-    private AddressType type;
+    private Address address;
 
     public Long getId() {
         return id;
@@ -38,6 +57,58 @@ public class PersonAddress implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getCreateUserId() {
+        return createUserId;
+    }
+
+    public PersonAddress createUserId(String createUserId) {
+        this.createUserId = createUserId;
+        return this;
+    }
+
+    public void setCreateUserId(String createUserId) {
+        this.createUserId = createUserId;
+    }
+
+    public ZonedDateTime getCreateDateTime() {
+        return createDateTime;
+    }
+
+    public PersonAddress createDateTime(ZonedDateTime createDateTime) {
+        this.createDateTime = createDateTime;
+        return this;
+    }
+
+    public void setCreateDateTime(ZonedDateTime createDateTime) {
+        this.createDateTime = createDateTime;
+    }
+
+    public String getUpdateUserId() {
+        return updateUserId;
+    }
+
+    public PersonAddress updateUserId(String updateUserId) {
+        this.updateUserId = updateUserId;
+        return this;
+    }
+
+    public void setUpdateUserId(String updateUserId) {
+        this.updateUserId = updateUserId;
+    }
+
+    public ZonedDateTime getUpdateDateTime() {
+        return updateDateTime;
+    }
+
+    public PersonAddress updateDateTime(ZonedDateTime updateDateTime) {
+        this.updateDateTime = updateDateTime;
+        return this;
+    }
+
+    public void setUpdateDateTime(ZonedDateTime updateDateTime) {
+        this.updateDateTime = updateDateTime;
     }
 
     public Person getPerson() {
@@ -53,30 +124,30 @@ public class PersonAddress implements Serializable {
         this.person = person;
     }
 
-    public Address getRace() {
-        return race;
+    public AddressType getAddressType() {
+        return addressType;
     }
 
-    public PersonAddress race(Address address) {
-        this.race = address;
+    public PersonAddress addressType(AddressType addressType) {
+        this.addressType = addressType;
         return this;
     }
 
-    public void setRace(Address address) {
-        this.race = address;
+    public void setAddressType(AddressType addressType) {
+        this.addressType = addressType;
     }
 
-    public AddressType getType() {
-        return type;
+    public Address getAddress() {
+        return address;
     }
 
-    public PersonAddress type(AddressType addressType) {
-        this.type = addressType;
+    public PersonAddress address(Address address) {
+        this.address = address;
         return this;
     }
 
-    public void setType(AddressType addressType) {
-        this.type = addressType;
+    public void setAddress(Address address) {
+        this.address = address;
     }
 
     @Override
@@ -103,6 +174,10 @@ public class PersonAddress implements Serializable {
     public String toString() {
         return "PersonAddress{" +
             "id=" + getId() +
+            ", createUserId='" + getCreateUserId() + "'" +
+            ", createDateTime='" + getCreateDateTime() + "'" +
+            ", updateUserId='" + getUpdateUserId() + "'" +
+            ", updateDateTime='" + getUpdateDateTime() + "'" +
             "}";
     }
 }

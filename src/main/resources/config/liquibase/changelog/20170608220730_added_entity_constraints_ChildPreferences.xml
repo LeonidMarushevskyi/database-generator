@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <!--
+        Added the constraints for entity ChildPreferences.
+    -->
+    <changeSet id="20170608220730-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="child_preferences_id"
+                                 baseTableName="child_preferences_age_group_types"
+                                 constraintName="fk_child_preferences_age_group_types_child_preferences_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="child_preferences"/>
+        <addForeignKeyConstraint baseColumnNames="age_group_types_id"
+                                 baseTableName="child_preferences_age_group_types"
+                                 constraintName="fk_child_preferences_age_group_types_age_group_types_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="age_group_type"/>
+        
+        <addForeignKeyConstraint baseColumnNames="child_preferences_id"
+                                 baseTableName="child_preferences_sibling_group_types"
+                                 constraintName="fk_child_preferences_sibling_group_types_child_preferences_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="child_preferences"/>
+        <addForeignKeyConstraint baseColumnNames="sibling_group_types_id"
+                                 baseTableName="child_preferences_sibling_group_types"
+                                 constraintName="fk_child_preferences_sibling_group_types_sibling_group_types_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="sibling_group_type"/>
+        
+    </changeSet>
+</databaseChangeLog>

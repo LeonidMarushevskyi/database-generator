@@ -1,0 +1,71 @@
+
+<div *ngIf="householdAdult">
+    <h2><span>Household Adult</span> {{householdAdult.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span>Out Of State Disclosure State</span></dt>
+        <dd>
+            <span>{{householdAdult.outOfStateDisclosureState}}</span>
+        </dd>
+        <dt><span>Criminal Record Statement Question 1</span></dt>
+        <dd>
+            <span>{{householdAdult.criminalRecordStatementQuestion1}}</span>
+        </dd>
+        <dt><span>Criminal Record Statement Question 2</span></dt>
+        <dd>
+            <span>{{householdAdult.criminalRecordStatementQuestion2}}</span>
+        </dd>
+        <dt><span>Criminal Record Statement Question 3</span></dt>
+        <dd>
+            <span>{{householdAdult.criminalRecordStatementQuestion3}}</span>
+        </dd>
+        <dt><span>Create User Id</span></dt>
+        <dd>
+            <span>{{householdAdult.createUserId}}</span>
+        </dd>
+        <dt><span>Create Date Time</span></dt>
+        <dd>
+            <span>{{householdAdult.createDateTime | date:'medium'}}</span>
+        </dd>
+        <dt><span>Update User Id</span></dt>
+        <dd>
+            <span>{{householdAdult.updateUserId}}</span>
+        </dd>
+        <dt><span>Update Date Time</span></dt>
+        <dd>
+            <span>{{householdAdult.updateDateTime | date:'medium'}}</span>
+        </dd>
+        <dt><span>Person</span></dt>
+        <dd>
+            <div *ngIf="householdAdult.person">
+                <a [routerLink]="['/person', householdAdult.person?.id]">{{householdAdult.person?.id}}</a>
+            </div>
+        </dd>
+        <dt><span>Household</span></dt>
+        <dd>
+            <div *ngIf="householdAdult.household">
+                <a [routerLink]="['/household', householdAdult.household?.id]">{{householdAdult.household?.id}}</a>
+            </div>
+        </dd>
+        <dt><span>Other States</span></dt>
+        <dd>
+            <span *ngFor="let otherStates of householdAdult.otherStates; let last = last">
+                <a [routerLink]="['/state-type', otherStates?.id ]">{{otherStates.id}}</a>{{last ? '' : ', '}}
+            </span>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            (click)="previousState()"
+            class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span> Back</span>
+    </button>
+
+    <button type="button"
+            [routerLink]="['/', { outlets: { popup: 'household-adult/'+ householdAdult.id + '/edit'} }]"
+            replaceUrl="true"
+            class="btn btn-primary">
+        <span class="fa fa-pencil"></span>&nbsp;<span> Edit</span>
+    </button>
+</div>

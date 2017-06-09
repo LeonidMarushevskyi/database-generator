@@ -8,11 +8,46 @@
     -->
     <changeSet id="20170501195703-2" author="jhipster">
         
-        <addForeignKeyConstraint baseColumnNames="ethnicity_id"
+        <addForeignKeyConstraint baseColumnNames="application_id"
                                  baseTableName="person"
-                                 constraintName="fk_person_ethnicity_id"
+                                 constraintName="fk_person_application_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="person_ethnicity"/>
+                                 referencedTableName="application"/>
 
+        <addForeignKeyConstraint baseColumnNames="household_id"
+                                 baseTableName="person"
+                                 constraintName="fk_person_household_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="household"/>
+
+        <addForeignKeyConstraint baseColumnNames="education_highest_level_id"
+                                 baseTableName="person"
+                                 constraintName="fk_person_education_highest_level_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="education_level_type"/>
+
+        <addForeignKeyConstraint baseColumnNames="gender_id"
+                                 baseTableName="person"
+                                 constraintName="fk_person_gender_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="gender_type"/>
+
+        <addForeignKeyConstraint baseColumnNames="race_id"
+                                 baseTableName="person"
+                                 constraintName="fk_person_race_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="race_type"/>
+
+        <addForeignKeyConstraint baseColumnNames="people_id"
+                                 baseTableName="person_ethnicities"
+                                 constraintName="fk_person_ethnicities_people_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="person"/>
+        <addForeignKeyConstraint baseColumnNames="ethnicities_id"
+                                 baseTableName="person_ethnicities"
+                                 constraintName="fk_person_ethnicities_ethnicities_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="ethnicity_type"/>
+        
     </changeSet>
 </databaseChangeLog>

@@ -1,0 +1,149 @@
+<form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+
+    <div class="modal-header">
+        <h4 class="modal-title" id="myCriminalRecordLabel">Create or edit a Criminal Record</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                (click)="clear()">&times;</button>
+    </div>
+    <div class="modal-body">
+        <jhi-alert-error></jhi-alert-error>
+        <div class="form-group" [hidden]="!criminalRecord.id">
+            <label for="id">ID</label>
+            <input type="text" class="form-control" id="id" name="id"
+                   [(ngModel)]="criminalRecord.id" readonly />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_offenseDescription">Offense Description</label>
+            <textarea class="form-control" name="offenseDescription" id="field_offenseDescription"
+                [(ngModel)]="criminalRecord.offenseDescription" required ></textarea>
+            <div [hidden]="!(editForm.controls.offenseDescription?.dirty && editForm.controls.offenseDescription?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.offenseDescription?.errors?.required">
+                   This field is required.
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_offenseDate">Offense Date</label>
+            <div class="input-group">
+                <input id="field_offenseDate" type="text" class="form-control" name="offenseDate" ngbDatepicker  #offenseDateDp="ngbDatepicker" [(ngModel)]="criminalRecord.offenseDate"
+                />
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-default" (click)="offenseDateDp.toggle()"><i class="fa fa-calendar"></i></button>
+                </span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_offenseExplanation">Offense Explanation</label>
+            <textarea class="form-control" name="offenseExplanation" id="field_offenseExplanation"
+                [(ngModel)]="criminalRecord.offenseExplanation" required ></textarea>
+            <div [hidden]="!(editForm.controls.offenseExplanation?.dirty && editForm.controls.offenseExplanation?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.offenseExplanation?.errors?.required">
+                   This field is required.
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_city">City</label>
+            <input type="text" class="form-control" name="city" id="field_city"
+                [(ngModel)]="criminalRecord.city"
+            maxlength="100" />
+            <div [hidden]="!(editForm.controls.city?.dirty && editForm.controls.city?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.city?.errors?.maxlength">
+                   This field cannot be longer than 100 characters.
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_createUserId">Create User Id</label>
+            <input type="text" class="form-control" name="createUserId" id="field_createUserId"
+                [(ngModel)]="criminalRecord.createUserId"
+            required maxlength="50" />
+            <div [hidden]="!(editForm.controls.createUserId?.dirty && editForm.controls.createUserId?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.createUserId?.errors?.required">
+                   This field is required.
+                </small>
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.createUserId?.errors?.maxlength">
+                   This field cannot be longer than 50 characters.
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_createDateTime">Create Date Time</label>
+            <div class="d-flex">
+                <input id="field_createDateTime" type="datetime-local" class="form-control" name="createDateTime" [(ngModel)]="criminalRecord.createDateTime"
+                required  />
+            </div>
+            <div [hidden]="!(editForm.controls.createDateTime?.dirty && editForm.controls.createDateTime?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.createDateTime?.errors?.required">
+                   This field is required.
+                </small>
+                <small class="form-text text-danger"
+                    [hidden]="!editForm.controls.createDateTime?.errors?.ZonedDateTimelocal">
+                    This field should be a date and time.
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_updateUserId">Update User Id</label>
+            <input type="text" class="form-control" name="updateUserId" id="field_updateUserId"
+                [(ngModel)]="criminalRecord.updateUserId"
+            required maxlength="50" />
+            <div [hidden]="!(editForm.controls.updateUserId?.dirty && editForm.controls.updateUserId?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.updateUserId?.errors?.required">
+                   This field is required.
+                </small>
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.updateUserId?.errors?.maxlength">
+                   This field cannot be longer than 50 characters.
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_updateDateTime">Update Date Time</label>
+            <div class="d-flex">
+                <input id="field_updateDateTime" type="datetime-local" class="form-control" name="updateDateTime" [(ngModel)]="criminalRecord.updateDateTime"
+                required  />
+            </div>
+            <div [hidden]="!(editForm.controls.updateDateTime?.dirty && editForm.controls.updateDateTime?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.updateDateTime?.errors?.required">
+                   This field is required.
+                </small>
+                <small class="form-text text-danger"
+                    [hidden]="!editForm.controls.updateDateTime?.errors?.ZonedDateTimelocal">
+                    This field should be a date and time.
+                </small>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="field_state">State</label>
+            <select class="form-control" id="field_state" name="state" [(ngModel)]="criminalRecord.state">
+                <option [ngValue]="null"></option>
+                <option [ngValue]="stateTypeOption.id === criminalRecord.state?.id ? criminalRecord.state : stateTypeOption" *ngFor="let stateTypeOption of states; trackBy: trackStateTypeById">{{stateTypeOption.id}}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="field_person">Person</label>
+            <select class="form-control" id="field_person" name="person" [(ngModel)]="criminalRecord.person" >
+                <option [ngValue]="null"></option>
+                <option [ngValue]="householdAdultOption.id === criminalRecord.person?.id ? criminalRecord.person : householdAdultOption" *ngFor="let householdAdultOption of householdadults; trackBy: trackHouseholdAdultById">{{householdAdultOption.id}}</option>
+            </select>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" (click)="clear()">
+            <span class="fa fa-ban"></span>&nbsp;<span>Cancel</span>
+        </button>
+        <button type="submit" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+            <span class="fa fa-save"></span>&nbsp;<span>Save</span>
+        </button>
+    </div>
+</form>

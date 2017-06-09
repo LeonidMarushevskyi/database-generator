@@ -3,9 +3,10 @@ package gov.ca.cwds.cals.rest.api.web.rest;
 import gov.ca.cwds.cals.rest.api.GeneratorApp;
 
 import gov.ca.cwds.cals.rest.api.domain.Person;
+import gov.ca.cwds.cals.rest.api.domain.GenderType;
+import gov.ca.cwds.cals.rest.api.domain.RaceType;
+import gov.ca.cwds.cals.rest.api.domain.EthnicityType;
 import gov.ca.cwds.cals.rest.api.repository.PersonRepository;
-import gov.ca.cwds.cals.rest.api.service.dto.PersonDTO;
-import gov.ca.cwds.cals.rest.api.service.mapper.PersonMapper;
 import gov.ca.cwds.cals.rest.api.web.rest.errors.ExceptionTranslator;
 
 import org.junit.Before;
@@ -24,9 +25,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.time.LocalDate;
+import java.time.Instant;
+import java.time.ZonedDateTime;
+import java.time.ZoneOffset;
 import java.time.ZoneId;
 import java.util.List;
 
+import static gov.ca.cwds.cals.rest.api.web.rest.TestUtil.sameInstant;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -47,23 +52,32 @@ public class PersonResourceIntTest {
     private static final String DEFAULT_LAST_NAME = "AAAAAAAAAA";
     private static final String UPDATED_LAST_NAME = "BBBBBBBBBB";
 
-    private static final String DEFAULT_GENDER = "AAAAAAAAAA";
-    private static final String UPDATED_GENDER = "BBBBBBBBBB";
-
-    private static final Integer DEFAULT_AGE = 1;
-    private static final Integer UPDATED_AGE = 2;
-
-    private static final LocalDate DEFAULT_DATE_OF_BIRTH = LocalDate.ofEpochDay(0L);
-    private static final LocalDate UPDATED_DATE_OF_BIRTH = LocalDate.now(ZoneId.systemDefault());
+    private static final String DEFAULT_MIDDLE_NAME = "AAAAAAAAAA";
+    private static final String UPDATED_MIDDLE_NAME = "BBBBBBBBBB";
 
     private static final String DEFAULT_SSN = "AAAAAAAAAA";
     private static final String UPDATED_SSN = "BBBBBBBBBB";
 
-    @Autowired
-    private PersonRepository personRepository;
+    private static final LocalDate DEFAULT_DATE_OF_BIRTH = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_DATE_OF_BIRTH = LocalDate.now(ZoneId.systemDefault());
+
+    private static final String DEFAULT_DRIVERS_LICENSE_NUMBER = "AAAAAAAAAA";
+    private static final String UPDATED_DRIVERS_LICENSE_NUMBER = "BBBBBBBBBB";
+
+    private static final String DEFAULT_CREATE_USER_ID = "AAAAAAAAAA";
+    private static final String UPDATED_CREATE_USER_ID = "BBBBBBBBBB";
+
+    private static final ZonedDateTime DEFAULT_CREATE_DATE_TIME = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
+    private static final ZonedDateTime UPDATED_CREATE_DATE_TIME = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
+
+    private static final String DEFAULT_UPDATE_USER_ID = "AAAAAAAAAA";
+    private static final String UPDATED_UPDATE_USER_ID = "BBBBBBBBBB";
+
+    private static final ZonedDateTime DEFAULT_UPDATE_DATE_TIME = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
+    private static final ZonedDateTime UPDATED_UPDATE_DATE_TIME = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
 
     @Autowired
-    private PersonMapper personMapper;
+    private PersonRepository personRepository;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -84,7 +98,7 @@ public class PersonResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        PersonResource personResource = new PersonResource(personRepository, personMapper);
+        PersonResource personResource = new PersonResource(personRepository);
         this.restPersonMockMvc = MockMvcBuilders.standaloneSetup(personResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -101,10 +115,29 @@ public class PersonResourceIntTest {
         Person person = new Person()
             .firstName(DEFAULT_FIRST_NAME)
             .lastName(DEFAULT_LAST_NAME)
-            .gender(DEFAULT_GENDER)
-            .age(DEFAULT_AGE)
+            .middleName(DEFAULT_MIDDLE_NAME)
+            .ssn(DEFAULT_SSN)
             .dateOfBirth(DEFAULT_DATE_OF_BIRTH)
-            .ssn(DEFAULT_SSN);
+            .driversLicenseNumber(DEFAULT_DRIVERS_LICENSE_NUMBER)
+            .createUserId(DEFAULT_CREATE_USER_ID)
+            .createDateTime(DEFAULT_CREATE_DATE_TIME)
+            .updateUserId(DEFAULT_UPDATE_USER_ID)
+            .updateDateTime(DEFAULT_UPDATE_DATE_TIME);
+        // Add required entity
+        GenderType gender = GenderTypeResourceIntTest.createEntity(em);
+        em.persist(gender);
+        em.flush();
+        person.setGender(gender);
+        // Add required entity
+        RaceType race = RaceTypeResourceIntTest.createEntity(em);
+        em.persist(race);
+        em.flush();
+        person.setRace(race);
+        // Add required entity
+        EthnicityType ethnicities = EthnicityTypeResourceIntTest.createEntity(em);
+        em.persist(ethnicities);
+        em.flush();
+        person.getEthnicities().add(ethnicities);
         return person;
     }
 
@@ -119,10 +152,9 @@ public class PersonResourceIntTest {
         int databaseSizeBeforeCreate = personRepository.findAll().size();
 
         // Create the Person
-        PersonDTO personDTO = personMapper.toDto(person);
         restPersonMockMvc.perform(post("/api/people")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(personDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(person)))
             .andExpect(status().isCreated());
 
         // Validate the Person in the database
@@ -131,10 +163,14 @@ public class PersonResourceIntTest {
         Person testPerson = personList.get(personList.size() - 1);
         assertThat(testPerson.getFirstName()).isEqualTo(DEFAULT_FIRST_NAME);
         assertThat(testPerson.getLastName()).isEqualTo(DEFAULT_LAST_NAME);
-        assertThat(testPerson.getGender()).isEqualTo(DEFAULT_GENDER);
-        assertThat(testPerson.getAge()).isEqualTo(DEFAULT_AGE);
-        assertThat(testPerson.getDateOfBirth()).isEqualTo(DEFAULT_DATE_OF_BIRTH);
+        assertThat(testPerson.getMiddleName()).isEqualTo(DEFAULT_MIDDLE_NAME);
         assertThat(testPerson.getSsn()).isEqualTo(DEFAULT_SSN);
+        assertThat(testPerson.getDateOfBirth()).isEqualTo(DEFAULT_DATE_OF_BIRTH);
+        assertThat(testPerson.getDriversLicenseNumber()).isEqualTo(DEFAULT_DRIVERS_LICENSE_NUMBER);
+        assertThat(testPerson.getCreateUserId()).isEqualTo(DEFAULT_CREATE_USER_ID);
+        assertThat(testPerson.getCreateDateTime()).isEqualTo(DEFAULT_CREATE_DATE_TIME);
+        assertThat(testPerson.getUpdateUserId()).isEqualTo(DEFAULT_UPDATE_USER_ID);
+        assertThat(testPerson.getUpdateDateTime()).isEqualTo(DEFAULT_UPDATE_DATE_TIME);
     }
 
     @Test
@@ -144,12 +180,11 @@ public class PersonResourceIntTest {
 
         // Create the Person with an existing ID
         person.setId(1L);
-        PersonDTO personDTO = personMapper.toDto(person);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restPersonMockMvc.perform(post("/api/people")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(personDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(person)))
             .andExpect(status().isBadRequest());
 
         // Validate the Alice in the database
@@ -165,11 +200,10 @@ public class PersonResourceIntTest {
         person.setFirstName(null);
 
         // Create the Person, which fails.
-        PersonDTO personDTO = personMapper.toDto(person);
 
         restPersonMockMvc.perform(post("/api/people")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(personDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(person)))
             .andExpect(status().isBadRequest());
 
         List<Person> personList = personRepository.findAll();
@@ -184,11 +218,118 @@ public class PersonResourceIntTest {
         person.setLastName(null);
 
         // Create the Person, which fails.
-        PersonDTO personDTO = personMapper.toDto(person);
 
         restPersonMockMvc.perform(post("/api/people")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(personDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(person)))
+            .andExpect(status().isBadRequest());
+
+        List<Person> personList = personRepository.findAll();
+        assertThat(personList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    public void checkDateOfBirthIsRequired() throws Exception {
+        int databaseSizeBeforeTest = personRepository.findAll().size();
+        // set the field null
+        person.setDateOfBirth(null);
+
+        // Create the Person, which fails.
+
+        restPersonMockMvc.perform(post("/api/people")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(person)))
+            .andExpect(status().isBadRequest());
+
+        List<Person> personList = personRepository.findAll();
+        assertThat(personList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    public void checkDriversLicenseNumberIsRequired() throws Exception {
+        int databaseSizeBeforeTest = personRepository.findAll().size();
+        // set the field null
+        person.setDriversLicenseNumber(null);
+
+        // Create the Person, which fails.
+
+        restPersonMockMvc.perform(post("/api/people")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(person)))
+            .andExpect(status().isBadRequest());
+
+        List<Person> personList = personRepository.findAll();
+        assertThat(personList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    public void checkCreateUserIdIsRequired() throws Exception {
+        int databaseSizeBeforeTest = personRepository.findAll().size();
+        // set the field null
+        person.setCreateUserId(null);
+
+        // Create the Person, which fails.
+
+        restPersonMockMvc.perform(post("/api/people")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(person)))
+            .andExpect(status().isBadRequest());
+
+        List<Person> personList = personRepository.findAll();
+        assertThat(personList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    public void checkCreateDateTimeIsRequired() throws Exception {
+        int databaseSizeBeforeTest = personRepository.findAll().size();
+        // set the field null
+        person.setCreateDateTime(null);
+
+        // Create the Person, which fails.
+
+        restPersonMockMvc.perform(post("/api/people")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(person)))
+            .andExpect(status().isBadRequest());
+
+        List<Person> personList = personRepository.findAll();
+        assertThat(personList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    public void checkUpdateUserIdIsRequired() throws Exception {
+        int databaseSizeBeforeTest = personRepository.findAll().size();
+        // set the field null
+        person.setUpdateUserId(null);
+
+        // Create the Person, which fails.
+
+        restPersonMockMvc.perform(post("/api/people")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(person)))
+            .andExpect(status().isBadRequest());
+
+        List<Person> personList = personRepository.findAll();
+        assertThat(personList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    public void checkUpdateDateTimeIsRequired() throws Exception {
+        int databaseSizeBeforeTest = personRepository.findAll().size();
+        // set the field null
+        person.setUpdateDateTime(null);
+
+        // Create the Person, which fails.
+
+        restPersonMockMvc.perform(post("/api/people")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(person)))
             .andExpect(status().isBadRequest());
 
         List<Person> personList = personRepository.findAll();
@@ -208,10 +349,14 @@ public class PersonResourceIntTest {
             .andExpect(jsonPath("$.[*].id").value(hasItem(person.getId().intValue())))
             .andExpect(jsonPath("$.[*].firstName").value(hasItem(DEFAULT_FIRST_NAME.toString())))
             .andExpect(jsonPath("$.[*].lastName").value(hasItem(DEFAULT_LAST_NAME.toString())))
-            .andExpect(jsonPath("$.[*].gender").value(hasItem(DEFAULT_GENDER.toString())))
-            .andExpect(jsonPath("$.[*].age").value(hasItem(DEFAULT_AGE)))
+            .andExpect(jsonPath("$.[*].middleName").value(hasItem(DEFAULT_MIDDLE_NAME.toString())))
+            .andExpect(jsonPath("$.[*].ssn").value(hasItem(DEFAULT_SSN.toString())))
             .andExpect(jsonPath("$.[*].dateOfBirth").value(hasItem(DEFAULT_DATE_OF_BIRTH.toString())))
-            .andExpect(jsonPath("$.[*].ssn").value(hasItem(DEFAULT_SSN.toString())));
+            .andExpect(jsonPath("$.[*].driversLicenseNumber").value(hasItem(DEFAULT_DRIVERS_LICENSE_NUMBER.toString())))
+            .andExpect(jsonPath("$.[*].createUserId").value(hasItem(DEFAULT_CREATE_USER_ID.toString())))
+            .andExpect(jsonPath("$.[*].createDateTime").value(hasItem(sameInstant(DEFAULT_CREATE_DATE_TIME))))
+            .andExpect(jsonPath("$.[*].updateUserId").value(hasItem(DEFAULT_UPDATE_USER_ID.toString())))
+            .andExpect(jsonPath("$.[*].updateDateTime").value(hasItem(sameInstant(DEFAULT_UPDATE_DATE_TIME))));
     }
 
     @Test
@@ -227,10 +372,14 @@ public class PersonResourceIntTest {
             .andExpect(jsonPath("$.id").value(person.getId().intValue()))
             .andExpect(jsonPath("$.firstName").value(DEFAULT_FIRST_NAME.toString()))
             .andExpect(jsonPath("$.lastName").value(DEFAULT_LAST_NAME.toString()))
-            .andExpect(jsonPath("$.gender").value(DEFAULT_GENDER.toString()))
-            .andExpect(jsonPath("$.age").value(DEFAULT_AGE))
+            .andExpect(jsonPath("$.middleName").value(DEFAULT_MIDDLE_NAME.toString()))
+            .andExpect(jsonPath("$.ssn").value(DEFAULT_SSN.toString()))
             .andExpect(jsonPath("$.dateOfBirth").value(DEFAULT_DATE_OF_BIRTH.toString()))
-            .andExpect(jsonPath("$.ssn").value(DEFAULT_SSN.toString()));
+            .andExpect(jsonPath("$.driversLicenseNumber").value(DEFAULT_DRIVERS_LICENSE_NUMBER.toString()))
+            .andExpect(jsonPath("$.createUserId").value(DEFAULT_CREATE_USER_ID.toString()))
+            .andExpect(jsonPath("$.createDateTime").value(sameInstant(DEFAULT_CREATE_DATE_TIME)))
+            .andExpect(jsonPath("$.updateUserId").value(DEFAULT_UPDATE_USER_ID.toString()))
+            .andExpect(jsonPath("$.updateDateTime").value(sameInstant(DEFAULT_UPDATE_DATE_TIME)));
     }
 
     @Test
@@ -253,15 +402,18 @@ public class PersonResourceIntTest {
         updatedPerson
             .firstName(UPDATED_FIRST_NAME)
             .lastName(UPDATED_LAST_NAME)
-            .gender(UPDATED_GENDER)
-            .age(UPDATED_AGE)
+            .middleName(UPDATED_MIDDLE_NAME)
+            .ssn(UPDATED_SSN)
             .dateOfBirth(UPDATED_DATE_OF_BIRTH)
-            .ssn(UPDATED_SSN);
-        PersonDTO personDTO = personMapper.toDto(updatedPerson);
+            .driversLicenseNumber(UPDATED_DRIVERS_LICENSE_NUMBER)
+            .createUserId(UPDATED_CREATE_USER_ID)
+            .createDateTime(UPDATED_CREATE_DATE_TIME)
+            .updateUserId(UPDATED_UPDATE_USER_ID)
+            .updateDateTime(UPDATED_UPDATE_DATE_TIME);
 
         restPersonMockMvc.perform(put("/api/people")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(personDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedPerson)))
             .andExpect(status().isOk());
 
         // Validate the Person in the database
@@ -270,10 +422,14 @@ public class PersonResourceIntTest {
         Person testPerson = personList.get(personList.size() - 1);
         assertThat(testPerson.getFirstName()).isEqualTo(UPDATED_FIRST_NAME);
         assertThat(testPerson.getLastName()).isEqualTo(UPDATED_LAST_NAME);
-        assertThat(testPerson.getGender()).isEqualTo(UPDATED_GENDER);
-        assertThat(testPerson.getAge()).isEqualTo(UPDATED_AGE);
-        assertThat(testPerson.getDateOfBirth()).isEqualTo(UPDATED_DATE_OF_BIRTH);
+        assertThat(testPerson.getMiddleName()).isEqualTo(UPDATED_MIDDLE_NAME);
         assertThat(testPerson.getSsn()).isEqualTo(UPDATED_SSN);
+        assertThat(testPerson.getDateOfBirth()).isEqualTo(UPDATED_DATE_OF_BIRTH);
+        assertThat(testPerson.getDriversLicenseNumber()).isEqualTo(UPDATED_DRIVERS_LICENSE_NUMBER);
+        assertThat(testPerson.getCreateUserId()).isEqualTo(UPDATED_CREATE_USER_ID);
+        assertThat(testPerson.getCreateDateTime()).isEqualTo(UPDATED_CREATE_DATE_TIME);
+        assertThat(testPerson.getUpdateUserId()).isEqualTo(UPDATED_UPDATE_USER_ID);
+        assertThat(testPerson.getUpdateDateTime()).isEqualTo(UPDATED_UPDATE_DATE_TIME);
     }
 
     @Test
@@ -282,12 +438,11 @@ public class PersonResourceIntTest {
         int databaseSizeBeforeUpdate = personRepository.findAll().size();
 
         // Create the Person
-        PersonDTO personDTO = personMapper.toDto(person);
 
         // If the entity doesn't have an ID, it will be created instead of just being updated
         restPersonMockMvc.perform(put("/api/people")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(personDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(person)))
             .andExpect(status().isCreated());
 
         // Validate the Person in the database
@@ -325,28 +480,5 @@ public class PersonResourceIntTest {
         assertThat(person1).isNotEqualTo(person2);
         person1.setId(null);
         assertThat(person1).isNotEqualTo(person2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(PersonDTO.class);
-        PersonDTO personDTO1 = new PersonDTO();
-        personDTO1.setId(1L);
-        PersonDTO personDTO2 = new PersonDTO();
-        assertThat(personDTO1).isNotEqualTo(personDTO2);
-        personDTO2.setId(personDTO1.getId());
-        assertThat(personDTO1).isEqualTo(personDTO2);
-        personDTO2.setId(2L);
-        assertThat(personDTO1).isNotEqualTo(personDTO2);
-        personDTO1.setId(null);
-        assertThat(personDTO1).isNotEqualTo(personDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(personMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(personMapper.fromId(null)).isNull();
     }
 }

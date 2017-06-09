@@ -17,16 +17,14 @@
             <thead>
             <tr>
             <th><span>ID</span></th>
-            <th><span>Code</span></th>
-            <th><span>Type</span></th>
+            <th><span>Name</span></th>
             <th></th>
             </tr>
             </thead>
             <tbody>
             <tr *ngFor="let raceType of raceTypes ;trackBy: trackId">
                 <td><a [routerLink]="['../race-type', raceType.id ]">{{raceType.id}}</a></td>
-                <td>{{raceType.code}}</td>
-                <td>{{raceType.type}}</td>
+                <td>{{raceType.name}}</td>
                 <td class="text-right">
                     <div class="btn-group flex-btn-group-container">
                         <button type="submit"
